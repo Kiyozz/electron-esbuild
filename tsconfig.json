@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "noImplicitReturns": false,
+    "noEmitOnError": true,
+    "incremental": true,
+    "declaration": true,
+    "baseUrl": "./",
+    "outDir": "dist"
+  },
+  "include": [
+    "src"
+  ]
+}
