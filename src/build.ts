@@ -19,11 +19,14 @@ function clean(): void {
 
 async function build(): Promise<void> {
   console.info(track(), 'Start')
-  clean()
+
+  if (!process.argv.join(' ').includes('--no-clean')) {
+    clean()
+  }
 
   const { esbuildMainConfig, webpackRendererConfig } = parseConfig(
     'electron-esbuild.config.yaml',
-    { sourcemap: false },
+    { sourcemap: false, minify: true },
     { mode: 'production', devtool: false },
   )
 
