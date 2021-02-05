@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Use esbuild with Electron for blazing fast compilation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
