@@ -17,12 +17,12 @@ Easily integrate esbuild for your Electron environment.
 npm i -D electron-esbuild
 ```
 
-Start a development build ([example](./examples/react-typescript))
+Start a development build ([example](examples/react-typescript-webpack))
 ```shell
 npx electron-esbuild dev
 ```
 
-Create a build ([example](./examples/react-typescript))
+Create a build ([example](examples/react-typescript-webpack))
 ```shell
 npx electron-esbuild build
 ```
@@ -31,18 +31,18 @@ npx electron-esbuild build
 npx electron-esbuild build --no-clean # do not clean output before build
 ```
 
-Package the app ([example](./examples/react-typescript))
+Package the app ([example](examples/react-typescript-webpack))
 ```shell
 npx electron-builder -p=never
 ```
 
 ## Quick start
 
-You can use this [example](./examples/react-typescript) for a starter React with TypeScript
+You can use this [example](examples/react-typescript-webpack) for a starter React with TypeScript
 
 ## Configuration
 
-Create a electron-esbuild configuration [electron-esbuild.config.yaml](./examples/react-typescript/electron-esbuild.config.yaml)
+Create a electron-esbuild configuration [electron-esbuild.config.yaml](examples/react-typescript-webpack/electron-esbuild.config.yaml)
 
 ```yaml
 # paths relative to current working directory
@@ -53,7 +53,7 @@ webpackRendererConfig: webpack.config.js # path to your webpack configuration
 
 ### Main esbuild config
 
-See [example](./examples/react-typescript/esbuild.config.js)
+See [example](examples/react-typescript-webpack/esbuild.config.js)
 
 ```js
 // esbuild.config.js
@@ -88,6 +88,6 @@ module.exports = (merge) => { // electron-esbuild expects a function from esbuil
 
 ### Renderer webpack configuration
 
-See [example](./examples/react-typescript/webpack.config.js)
+See [example](examples/react-typescript-webpack/webpack.config.js)
 
 This example use HMR/Hot reload in the renderer process in development!

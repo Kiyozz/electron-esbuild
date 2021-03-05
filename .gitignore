@@ -6,3 +6,10 @@
 
 # Errors logs
 yarn-error.log
+
+# examples build output
+/examples/**/dist
+/examples/**/package-lock.json
+
+# WebStorm
+/.idea

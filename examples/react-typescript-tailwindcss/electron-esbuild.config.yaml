@@ -3,6 +3,7 @@ mainConfig:
   path: esbuild.main.config.js
   src: src/main/main.ts
   output: dist/main
+
 rendererConfig:
   type: esbuild # `webpack` for using webpack in renderer, see examples/react-typescript-webpack
   path: esbuild.renderer.config.js

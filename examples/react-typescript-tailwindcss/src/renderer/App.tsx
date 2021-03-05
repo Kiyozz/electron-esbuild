@@ -12,11 +12,15 @@ export function App() {
   }, [])
 
   return (
-    <div className="padding">
+    <div>
       <h1>Count {count}</h1>
 
       <div>Hello world!</div>
-      <div>Fast full page reload from esbuild</div>
+      <div>Fast full page reload from esbuild.</div>
+      <div>
+        It was possible to use Tailwind thanks to the postcss esbuild plugin. Because compilation goes through postcss,
+        compilation speed is increased.
+      </div>
     </div>
   )
 }

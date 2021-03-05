@@ -1,11 +1,10 @@
 mainConfig:
   type: esbuild # currently, only esbuild is supported for mainConfig
-  path: esbuild.main.config.js
+  path: esbuild.config.js
   src: src/main/main.ts
   output: dist/main
 rendererConfig:
-  type: esbuild # `webpack` for using webpack in renderer, see examples/react-typescript-webpack
-  path: esbuild.renderer.config.js
-  html: src/renderer/index.html
+  type: webpack # `esbuild` for using esbuild in renderer, see examples/react-typescript
+  path: webpack.config.js
   src: src/renderer/index.tsx
   output: dist/renderer

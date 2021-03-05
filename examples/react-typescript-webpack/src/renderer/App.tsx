@@ -16,7 +16,7 @@ export function App() {
       <h1>Count {count}</h1>
 
       <div>Hello world!</div>
-      <div>Fast full page reload from esbuild</div>
+      <div>Fast refresh active</div>
     </div>
   )
 }

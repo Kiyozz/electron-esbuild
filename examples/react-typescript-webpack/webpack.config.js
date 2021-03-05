@@ -108,7 +108,11 @@ module.exports = (merge) => {
       minimizer: [new TerserPlugin(), new CssMinimizerWebpackPlugin()],
     }
   } else {
-    myNewConfig.plugins.push(new ForkTsCheckerWebpackPlugin(), new ReactRefreshWebpackPlugin())
+    myNewConfig.plugins.push(
+      new webpack.HotModuleReplacementPlugin(),
+      new ForkTsCheckerWebpackPlugin(),
+      new ReactRefreshWebpackPlugin(),
+    )
 
     myNewConfig.devServer = {
       host: 'localhost',

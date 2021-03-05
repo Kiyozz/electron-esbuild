@@ -1,0 +1,12 @@
+html {
+  font-size: 16px;
+}
+
+body {
+  @apply antialiased bg-white h-screen p-4;
+}
+
+h1 {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
