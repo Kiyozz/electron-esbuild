@@ -5,10 +5,10 @@ Easily integrate esbuild for your Electron environment.
 ## Features
 
 - Use of `esbuild` for main source code building
-- Use of `webpack` for renderer source code building
+- Use of `esbuild` or `webpack` for renderer source code building
 - HMR for `renderer` and `main` processes
-- Full control of your webpack configuration
 - Full control of your esbuild configuration
+- Full control of your webpack configuration
 - Use electron-builder for final package
 
 ## Use
@@ -17,12 +17,12 @@ Easily integrate esbuild for your Electron environment.
 npm i -D electron-esbuild
 ```
 
-Start a development build ([example](examples/react-typescript-webpack))
+Start a development build ([example](examples/react-typescript))
 ```shell
 npx electron-esbuild dev
 ```
 
-Create a build ([example](examples/react-typescript-webpack))
+Create a build ([example](examples/react-typescript))
 ```shell
 npx electron-esbuild build
 ```
@@ -31,9 +31,9 @@ npx electron-esbuild build
 npx electron-esbuild build --no-clean # do not clean output before build
 ```
 
-Package the app ([example](examples/react-typescript-webpack))
+Package the app ([example](examples/react-typescript))
 ```shell
-npx electron-builder -p=never
+npx electron-builder
 ```
 
 ## Quick start
@@ -42,52 +42,68 @@ You can use this [example](examples/react-typescript-webpack) for a starter Reac
 
 ## Configuration
 
-Create a electron-esbuild configuration [electron-esbuild.config.yaml](examples/react-typescript-webpack/electron-esbuild.config.yaml)
+Create a electron-esbuild configuration [electron-esbuild.config.yaml](examples/react-typescript/electron-esbuild.config.yaml)
 
 ```yaml
-# paths relative to current working directory
-
-esbuildMainConfig: esbuild.config.js # path to your esbuild configuration
-webpackRendererConfig: webpack.config.js # path to your webpack configuration
+mainConfig:
+  type: esbuild # currently, only esbuild is supported for mainConfig
+  path: esbuild.main.config.js
+  src: src/main/main.ts
+  output: dist/main
+rendererConfig:
+  type: esbuild # 'webpack' for using webpack in renderer, see examples/react-typescript-webpack
+  path: esbuild.renderer.config.js
+  html: src/renderer/index.html
+  src: src/renderer/index.tsx
+  output: dist/renderer
 ```
 
 ### Main esbuild config
 
-See [example](examples/react-typescript-webpack/esbuild.config.js)
+See [example](examples/react-typescript/esbuild.main.config.js)
 
 ```js
-// esbuild.config.js
 const path = require('path')
 
 /**
- * @param {Partial<import('esbuild').BuildOptions>} merge configuration added by electron-esbuild
+ * @param {Partial<import('esbuild').BuildOptions>} merge
  *
  * @return {import('esbuild').BuildOptions}
  */
-module.exports = (merge) => { // electron-esbuild expects a function from esbuild configuration
-  // merge object contains production/development configuration added by electron-esbuild
-  // electron-esbuild overrides NODE_ENV when using `dev` or `build` command
-  const isProduction = process.env.NODE_ENV === 'production'
-
-  return {
-    platform: 'node',
-    entryPoints: [path.resolve('src/main/main.ts')], // Path to your main file
-    bundle: true,
-    target: 'node12.18.4', // electron version target
-    loader: {
-      '.ts': 'ts', // Default loader for TypeScript project
-    },
-    sourcemap: false,
-    define: {
-      'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
-    },
-    ...merge,
-  }
-}
+module.exports = (merge) => ({
+  platform: 'node',
+  entryPoints: [path.resolve('src/main/main.ts')],
+  bundle: true,
+  target: 'node14.16.0', // electron version target
+  loader: {
+    '.ts': 'ts',
+  },
+  ...merge,
+})
 ```
 
-### Renderer webpack configuration
+### Renderer esbuild configuration
 
-See [example](examples/react-typescript-webpack/webpack.config.js)
+See [example](examples/react-typescript/esbuild.renderer.config.js)
 
-This example use HMR/Hot reload in the renderer process in development!
+```js
+const path = require('path')
+
+/**
+ * @param {Partial<import('esbuild').BuildOptions>} merge
+ *
+ * @return {import('esbuild').BuildOptions}
+ */
+module.exports = (merge) => ({
+  platform: 'browser',
+  entryPoints: [path.resolve('src/renderer/index.tsx')],
+  bundle: true,
+  target: 'chrome89', // electron version target
+  loader: {
+    '.ts': 'ts',
+    '.tsx': 'tsx',
+    '.css': 'css',
+  },
+  ...merge,
+})
+```
