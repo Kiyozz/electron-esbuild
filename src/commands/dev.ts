@@ -43,8 +43,8 @@ class Dev {
   async init(): Promise<void> {
     const start = () => this.startApp()
 
-    this.mainBuilder.watch(start)
-    this.rendererBuilder.watch(start)
+    this.mainBuilder.dev(start)
+    this.rendererBuilder.dev(start)
 
     await Promise.all([this.mainBuilder.build(), this.rendererBuilder.build()])
 

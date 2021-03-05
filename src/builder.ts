@@ -26,7 +26,7 @@ export interface Builder {
   env: string
 
   build(): Promise<void>
-  watch(start: () => void): void
+  dev(start: () => void): void
 }
 
 export abstract class BaseBuilder<T> implements Builder {
@@ -38,7 +38,7 @@ export abstract class BaseBuilder<T> implements Builder {
 
   abstract build(): Promise<void>
 
-  abstract watch(start: () => void): void
+  abstract dev(start: () => void): void
 }
 
 const logger = new Logger('Builder')
@@ -57,12 +57,13 @@ class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       await this.builder.rebuild()
     } else {
       this.builder = (await esbuild.build(this.config.config)) as BuildIncremental
+      await this.copyHtml()
     }
 
     logger.log(this.env, 'built')
   }
 
-  watch(start: () => void): void {
+  dev(start: () => void): void {
     if (isMain(this.config)) {
       const sources = path.join(path.resolve(path.dirname(this.config.fileConfig.src)), '**', '*.{js,ts,tsx}')
       const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this.config.fileConfig.src))])
@@ -77,7 +78,7 @@ class EsbuildBuilder extends BaseBuilder<BuildOptions> {
               start()
 
               await watcher.close()
-              this.watch(start)
+              this.dev(start)
             },
             { wait: 200 },
           ),
@@ -153,6 +154,15 @@ class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         })
     }
   }
+
+  private async copyHtml() {
+    if (this.config.fileConfig.html) {
+      const out = path.resolve(process.cwd(), this.config.fileConfig.output)
+      const html = path.resolve(process.cwd(), this.config.fileConfig.html)
+
+      await fs.copyFile(html, path.join(out, path.basename(html)))
+    }
+  }
 }
 
 class WebpackBuilder extends BaseBuilder<Configuration> {
@@ -179,7 +189,7 @@ class WebpackBuilder extends BaseBuilder<Configuration> {
     })
   }
 
-  watch(start: () => void) {
+  dev(start: () => void) {
     if (isMain(this.config)) {
       // TODO: webpack main watch
     } else {
