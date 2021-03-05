@@ -203,7 +203,7 @@ class WebpackBuilder extends BaseBuilder<Configuration> {
         if (err) {
           logger.error(this.env, 'error', err)
         } else {
-          logger.log('Building ', this.env.toLowerCase())
+          logger.log('Building', this.env.toLowerCase())
         }
       })
     }
