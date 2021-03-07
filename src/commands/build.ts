@@ -6,13 +6,16 @@
 
 import * as path from 'path'
 import * as rimraf from 'rimraf'
-import { configByEnv, ElectronEsbuildWorker, FILE, isEsbuild } from '../config'
-import { Logger, unsupportedType } from '../console'
+
 import { createBuilders } from '../builder'
+import { ElectronEsbuildWorker } from '../config'
+import { FILE } from '../config/constants'
+import { configByEnv } from '../config/utils'
+import { Logger } from '../console'
 
 process.env.NODE_ENV = 'production'
 
-const logger = new Logger('Build')
+const logger = new Logger('Commands/Build')
 
 function clean(): void {
   rimraf.sync(path.resolve('dist'))
@@ -33,10 +36,6 @@ async function build(): Promise<void> {
   )
 
   const [main, renderer] = createBuilders(mainConfig, rendererConfig)
-
-  if (!isEsbuild(mainConfig)) {
-    unsupportedType(mainConfig.fileConfig.type, 'main')
-  }
 
   logger.log('Creating production build...')
 

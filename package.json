@@ -29,33 +29,41 @@
   "scripts": {
     "build": "tsc",
     "electron-esbuild": "node dist/index.js",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "lint": "eslint src --ext .ts"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
     "chokidar": "~3.5.1",
-    "compression": "^1.7.4",
-    "connect": "^3.7.0",
+    "compression": "~1.7.4",
+    "connect": "~3.7.0",
     "debounce-fn": "~4.0.0",
     "dependency-tree-81": "~8.1.2",
     "esbuild": "~0.8.55",
-    "http-proxy": "^1.18.1",
+    "http-proxy": "~1.18.1",
+    "joi": "~17.4.0",
     "js-yaml": "~4.0.0",
-    "livereload": "^0.9.1",
+    "livereload": "~0.9.1",
     "rimraf": "~3.0.2",
     "webpack-dev-server": "~3.11.2"
   },
   "devDependencies": {
-    "@types/compression": "^1.7.0",
-    "@types/connect": "^3.4.34",
-    "@types/http-proxy": "^1.17.5",
+    "@types/compression": "~1.7.0",
+    "@types/connect": "~3.4.34",
+    "@types/http-proxy": "~1.17.5",
     "@types/js-yaml": "~4.0.0",
-    "@types/livereload": "^0.9.0",
+    "@types/livereload": "~0.9.0",
     "@types/node": "~14.14.31",
     "@types/rimraf": "~3.0.0",
     "@types/webpack-dev-server": "~3.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "prettier": "~2.2.1",
     "typescript": "~4.2.3",
     "webpack": "~4.46.0"

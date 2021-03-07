@@ -4,18 +4,22 @@
  * All rights reserved.
  */
 
-import * as path from 'path'
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
-import { configByEnv, ElectronEsbuildConfigItem, ElectronEsbuildWorker, FILE } from '../config'
-import { Logger } from '../console'
+import * as path from 'path'
+
 import { Builder, createBuilders } from '../builder'
+import { ElectronEsbuildWorker } from '../config'
+import { FILE } from '../config/constants'
+import { ElectronEsbuildConfigItem } from '../config/types'
+import { configByEnv } from '../config/utils'
+import { Logger } from '../console'
 
 process.env.NODE_ENV = 'development'
 
 const isWindows = process.platform === 'win32'
 const electronBin = isWindows ? 'electron.cmd' : 'electron'
 
-const logger = new Logger('Dev')
+const logger = new Logger('Commands/Dev')
 
 class Dev {
   private readonly worker = new ElectronEsbuildWorker(FILE)

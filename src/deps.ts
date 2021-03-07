@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Kiyozz.
+ *
+ * All rights reserved.
+ */
+
 import * as depsTree from 'dependency-tree-81'
 import * as path from 'path'
 
