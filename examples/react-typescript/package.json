@@ -13,7 +13,7 @@
     "@types/react-dom": "~17.0.1",
     "electron": "~12.0.0",
     "electron-builder": "~22.10.5",
-    "electron-esbuild": "~1.0.2",
+    "electron-esbuild": "~1.1.2",
     "electron-util": "~0.14.2",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
