@@ -32,6 +32,11 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
     logger.log('Building', this.env.toLowerCase())
 
     return new Promise<void>((resolve, reject) => {
+      if (((this.compiler as unknown) as { running: boolean }).running) {
+        resolve()
+        return
+      }
+
       this.compiler.run((err) => {
         if (err) {
           logger.error(this.env, 'error', err)
@@ -57,7 +62,7 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
         if (err) {
           logger.error(this.env, 'error', err)
         } else {
-          logger.log('Building', this.env.toLowerCase())
+          logger.log(this.env, ': starting webpack dev server')
         }
       })
     }
