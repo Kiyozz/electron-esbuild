@@ -4,11 +4,11 @@
  * All rights reserved.
  */
 
-import { Builder } from '../builder'
+import type { Builder } from '../builder'
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'
 
-export abstract class BaseBuilder<T> implements Builder {
+export default abstract class BaseBuilder<T> implements Builder {
   public env: string
 
   protected constructor(protected config: ElectronEsbuildConfigItem<T>) {

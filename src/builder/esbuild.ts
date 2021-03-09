@@ -10,7 +10,7 @@ import * as connect from 'connect'
 import * as debounce from 'debounce-fn'
 import * as esbuild from 'esbuild'
 import { BuildIncremental, BuildOptions } from 'esbuild'
-import * as fs from 'fs/promises'
+import { promises as fs } from 'fs'
 import { createServer } from 'http'
 import * as httpProxy from 'http-proxy'
 import * as livereload from 'livereload'
@@ -18,13 +18,13 @@ import * as path from 'path'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'
-import { Logger } from '../console'
-import { getDeps } from '../deps'
-import { BaseBuilder } from './base'
+import Logger from '../console'
+import getDeps from '../deps'
+import BaseBuilder from './base'
 
 const logger = new Logger('Builder/Esbuild')
 
-export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
+export default class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildIncremental | undefined
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {

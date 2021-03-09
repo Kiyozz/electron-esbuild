@@ -4,4 +4,6 @@
  * All rights reserved.
  */
 
-export const FILE = 'electron-esbuild.config.yaml'
+const CONFIG_FILE_NAME = 'electron-esbuild.config.yaml'
+
+export default CONFIG_FILE_NAME

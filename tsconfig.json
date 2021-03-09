@@ -5,15 +5,13 @@
     "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "noImplicitReturns": false,
     "noEmitOnError": true,
     "incremental": true,
-    "declaration": true,
+    "declaration": false,
     "baseUrl": "./",
     "outDir": "dist"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

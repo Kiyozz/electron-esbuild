@@ -6,7 +6,7 @@
 
 import * as Joi from 'joi'
 
-import { Logger } from '../console'
+import Logger from '../console'
 import { TypeConfig } from './enums'
 import { ElectronEsbuildConfigYaml } from './types'
 
@@ -28,7 +28,7 @@ const schema = Joi.object<ElectronEsbuildConfigYaml>({
   }).required(),
 })
 
-export function validate(config: unknown): true | never {
+export default function validate(config: unknown): true | never {
   const result = schema.validate(config)
 
   if (result.error) {

@@ -8,18 +8,17 @@ import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import * as path from 'path'
 
-import { Configurator } from './config/configurators/base'
-import { ConfiguratorFactory } from './config/configurators/configurator-factory'
+import Configurator from './config/configurators/base'
+import ConfiguratorFactory from './config/configurators/configurator-factory'
 import { Target, TypeConfig } from './config/enums'
 import { ElectronEsbuildConfig, ElectronEsbuildConfigYaml, PossibleConfiguration } from './config/types'
-import { validate } from './config/validation'
-import { Logger } from './console'
+import validate from './config/validation'
+import Logger from './console'
 
 const logger = new Logger('Config')
 
-export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfiguration> {
+export default class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfiguration> {
   public readonly yaml: ElectronEsbuildConfigYaml
-
   public readonly mainConfig: Configurator<TypeConfig>
   public readonly rendererConfig: Configurator<TypeConfig>
 

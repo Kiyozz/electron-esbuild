@@ -7,41 +7,54 @@
 import * as path from 'path'
 import * as rimraf from 'rimraf'
 
-import { createBuilders } from '../builder'
-import { ElectronEsbuildWorker } from '../config'
-import { FILE } from '../config/constants'
+import createBuilders from '../builder'
+import Cli, { CliResult } from '../cli'
+import ElectronEsbuildWorker from '../config'
+import CONFIG_FILE_NAME from '../config/constants'
 import { configByEnv } from '../config/utils'
-import { Logger } from '../console'
+import Logger from '../console'
 
 process.env.NODE_ENV = 'production'
 
 const logger = new Logger('Commands/Build')
 
 function clean(): void {
+  logger.log('Cleaning output')
   rimraf.sync(path.resolve('dist'))
 }
 
-async function build(): Promise<void> {
-  logger.log('Start')
-
-  if (!process.argv.join(' ').includes('--no-clean')) {
-    clean()
+export default class Build extends Cli {
+  constructor(cli: CliResult) {
+    super(cli)
   }
 
-  const worker = new ElectronEsbuildWorker(FILE)
+  async init(): Promise<number> {
+    logger.debug('Start')
 
-  const { mainConfig, rendererConfig } = worker.parse(
-    configByEnv(false, worker.mainConfig.type),
-    configByEnv(false, worker.rendererConfig.type),
-  )
+    if (this.cli.flags.clean) {
+      clean()
+    }
 
-  const [main, renderer] = createBuilders(mainConfig, rendererConfig)
+    logger.debug('Creating worker')
 
-  logger.log('Creating production build...')
+    const worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME)
 
-  await Promise.all([main.build(), renderer.build()])
+    logger.debug('Created worker')
 
-  process.exit(0)
+    const { mainConfig, rendererConfig } = worker.parse(
+      configByEnv(false, worker.mainConfig.type),
+      configByEnv(false, worker.rendererConfig.type),
+    )
+
+    logger.debug('Parsed config')
+
+    const [main, renderer] = createBuilders(mainConfig, rendererConfig)
+
+    logger.debug('Created builders')
+    logger.log('Creating production build...')
+
+    await Promise.all([main.build(), renderer.build()])
+
+    return 0
+  }
 }
-
-build()

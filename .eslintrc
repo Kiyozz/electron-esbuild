@@ -28,6 +28,13 @@
           "order": "asc"
         }
       }
-    ]
+    ],
+    "import/first": "error",
+    "import/exports-last": "error",
+    "import/newline-after-import": "error",
+    "import/prefer-default-export": "error",
+    "import/default": "error",
+    "import/no-useless-path-segments": "error",
+    "import/no-cycle": "error"
   }
 }

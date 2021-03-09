@@ -7,12 +7,13 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import * as path from 'path'
 
-import { Builder, createBuilders } from '../builder'
-import { ElectronEsbuildWorker } from '../config'
-import { FILE } from '../config/constants'
+import createBuilders, { Builder } from '../builder'
+import Cli, { CliResult } from '../cli'
+import ElectronEsbuildWorker from '../config'
+import CONFIG_FILE_NAME from '../config/constants'
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { configByEnv } from '../config/utils'
-import { Logger } from '../console'
+import Logger from '../console'
 
 process.env.NODE_ENV = 'development'
 
@@ -21,36 +22,54 @@ const electronBin = isWindows ? 'electron.cmd' : 'electron'
 
 const logger = new Logger('Commands/Dev')
 
-class Dev {
-  private readonly worker = new ElectronEsbuildWorker(FILE)
+export default class Dev extends Cli {
+  private readonly worker: ElectronEsbuildWorker
   private readonly mainConfig: ElectronEsbuildConfigItem
   private readonly rendererConfig: ElectronEsbuildConfigItem
   private electronProcess: ChildProcessWithoutNullStreams | undefined
   private readonly mainBuilder: Builder
   private readonly rendererBuilder: Builder
 
-  constructor() {
+  constructor(cli: CliResult) {
+    super(cli)
+    logger.debug('Creating worker')
+
+    this.worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME)
+
+    logger.debug('Created worker')
+
     const { mainConfig, rendererConfig } = this.worker.parse(
       configByEnv(true, this.worker.mainConfig.type),
       configByEnv(true, this.worker.rendererConfig.type),
     )
+
+    logger.debug('Parsed config')
 
     this.mainConfig = mainConfig
     this.rendererConfig = rendererConfig
 
     const [mainBuilder, rendererBuilder] = createBuilders(this.mainConfig, this.rendererConfig)
 
+    logger.debug('Created builders')
+
     this.mainBuilder = mainBuilder
     this.rendererBuilder = rendererBuilder
   }
 
   async init(): Promise<void> {
+    logger.debug('Start')
+
     const start = () => this.startApp()
 
+    logger.debug('Starting dev builders')
     this.mainBuilder.dev(start)
     this.rendererBuilder.dev(start)
+    logger.debug('Started dev builders')
+    logger.debug('Starting initial builds')
 
     await Promise.all([this.mainBuilder.build(), this.rendererBuilder.build()])
+
+    logger.debug('Initial builds finished')
 
     await this.startApp()
   }
@@ -95,13 +114,3 @@ class Dev {
     }
   }
 }
-
-async function dev(): Promise<void> {
-  logger.log('Start')
-
-  const dev = new Dev()
-
-  await dev.init()
-}
-
-dev()

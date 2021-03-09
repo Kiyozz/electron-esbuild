@@ -4,8 +4,8 @@
  * All rights reserved.
  */
 
-import { EsbuildBuilder } from './builder/esbuild'
-import { WebpackBuilder } from './builder/webpack'
+import EsbuildBuilder from './builder/esbuild'
+import WebpackBuilder from './builder/webpack'
 import { ElectronEsbuildConfigItem } from './config/types'
 import { isEsbuild, isWebpack } from './config/utils'
 import { unsupportedType } from './console'
@@ -17,7 +17,7 @@ export interface Builder {
   dev(start: () => void): void
 }
 
-export function createBuilders(
+export default function createBuilders(
   mainConfig: ElectronEsbuildConfigItem,
   rendererConfig: ElectronEsbuildConfigItem,
 ): [Builder, Builder] {
