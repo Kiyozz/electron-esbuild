@@ -11,18 +11,26 @@ Easily integrate esbuild for your Electron environment.
 - Full control of your webpack configuration
 - Use electron-builder for final package
 
-## Use
+## Create a Electron app
+
+```shell
+npx create-electron-esbuild-app --name my-app --package-manager npm --template react-typescript
+```
+
+## Manual
 
 ```shell
 npm i -D electron-esbuild
 ```
 
 Start a development build ([example](examples/react-typescript))
+
 ```shell
 npx electron-esbuild dev
 ```
 
 Create a build ([example](examples/react-typescript))
+
 ```shell
 npx electron-esbuild build
 ```
@@ -32,13 +40,12 @@ npx electron-esbuild build --no-clean # do not clean output before build
 ```
 
 Package the app ([example](examples/react-typescript))
+
 ```shell
 npx electron-builder
 ```
 
-## Quick start
-
-You can use this [example](examples/react-typescript-webpack) for a starter React with TypeScript
+You can use this [example](examples/react-typescript) for a starter React with TypeScript
 
 ## Configuration
 
