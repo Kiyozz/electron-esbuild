@@ -5,8 +5,8 @@
  */
 
 import { BuildOptions } from 'esbuild'
-import * as nodeModule from 'module'
-import * as path from 'path'
+import nodeModule from 'module'
+import path from 'path'
 
 import { Target, TypeConfig } from '../enums'
 import { ItemConfig } from '../types'

@@ -5,7 +5,7 @@
  */
 
 import { Compiler, Configuration } from 'webpack'
-import * as WebpackDevServer from 'webpack-dev-server'
+import WebpackDevServer from 'webpack-dev-server'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain } from '../config/utils'

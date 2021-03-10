@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import * as Joi from 'joi'
+import Joi from 'joi'
 
 import Logger from '../console'
 import { TypeConfig } from './enums'

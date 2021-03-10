@@ -4,17 +4,17 @@
  * All rights reserved.
  */
 
-import * as chokidar from 'chokidar'
-import * as compression from 'compression'
-import * as connect from 'connect'
-import * as debounce from 'debounce-fn'
-import * as esbuild from 'esbuild'
+import chokidar from 'chokidar'
+import compression from 'compression'
+import connect from 'connect'
+import debounce from 'debounce-fn'
+import esbuild from 'esbuild'
 import { BuildIncremental, BuildOptions } from 'esbuild'
 import { promises as fs } from 'fs'
 import { createServer } from 'http'
-import * as httpProxy from 'http-proxy'
-import * as livereload from 'livereload'
-import * as path from 'path'
+import httpProxy from 'http-proxy'
+import livereload from 'livereload'
+import path from 'path'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'

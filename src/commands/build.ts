@@ -4,8 +4,8 @@
  * All rights reserved.
  */
 
-import * as path from 'path'
-import * as rimraf from 'rimraf'
+import path from 'path'
+import rimraf from 'rimraf'
 
 import createBuilders from '../builder'
 import Cli, { CliResult } from '../cli'

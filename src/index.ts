@@ -5,7 +5,7 @@
  * All rights reserved.
  */
 
-import * as meow from 'meow'
+import meow from 'meow'
 
 import Cli, { CliFlags } from './cli'
 import commands from './commands'

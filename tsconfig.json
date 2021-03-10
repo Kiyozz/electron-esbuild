@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "es5",
     "strict": true,
     "skipLibCheck": true,
-    "sourceMap": false,
     "noImplicitReturns": false,
-    "noEmitOnError": true,
-    "incremental": true,
-    "declaration": false,
-    "baseUrl": "./",
+    "noEmit": true,
+    "esModuleInterop": true,
     "outDir": "dist"
   },
   "include": ["src"]

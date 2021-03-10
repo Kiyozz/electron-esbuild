@@ -4,9 +4,9 @@
  * All rights reserved.
  */
 
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
-import * as path from 'path'
+import fs from 'fs'
+import yaml from 'js-yaml'
+import path from 'path'
 
 import Configurator from './config/configurators/base'
 import ConfiguratorFactory from './config/configurators/configurator-factory'

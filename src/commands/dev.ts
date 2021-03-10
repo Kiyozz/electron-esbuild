@@ -5,7 +5,7 @@
  */
 
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
-import * as path from 'path'
+import path from 'path'
 
 import createBuilders, { Builder } from '../builder'
 import Cli, { CliResult } from '../cli'
