@@ -19,7 +19,7 @@ process.env.NODE_ENV = 'production'
 const logger = new Logger('Commands/Build')
 
 function clean(): void {
-  logger.log('Cleaning output')
+  logger.log('Cleaning')
   rimraf.sync(path.resolve('dist'))
 }
 
