@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'src/**.ts'
+      - 'scripts/**.js'
       - '.github/workflows/**.yml'
 
 jobs:
@@ -15,8 +16,9 @@ jobs:
       - uses: actions/cache@v2
         id: npm-cache
         with:
-          path: 'node_modules'
-          key: "${{ runner.os }}-modules-${{ hashFiles('package.json') }}"
+          path: |
+            ~/.npm
+          key: "${{ runner.os }}-modules-${{ hashFiles('package-lock.json') }}"
       - uses: actions/setup-node@v2
         with:
           node-version: 15.x
