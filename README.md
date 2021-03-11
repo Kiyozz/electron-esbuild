@@ -1,5 +1,7 @@
 # electron-esbuild
 
+![github-actions](https://github.com/Kiyozz/electron-esbuild/workflows/CI/badge.svg)
+
 Easily integrate esbuild for your Electron environment.
 
 ## Features
