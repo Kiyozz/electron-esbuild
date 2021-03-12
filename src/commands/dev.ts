@@ -7,13 +7,13 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
 
-import createBuilders, { Builder } from '../builder'
-import Cli, { CliResult } from '../cli'
-import ElectronEsbuildWorker from '../config'
-import CONFIG_FILE_NAME from '../config/constants'
+import { createBuilders, Builder } from '../builder'
+import { Cli, CliResult } from '../cli'
+import { ElectronEsbuildWorker } from '../config'
+import { CONFIG_FILE_NAME } from '../config/constants'
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { configByEnv } from '../config/utils'
-import Logger from '../console'
+import { Logger } from '../console'
 
 process.env.NODE_ENV = 'development'
 
@@ -22,7 +22,7 @@ const electronBin = isWindows ? 'electron.cmd' : 'electron'
 
 const logger = new Logger('Commands/Dev')
 
-export default class Dev extends Cli {
+export class Dev extends Cli {
   private readonly worker: ElectronEsbuildWorker
   private readonly mainConfig: ElectronEsbuildConfigItem
   private readonly rendererConfig: ElectronEsbuildConfigItem

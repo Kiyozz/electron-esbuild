@@ -20,7 +20,7 @@ function zeros(value: number, fixed: number): string {
   return fixedValue
 }
 
-export default function track(): string {
+export function track(): string {
   if (typeof startedAt === 'undefined') {
     startedAt = Date.now()
   }

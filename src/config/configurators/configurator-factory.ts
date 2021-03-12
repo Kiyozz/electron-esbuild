@@ -7,11 +7,11 @@
 import { unsupportedType } from '../../console'
 import { TypeConfig } from '../enums'
 import { ItemConfig } from '../types'
-import Configurator from './base'
-import EsbuildConfigurator from './esbuild'
-import WebpackConfigurator from './webpack'
+import { Configurator } from './base'
+import { EsbuildConfigurator } from './esbuild'
+import { WebpackConfigurator } from './webpack'
 
-export default class ConfiguratorFactory {
+export class ConfiguratorFactory {
   create(config: ItemConfig): Configurator<TypeConfig> {
     switch (config.type) {
       case TypeConfig.Esbuild:

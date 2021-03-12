@@ -7,12 +7,12 @@
 import path from 'path'
 import rimraf from 'rimraf'
 
-import createBuilders from '../builder'
-import Cli, { CliResult } from '../cli'
-import ElectronEsbuildWorker from '../config'
-import CONFIG_FILE_NAME from '../config/constants'
+import { createBuilders } from '../builder'
+import { Cli, CliResult } from '../cli'
+import { ElectronEsbuildWorker } from '../config'
+import { CONFIG_FILE_NAME } from '../config/constants'
 import { configByEnv } from '../config/utils'
-import Logger from '../console'
+import { Logger } from '../console'
 
 process.env.NODE_ENV = 'production'
 
@@ -23,7 +23,7 @@ function clean(): void {
   rimraf.sync(path.resolve('dist'))
 }
 
-export default class Build extends Cli {
+export class Build extends Cli {
   constructor(cli: CliResult) {
     super(cli)
   }

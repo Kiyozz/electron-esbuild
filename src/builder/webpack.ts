@@ -9,12 +9,12 @@ import WebpackDevServer from 'webpack-dev-server'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain } from '../config/utils'
-import Logger from '../console'
-import BaseBuilder from './base'
+import { Logger } from '../console'
+import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Webpack')
 
-export default class WebpackBuilder extends BaseBuilder<Configuration> {
+export class WebpackBuilder extends BaseBuilder<Configuration> {
   private readonly compiler!: Compiler
 
   constructor(protected config: ElectronEsbuildConfigItem<Configuration>) {

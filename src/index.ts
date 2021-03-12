@@ -7,8 +7,8 @@
 
 import meow from 'meow'
 
-import Cli, { CliFlags } from './cli'
-import commands from './commands'
+import { Cli, CliFlags } from './cli'
+import { commands } from './commands'
 
 const cli = meow<CliFlags>(
   `Usage

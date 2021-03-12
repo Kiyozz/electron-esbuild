@@ -15,7 +15,7 @@ export type CliFlags = {
 
 export type CliResult = Result<CliFlags>
 
-export default abstract class Cli {
+export abstract class Cli {
   protected constructor(protected cli: CliResult) {}
 
   abstract init(): Promise<number | void>

@@ -5,7 +5,7 @@
  */
 
 import { TypeConfig } from './config/enums'
-import track from './track'
+import { track } from './track'
 
 export function unsupportedType(type: TypeConfig, env?: 'main' | 'renderer'): never {
   const args = [track(), 'unsupported type', type]
@@ -18,7 +18,7 @@ export function unsupportedType(type: TypeConfig, env?: 'main' | 'renderer'): ne
   process.exit(1)
 }
 
-export default class Logger {
+export class Logger {
   constructor(private namespace: string) {}
 
   log(...args: unknown[]): void {

@@ -10,9 +10,9 @@ import { Configuration } from 'webpack'
 import { Target, TypeConfig } from '../enums'
 import { ItemConfig } from '../types'
 import { isMain } from '../utils'
-import Configurator from './base'
+import { Configurator } from './base'
 
-export default class WebpackConfigurator extends Configurator<TypeConfig.Webpack> {
+export class WebpackConfigurator extends Configurator<TypeConfig.Webpack> {
   public type = TypeConfig.Webpack
 
   constructor(private config: ItemConfig) {

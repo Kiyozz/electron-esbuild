@@ -11,9 +11,9 @@ import path from 'path'
 import { Target, TypeConfig } from '../enums'
 import { ItemConfig } from '../types'
 import { isMain } from '../utils'
-import Configurator from './base'
+import { Configurator } from './base'
 
-export default class EsbuildConfigurator extends Configurator<TypeConfig.Esbuild> {
+export class EsbuildConfigurator extends Configurator<TypeConfig.Esbuild> {
   public type = TypeConfig.Esbuild
 
   constructor(private config: ItemConfig) {

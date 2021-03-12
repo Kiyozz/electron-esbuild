@@ -18,13 +18,13 @@ import path from 'path'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'
-import Logger from '../console'
-import getDeps from '../deps'
-import BaseBuilder from './base'
+import { Logger } from '../console'
+import { getDeps } from '../deps'
+import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Esbuild')
 
-export default class EsbuildBuilder extends BaseBuilder<BuildOptions> {
+export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildIncremental | undefined
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {

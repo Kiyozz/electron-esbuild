@@ -4,12 +4,12 @@
  * All rights reserved.
  */
 
-import Build from './build'
-import Dev from './dev'
+import { Build } from './build'
+import { Dev } from './dev'
 
 const commands = {
   build: Build,
   dev: Dev,
 }
 
-export default commands
+export { commands }
