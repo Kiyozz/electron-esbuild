@@ -76,7 +76,7 @@
     "webpack": "~4.46.0"
   },
   "peerDependencies": {
-    "esbuild": "^0.8.57",
+    "esbuild": "0.x",
     "webpack": ">=4"
   },
   "peerDependenciesMeta": {
