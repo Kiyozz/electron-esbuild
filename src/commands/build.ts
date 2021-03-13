@@ -37,7 +37,7 @@ export class Build extends Cli {
 
     logger.debug('Creating worker')
 
-    const worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME)
+    const worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME, 'production')
 
     logger.debug('Created worker')
 

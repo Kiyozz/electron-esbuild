@@ -14,6 +14,7 @@ import { Target, TypeConfig } from './config/enums'
 import { ElectronEsbuildConfig, ElectronEsbuildConfigYaml, PossibleConfiguration } from './config/types'
 import { validate } from './config/validation'
 import { Logger } from './console'
+import { Env } from './env'
 
 const logger = new Logger('Config')
 
@@ -22,7 +23,7 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
   public readonly mainConfig: Configurator<TypeConfig>
   public readonly rendererConfig: Configurator<TypeConfig>
 
-  constructor(private electronEsbuildConfigFile: string) {
+  constructor(private electronEsbuildConfigFile: string, private env: Env) {
     this.yaml = this.loadYaml()
     const configuratorFactory = new ConfiguratorFactory()
     this.mainConfig = configuratorFactory.create(this.yaml.mainConfig)
@@ -41,6 +42,8 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
         `Renderer config file '${rendererConfig.path}' not found. Check your ${this.electronEsbuildConfigFile}`,
       )
     }
+
+    process.env.NODE_ENV = this.env
 
     let mainConfigFinal: M = require(path.resolve(process.cwd(), mainConfig.path))({
       ...mainPartial,

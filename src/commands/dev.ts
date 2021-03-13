@@ -34,7 +34,7 @@ export class Dev extends Cli {
     super(cli)
     logger.debug('Creating worker')
 
-    this.worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME)
+    this.worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME, 'development')
 
     logger.debug('Created worker')
 
