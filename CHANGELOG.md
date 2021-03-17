@@ -1,10 +1,16 @@
+## Unreleased
+
+### Features
+
+- If you're using webpack for the renderer, and your configuration file was invalid, the error was silenced.
+
 ## v1.2.0
 
-## Bug fixes
+### Bug fixes
 
 - NODE_ENV was not set in the user configuration
 
-## Breaking changes
+### Breaking changes
 
 **Users configuration file is no longer a function**
 
