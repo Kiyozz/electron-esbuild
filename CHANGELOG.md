@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- Using webpack, plugins/minimizer classes instance was discarded and cause webpack to fail
+
 ## v1.2.1
 
 ### Features

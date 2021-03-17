@@ -68,8 +68,8 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
       )
     }
 
-    let mainConfigFinal: M = deepMerge(userMainConfig, mainPartial)
-    let rendererConfigFinal: R = deepMerge(userRendererConfig, rendererPartial)
+    let mainConfigFinal: M = deepMerge(userMainConfig, mainPartial, { clone: false })
+    let rendererConfigFinal: R = deepMerge(userRendererConfig, rendererPartial, { clone: false })
 
     mainConfigFinal = deepMerge(
       mainConfigFinal,
