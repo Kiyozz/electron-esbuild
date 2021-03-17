@@ -15,8 +15,6 @@ import { ElectronEsbuildConfigItem } from '../config/types'
 import { configByEnv } from '../config/utils'
 import { Logger } from '../console'
 
-process.env.NODE_ENV = 'development'
-
 const isWindows = process.platform === 'win32'
 const electronBin = isWindows ? 'electron.cmd' : 'electron'
 
@@ -32,6 +30,7 @@ export class Dev extends Cli {
 
   constructor(cli: CliResult) {
     super(cli)
+    process.env.NODE_ENV = 'development'
     logger.debug('Creating worker')
 
     this.worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME, 'development')

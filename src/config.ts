@@ -4,6 +4,7 @@
  * All rights reserved.
  */
 
+import deepMerge from 'deepmerge'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
@@ -45,23 +46,40 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
 
     process.env.NODE_ENV = this.env
 
-    let mainConfigFinal: M = require(path.resolve(process.cwd(), mainConfig.path))({
-      ...mainPartial,
-    })
+    const userMainConfig = require(path.resolve(process.cwd(), mainConfig.path))
+    const userRendererConfig = require(path.resolve(process.cwd(), rendererConfig.path))
 
-    let rendererConfigFinal: R = require(path.resolve(process.cwd(), rendererConfig.path))({
-      ...rendererPartial,
-    })
+    if (typeof userMainConfig === 'function' || typeof userRendererConfig === 'function') {
+      const configFileThatIsWrong = []
 
-    mainConfigFinal = {
-      ...mainConfigFinal,
-      ...this.mainConfig.load(mainPartial, mainConfigFinal, Target.Main),
+      if (typeof userMainConfig === 'function') {
+        configFileThatIsWrong.push('main')
+      }
+
+      if (typeof userRendererConfig === 'function') {
+        configFileThatIsWrong.push('renderer')
+      }
+
+      const plural = configFileThatIsWrong.length > 1 ? 's' : ''
+
+      logger.end(
+        'Starting electron-esbuild v1.2.0, you need to export an object from your esbuild/webpack configuration file',
+        `Check your ${configFileThatIsWrong.join(', ')} configuration file${plural}`,
+      )
     }
 
-    rendererConfigFinal = {
-      ...rendererConfigFinal,
-      ...this.rendererConfig.load(rendererPartial, rendererConfigFinal, Target.Renderer),
-    }
+    let mainConfigFinal: M = deepMerge(userMainConfig, mainPartial)
+    let rendererConfigFinal: R = deepMerge(userRendererConfig, rendererPartial)
+
+    mainConfigFinal = deepMerge(
+      mainConfigFinal,
+      this.mainConfig.load(mainPartial, mainConfigFinal, Target.Main) as Partial<M>,
+    )
+
+    rendererConfigFinal = deepMerge(
+      rendererConfigFinal,
+      this.rendererConfig.load(rendererPartial, rendererConfigFinal, Target.Renderer) as Partial<R>,
+    )
 
     return {
       mainConfig: {

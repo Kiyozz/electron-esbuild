@@ -1,11 +1,7 @@
 const path = require('path')
 
-/**
- * @param {Partial<import('esbuild').BuildOptions>} merge
- *
- * @return {import('esbuild').BuildOptions}
- */
-module.exports = (merge) => ({
+/** @var {Partial<import('esbuild').BuildOptions>} */
+module.exports = {
   platform: 'browser',
   entryPoints: [path.resolve('src/renderer/index.tsx')],
   bundle: true,
@@ -14,6 +10,5 @@ module.exports = (merge) => ({
     '.ts': 'ts',
     '.tsx': 'tsx',
     '.css': 'css',
-  },
-  ...merge,
-})
+  }
+}

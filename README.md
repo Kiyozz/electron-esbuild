@@ -71,15 +71,11 @@ rendererConfig:
 
 See [example](examples/react-typescript/esbuild.main.config.js)
 
-```js
+```javascript
 const path = require('path')
 
-/**
- * @param {Partial<import('esbuild').BuildOptions>} merge
- *
- * @return {import('esbuild').BuildOptions}
- */
-module.exports = (merge) => ({
+/** @var {Partial<import('esbuild').BuildOptions>} */
+module.exports = {
   platform: 'node',
   entryPoints: [path.resolve('src/main/main.ts')],
   bundle: true,
@@ -87,23 +83,18 @@ module.exports = (merge) => ({
   loader: {
     '.ts': 'ts',
   },
-  ...merge,
-})
+}
 ```
 
 ### Renderer esbuild configuration
 
 See [example](examples/react-typescript/esbuild.renderer.config.js)
 
-```js
+```javascript
 const path = require('path')
 
-/**
- * @param {Partial<import('esbuild').BuildOptions>} merge
- *
- * @return {import('esbuild').BuildOptions}
- */
-module.exports = (merge) => ({
+/** @var {Partial<import('esbuild').BuildOptions>} */
+module.exports = {
   platform: 'browser',
   entryPoints: [path.resolve('src/renderer/index.tsx')],
   bundle: true,
@@ -113,6 +104,5 @@ module.exports = (merge) => ({
     '.tsx': 'tsx',
     '.css': 'css',
   },
-  ...merge,
-})
+}
 ```

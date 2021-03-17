@@ -8,11 +8,9 @@ const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
 const webpack = require('webpack')
 
 /**
- * @param {Partial<import('webpack').Configuration>} merge
- *
- * @return {import('webpack').Configuration}
+ * @return {Partial<webpack.Configuration>}
  */
-module.exports = (merge) => {
+const createConfig = () => {
   const isProduction = process.env.NODE_ENV === 'production'
 
   const plugins = [
@@ -31,7 +29,7 @@ module.exports = (merge) => {
   const rendererSources = path.resolve(__dirname, 'src', 'renderer')
 
   /** @type {import('webpack').Configuration} */
-  const myNewConfig = {
+  const configuration = {
     entry: {
       renderer: [path.join(rendererSources, 'index.tsx'), path.join(rendererSources, 'index.css')],
     },
@@ -103,29 +101,28 @@ module.exports = (merge) => {
   }
 
   if (isProduction) {
-    myNewConfig.optimization = {
+    configuration.optimization = {
       minimize: true,
       minimizer: [new TerserPlugin(), new CssMinimizerWebpackPlugin()],
     }
   } else {
-    myNewConfig.plugins.push(
+    configuration.plugins.push(
       new webpack.HotModuleReplacementPlugin(),
       new ForkTsCheckerWebpackPlugin(),
       new ReactRefreshWebpackPlugin(),
     )
 
-    myNewConfig.devServer = {
+    configuration.devServer = {
       host: 'localhost',
       port: '9080',
       hot: true,
       overlay: true,
     }
 
-    myNewConfig.entry.renderer.unshift('css-hot-loader/hotModuleReplacement')
+    configuration.entry.renderer.unshift('css-hot-loader/hotModuleReplacement')
   }
 
-  return {
-    ...myNewConfig,
-    ...merge,
-  }
+  return configuration
 }
+
+module.exports = createConfig()
