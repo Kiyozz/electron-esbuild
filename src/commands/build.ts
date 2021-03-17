@@ -14,8 +14,6 @@ import { CONFIG_FILE_NAME } from '../config/constants'
 import { configByEnv } from '../config/utils'
 import { Logger } from '../console'
 
-process.env.NODE_ENV = 'production'
-
 const logger = new Logger('Commands/Build')
 
 function clean(): void {
@@ -29,6 +27,7 @@ export class Build extends Cli {
   }
 
   async init(): Promise<number> {
+    process.env.NODE_ENV = 'production'
     logger.debug('Start')
 
     if (this.cli.flags.clean) {
