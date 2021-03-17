@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- v1.2.2 fix was incomplete
+
 ## v1.2.2
 
 ### Bug fixes

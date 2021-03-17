@@ -4,6 +4,7 @@
  * All rights reserved.
  */
 
+import deepMerge from 'deepmerge'
 import path from 'path'
 import { Configuration } from 'webpack'
 
@@ -20,12 +21,15 @@ export class WebpackConfigurator extends Configurator<TypeConfig.Webpack> {
   }
 
   load(partial: Partial<Configuration>, userConfig: Configuration, target: Target): Configuration {
-    return {
-      ...partial,
-      output: {
-        filename: isMain(target) ? 'main.js' : 'index.js',
-        path: path.resolve(process.cwd(), this.config.output),
+    return deepMerge(
+      partial,
+      {
+        output: {
+          filename: isMain(target) ? 'main.js' : 'index.js',
+          path: path.resolve(process.cwd(), this.config.output),
+        },
       },
-    }
+      { clone: false },
+    )
   }
 }

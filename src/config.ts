@@ -74,11 +74,13 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
     mainConfigFinal = deepMerge(
       mainConfigFinal,
       this.mainConfig.load(mainPartial, mainConfigFinal, Target.Main) as Partial<M>,
+      { clone: false },
     )
 
     rendererConfigFinal = deepMerge(
       rendererConfigFinal,
       this.rendererConfig.load(rendererPartial, rendererConfigFinal, Target.Renderer) as Partial<R>,
+      { clone: false },
     )
 
     return {

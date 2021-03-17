@@ -4,6 +4,7 @@
  * All rights reserved.
  */
 
+import deepMerge from 'deepmerge'
 import { BuildOptions } from 'esbuild'
 import nodeModule from 'module'
 import path from 'path'
@@ -30,10 +31,14 @@ export class EsbuildConfigurator extends Configurator<TypeConfig.Esbuild> {
       additional.outfile = out
     }
 
-    return {
-      ...partial,
-      external: [...(partial.external ?? []), 'electron', ...nodeModule.builtinModules],
-      ...additional,
-    }
+    return deepMerge(
+      deepMerge(
+        partial,
+        { external: [...(partial.external ?? []), 'electron', ...nodeModule.builtinModules] },
+        { clone: false },
+      ),
+      additional,
+      { clone: false },
+    )
   }
 }
