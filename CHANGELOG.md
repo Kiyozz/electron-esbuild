@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- Fix `cannot find module 'webpack'`
+
 ## v1.2.3
 
 ### Bug fixes

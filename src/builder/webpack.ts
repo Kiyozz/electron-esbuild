@@ -5,7 +5,6 @@
  */
 
 import { Compiler, Configuration } from 'webpack'
-import WebpackDevServer from 'webpack-dev-server'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain } from '../config/utils'
@@ -22,6 +21,7 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
 
     try {
       const webpack = require('webpack')
+      require('webpack-dev-server') // check that user can use webpack-dev-server
       this.compiler = webpack(this.config.config)
     } catch (e) {
       if (e.message?.includes('Invalid configuration object')) {
@@ -57,12 +57,13 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
     if (isMain(this.config)) {
       // TODO: webpack main watch
     } else {
+      const WebpackDevServer = require('webpack-dev-server')
       const rendererServer = new WebpackDevServer(this.compiler, {
         hot: true,
         overlay: true,
       })
 
-      rendererServer.listen(9080, 'localhost', (err) => {
+      rendererServer.listen(9080, 'localhost', (err: Error | undefined) => {
         if (err) {
           logger.error(this.env, 'error', err)
         } else {
