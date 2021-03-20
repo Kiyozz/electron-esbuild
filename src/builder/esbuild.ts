@@ -24,6 +24,7 @@ const logger = new Logger('Builder/Esbuild')
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildIncremental | undefined
   private lrServer: ReturnType<typeof livereload.createServer> | undefined
+  private start: (() => void) | undefined
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
     super(config)
@@ -45,6 +46,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
               logger.log('Refresh', this.env.toLowerCase())
 
               this.lrServer?.refresh('index.html')
+              this.start?.()
             }
           },
         },
@@ -55,9 +57,9 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     logger.log(this.env, 'built')
   }
 
-  dev(): void {
+  dev(start: () => void): void {
     if (isMain(this.config)) {
-      // TODO?
+      this.start = start
     } else if (isRenderer(this.config)) {
       if (typeof this.config.fileConfig.html === 'undefined') {
         logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
