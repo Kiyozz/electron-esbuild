@@ -37,12 +37,9 @@
     "dist"
   ],
   "dependencies": {
-    "chokidar": "~3.5.1",
     "compression": "~1.7.4",
     "connect": "~3.7.0",
-    "debounce-fn": "~4.0.0",
     "deepmerge": "^4.2.2",
-    "dependency-tree-81": "~8.1.2",
     "http-proxy": "~1.18.1",
     "joi": "~17.4.0",
     "js-yaml": "~4.0.0",

@@ -4,10 +4,8 @@
  * All rights reserved.
  */
 
-import chokidar from 'chokidar'
 import compression from 'compression'
 import connect from 'connect'
-import debounce from 'debounce-fn'
 import esbuild from 'esbuild'
 import { BuildIncremental, BuildOptions } from 'esbuild'
 import { promises as fs } from 'fs'
@@ -19,13 +17,13 @@ import path from 'path'
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'
 import { Logger } from '../console'
-import { getDeps } from '../deps'
 import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Esbuild')
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildIncremental | undefined
+  private lrServer: ReturnType<typeof livereload.createServer> | undefined
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
     super(config)
@@ -37,40 +35,33 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     if (this.builder) {
       await this.builder.rebuild()
     } else {
-      this.builder = (await esbuild.build(this.config.config)) as BuildIncremental
+      this.builder = (await esbuild.build({
+        ...this.config.config,
+        watch: {
+          onRebuild: (error) => {
+            if (error) {
+              logger.error('Refresh failed', error)
+            } else {
+              logger.log('Refresh', this.env.toLowerCase())
+
+              this.lrServer?.refresh('index.html')
+            }
+          },
+        },
+      })) as BuildIncremental
       await this.copyHtml()
     }
 
     logger.log(this.env, 'built')
   }
 
-  dev(start: () => void): void {
+  dev(): void {
     if (isMain(this.config)) {
-      const sources = path.join(path.resolve(path.dirname(this.config.fileConfig.src)), '**', '*.{js,ts,tsx}')
-      const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this.config.fileConfig.src))])
-
-      watcher.on('ready', () => {
-        watcher.on(
-          'all',
-          debounce(
-            async () => {
-              await this.build()
-
-              start()
-
-              await watcher.close()
-              this.dev(start)
-            },
-            { wait: 200 },
-          ),
-        )
-      })
+      // TODO?
     } else if (isRenderer(this.config)) {
       if (typeof this.config.fileConfig.html === 'undefined') {
         logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
       }
-
-      const srcDir = path.resolve(process.cwd(), path.dirname(this.config.fileConfig.src))
 
       esbuild
         .serve(
@@ -94,7 +85,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           const proxy = httpProxy.createProxy({ target: 'http://localhost:9081' })
           const proxyLr = httpProxy.createProxy({ target: `http://localhost:${livereloadPort}` })
-          const lrServer = livereload.createServer({ port: livereloadPort })
+          this.lrServer = livereload.createServer({ port: livereloadPort })
 
           const handler = connect()
 
@@ -119,20 +110,9 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             proxyLr.ws(req, socket, head)
           })
 
-          const sources = `${srcDir}/**/*.{js,jsx,ts,tsx,css,scss}`
-          const watcher = chokidar.watch(sources, { disableGlobbing: false })
-
-          watcher.on('ready', () => {
-            watcher.on('all', async (eventName, file) => {
-              logger.log('Refresh', this.env.toLowerCase())
-              lrServer.refresh(file)
-            })
-          })
-
           process.on('exit', async () => {
             server.close()
-            lrServer.close()
-            await watcher.close()
+            this.lrServer?.close()
             builder.stop()
           })
 
