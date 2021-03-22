@@ -15,7 +15,7 @@ export abstract class BaseBuilder<T> implements Builder {
     this.env = isMain(this.config) ? 'Main' : isRenderer(this.config) ? 'Renderer' : 'Unknown env'
   }
 
-  abstract build(): Promise<void>
+  abstract build(): void | Promise<void>
 
-  abstract dev(start: () => void): void
+  abstract dev(start: () => void): void | Promise<void>
 }

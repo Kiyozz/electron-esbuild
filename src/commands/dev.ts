@@ -69,8 +69,6 @@ export class Dev extends Cli {
     await Promise.all([this.mainBuilder.build(), this.rendererBuilder.build()])
 
     logger.debug('Initial builds finished')
-
-    await this.startApp()
   }
 
   private startApp() {

@@ -13,8 +13,8 @@ import { unsupportedType } from './console'
 export interface Builder {
   env: string
 
-  build(): Promise<void>
-  dev(start: () => void): void
+  build(): void | Promise<void>
+  dev(start: () => void): void | Promise<void>
 }
 
 export function createBuilders(
