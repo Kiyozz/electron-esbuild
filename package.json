@@ -83,6 +83,9 @@
   "peerDependenciesMeta": {
     "webpack": {
       "optional": true
+    },
+    "webpack-dev-server": {
+      "optional": true
     }
   },
   "husky": {
