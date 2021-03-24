@@ -6,12 +6,11 @@
 
 import compression from 'compression'
 import connect from 'connect'
+import crypto from 'crypto'
 import esbuild, { BuildResult } from 'esbuild'
 import { BuildOptions } from 'esbuild'
 import { promises as fs } from 'fs'
-import { createServer } from 'http'
-import httpProxy from 'http-proxy'
-import livereload from 'livereload'
+import { createServer, ServerResponse } from 'http'
 import path from 'path'
 import serveStatic from 'serve-static'
 
@@ -26,6 +25,7 @@ type StartCallback = () => void
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildResult | undefined
+  private clients: Record<string, ServerResponse> = {}
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
     super(config)
@@ -45,7 +45,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       this.builder = (await esbuild.build({
         ...this.config.config,
         watch: {
-          onRebuild: (error) => {
+          onRebuild: (error: unknown) => {
             if (error) {
               logger.error('Refresh', this.env.toLowerCase(), 'failed', error)
             } else {
@@ -63,19 +63,18 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         return
       }
 
-      const livereloadPort = 35729
       const htmlPath = path.resolve(process.cwd(), this.config.fileConfig.html)
 
       const html = (await fs.readFile(htmlPath))
         .toString()
-        .replace('</body>', `<script src="/livereload.js?snipver=1"></script></body>`)
-
-      const proxyLr = httpProxy.createProxy({ target: `http://localhost:${livereloadPort}` })
-      const lrServer = livereload.createServer({ port: livereloadPort })
+        .replace(
+          '</body>',
+          '<script>new EventSource("/events").onmessage = () => window.location.reload();</script></body>',
+        )
 
       const handler = connect()
 
-      handler.use(compression() as never)
+      // handler.use(compression() as never)
 
       let publicPath = ''
 
@@ -87,8 +86,6 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         logger.end('Missing outdir/outfile in esbuild configuration. This is maybe an error from electron-esbuild.')
       }
 
-      lrServer.watch(publicPath)
-
       handler.use(serveStatic(publicPath, { index: false }))
       handler.use((req, res) => {
         if (req.url === '/' || req.url === '') {
@@ -97,20 +94,47 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
           res.writeHead(200)
           res.end(html)
-        } else if (req.url?.includes('livereload.js')) {
-          proxyLr.web(req, res)
+        } else if (req.url === '/events') {
+          res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+          })
+
+          const key = crypto.randomBytes(8).toString('hex')
+
+          logger.log('Client connected', key)
+
+          this.clients[key] = res
+
+          req.on('close', () => {
+            logger.log('Client disconnected', key)
+
+            delete this.clients[key]
+          })
         }
       })
 
+      const keepaliveInterval = setInterval(() => {
+        for (const [key, client] of Object.entries(this.clients)) {
+          logger.log('Pinging client', key)
+
+          client.write(`:\n\n`)
+        }
+      }, 10000)
+
       const server = createServer(handler)
 
-      server.on('upgrade', (req, socket, head) => {
-        proxyLr.ws(req, socket, head)
-      })
-
       process.on('exit', async () => {
+        clearInterval(keepaliveInterval)
+
+        for (const [key, client] of Object.entries(this.clients)) {
+          logger.log('Ending client', key)
+
+          client.end()
+        }
+
         server.close()
-        lrServer.close()
         this.builder?.stop?.()
       })
 
@@ -119,11 +143,17 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       this.builder = await esbuild.build({
         ...this.config.config,
         watch: {
-          onRebuild: async (error) => {
+          onRebuild: (error: unknown) => {
             if (error) {
-              logger.error('Refresh', this.env.toLowerCase(), 'failed', error)
+              logger.error('Rebuild', this.env.toLowerCase(), 'failed', error)
             } else {
-              logger.log('Refresh', this.env.toLowerCase())
+              logger.log('Rebuild', this.env.toLowerCase())
+
+              for (const [key, client] of Object.entries(this.clients)) {
+                logger.log('Reloading client', key)
+
+                client.write('data: reload\n\n')
+              }
             }
           },
         },
