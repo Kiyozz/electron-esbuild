@@ -4,7 +4,6 @@
  * All rights reserved.
  */
 
-import compression from 'compression'
 import connect from 'connect'
 import crypto from 'crypto'
 import esbuild, { BuildResult } from 'esbuild'
@@ -69,7 +68,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         .toString()
         .replace(
           '</body>',
-          '<script>new EventSource("/events").onmessage = () => window.location.reload();</script></body>',
+          '<script>new EventSource("/events").onmessage = () => window.location.reload()</script></body>',
         )
 
       const handler = connect()
@@ -103,21 +102,21 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           const key = crypto.randomBytes(8).toString('hex')
 
-          logger.log('Client connected', key)
+          logger.debug('Client connected', key)
 
           this.clients[key] = res
 
           req.on('close', () => {
-            logger.log('Client disconnected', key)
+            logger.debug('Client disconnected', key)
 
             delete this.clients[key]
           })
         }
       })
 
-      const keepaliveInterval = setInterval(() => {
+      const keepAliveInterval = setInterval(() => {
         for (const [key, client] of Object.entries(this.clients)) {
-          logger.log('Pinging client', key)
+          logger.debug('Pinging client', key)
 
           client.write(`:\n\n`)
         }
@@ -126,10 +125,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       const server = createServer(handler)
 
       process.on('exit', async () => {
-        clearInterval(keepaliveInterval)
+        clearInterval(keepAliveInterval)
 
         for (const [key, client] of Object.entries(this.clients)) {
-          logger.log('Ending client', key)
+          logger.debug('Ending client', key)
 
           client.end()
         }
@@ -150,7 +149,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
               logger.log('Rebuild', this.env.toLowerCase())
 
               for (const [key, client] of Object.entries(this.clients)) {
-                logger.log('Reloading client', key)
+                logger.debug('Reloading client', key)
 
                 client.write('data: reload\n\n')
               }
