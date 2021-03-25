@@ -1,4 +1,4 @@
-## Unreleased
+## v1.2.5
 
 ### Dependencies
 

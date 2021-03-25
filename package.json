@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "keywords": [
     "esbuild",
     "electron",
