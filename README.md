@@ -106,3 +106,14 @@ module.exports = {
   },
 }
 ```
+
+## Development
+
+electron-esbuild is built using `node@>=15.12` and `npm@>=7.6`. Any pull-request using lower version will be rejected.
+
+### Setup
+
+```bash
+npm i
+npm run build
+```
