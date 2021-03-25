@@ -14,6 +14,7 @@ async function start() {
   await esbuild.build({
     ...config,
     minify: false,
+    sourcemap: 'external',
   })
 }
 

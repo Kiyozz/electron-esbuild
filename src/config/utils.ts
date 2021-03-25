@@ -8,9 +8,13 @@ import { BuildOptions } from 'esbuild'
 import { Configuration } from 'webpack'
 
 import { Target, TypeConfig } from './enums'
-import { ElectronEsbuildConfigItem, PossibleConfiguration } from './types'
+import { ElectronEsbuildConfigItem, ItemConfig, PossibleConfiguration } from './types'
 
-export function configByEnv(dev: boolean, type: TypeConfig): PossibleConfiguration {
+export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConfiguration {
+  if (type === null) {
+    return {}
+  }
+
   if (dev) {
     switch (type) {
       case TypeConfig.Esbuild:
@@ -41,15 +45,15 @@ export function configByEnv(dev: boolean, type: TypeConfig): PossibleConfigurati
 }
 
 export function isEsbuild(
-  configItem: ElectronEsbuildConfigItem,
-): configItem is ElectronEsbuildConfigItem<BuildOptions> {
-  return configItem.fileConfig.type === TypeConfig.Esbuild
+  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
+): configItem is ElectronEsbuildConfigItem<BuildOptions, ItemConfig> {
+  return configItem.fileConfig?.type === TypeConfig.Esbuild
 }
 
 export function isWebpack(
-  configItem: ElectronEsbuildConfigItem,
-): configItem is ElectronEsbuildConfigItem<Configuration> {
-  return configItem.fileConfig.type === TypeConfig.Webpack
+  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
+): configItem is ElectronEsbuildConfigItem<Configuration, ItemConfig> {
+  return configItem.fileConfig?.type === TypeConfig.Webpack
 }
 
 export function isMain(configItem: ElectronEsbuildConfigItem | Target): boolean {

@@ -19,20 +19,20 @@ export interface ItemConfig {
 
 export type PossibleConfiguration = Configuration | BuildOptions
 
-export interface ElectronEsbuildConfigItem<T = PossibleConfiguration> {
+export interface ElectronEsbuildConfigItem<T = PossibleConfiguration, F = ItemConfig | null> {
   config: T
-  fileConfig: ItemConfig
+  fileConfig: F
   target: Target
 }
 
 export interface ElectronEsbuildConfig<M = PossibleConfiguration, R = PossibleConfiguration> {
-  mainConfig: ElectronEsbuildConfigItem<M>
-  rendererConfig: ElectronEsbuildConfigItem<R>
+  mainConfig: ElectronEsbuildConfigItem<M, ItemConfig>
+  rendererConfig: ElectronEsbuildConfigItem<R | null>
 }
 
 export interface ElectronEsbuildConfigYaml {
   mainConfig: ItemConfig
-  rendererConfig: ItemConfig
+  rendererConfig: ItemConfig | null
 }
 
 export interface ConfigMapping {

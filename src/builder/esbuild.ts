@@ -45,6 +45,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   }
 
   dev(start: () => void): void {
+    if (this.config.fileConfig === null) {
+      return
+    }
+
     if (isMain(this.config)) {
       const sources = path.join(path.resolve(path.dirname(this.config.fileConfig.src)), '**', '*.{js,ts,tsx}')
       const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this.config.fileConfig.src))])
@@ -81,7 +85,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           this.config.config,
         )
         .then(async (builder) => {
-          if (typeof this.config.fileConfig.html === 'undefined') {
+          if (typeof this.config.fileConfig?.html === 'undefined') {
             logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
             return
           }
@@ -142,7 +146,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   }
 
   private async copyHtml() {
-    if (this.config.fileConfig.html) {
+    if (this.config.fileConfig?.html) {
       const out = path.resolve(process.cwd(), this.config.fileConfig.output)
       const html = path.resolve(process.cwd(), this.config.fileConfig.html)
 

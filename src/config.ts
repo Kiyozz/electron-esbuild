@@ -22,13 +22,14 @@ const logger = new Logger('Config')
 export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfiguration> {
   public readonly yaml: ElectronEsbuildConfigYaml
   public readonly mainConfig: Configurator<TypeConfig>
-  public readonly rendererConfig: Configurator<TypeConfig>
+  public readonly rendererConfig: Configurator<TypeConfig> | null
 
   constructor(private electronEsbuildConfigFile: string, private env: Env) {
     this.yaml = this.loadYaml()
     const configuratorFactory = new ConfiguratorFactory()
     this.mainConfig = configuratorFactory.create(this.yaml.mainConfig)
-    this.rendererConfig = configuratorFactory.create(this.yaml.rendererConfig)
+    this.rendererConfig =
+      this.yaml.rendererConfig !== null ? configuratorFactory.create(this.yaml.rendererConfig) : null
   }
 
   parse(mainPartial: Partial<M>, rendererPartial: Partial<R>): ElectronEsbuildConfig<M, R> {
@@ -38,7 +39,7 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
       logger.end(`Main config file '${mainConfig.path}' not found. Check your ${this.electronEsbuildConfigFile}`)
     }
 
-    if (!fs.existsSync(rendererConfig.path)) {
+    if (rendererConfig !== null && !fs.existsSync(rendererConfig.path)) {
       logger.end(
         `Renderer config file '${rendererConfig.path}' not found. Check your ${this.electronEsbuildConfigFile}`,
       )
@@ -47,7 +48,8 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
     process.env.NODE_ENV = this.env
 
     const userMainConfig = require(path.resolve(process.cwd(), mainConfig.path))
-    const userRendererConfig = require(path.resolve(process.cwd(), rendererConfig.path))
+    const userRendererConfig =
+      rendererConfig !== null ? require(path.resolve(process.cwd(), rendererConfig.path)) : null
 
     if (typeof userMainConfig === 'function' || typeof userRendererConfig === 'function') {
       const configFileThatIsWrong = []
@@ -69,7 +71,8 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
     }
 
     let mainConfigFinal: M = deepMerge(userMainConfig, mainPartial, { clone: false })
-    let rendererConfigFinal: R = deepMerge(userRendererConfig, rendererPartial, { clone: false })
+    let rendererConfigFinal: R | null =
+      rendererConfig !== null ? deepMerge(userRendererConfig, rendererPartial, { clone: false }) : null
 
     mainConfigFinal = deepMerge(
       mainConfigFinal,
@@ -77,11 +80,16 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
       { clone: false },
     )
 
-    rendererConfigFinal = deepMerge(
-      rendererConfigFinal,
-      this.rendererConfig.load(rendererPartial, rendererConfigFinal, Target.Renderer) as Partial<R>,
-      { clone: false },
-    )
+    rendererConfigFinal =
+      rendererConfigFinal !== null
+        ? this.rendererConfig
+          ? deepMerge(
+              rendererConfigFinal,
+              this.rendererConfig.load(rendererPartial, rendererConfigFinal, Target.Renderer) as Partial<R>,
+              { clone: false },
+            )
+          : null
+        : null
 
     return {
       mainConfig: {
@@ -106,10 +114,14 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
       logger.end('Cannot find file', this.electronEsbuildConfigFile)
     }
 
-    const electronEsbuildConfig = yaml.load(fileContent) as unknown
+    const electronEsbuildConfig = (yaml.load(fileContent) as unknown) as ElectronEsbuildConfigYaml
 
     validate(electronEsbuildConfig)
 
-    return electronEsbuildConfig as ElectronEsbuildConfigYaml
+    if (electronEsbuildConfig.rendererConfig === undefined) {
+      electronEsbuildConfig.rendererConfig = null
+    }
+
+    return electronEsbuildConfig
   }
 }

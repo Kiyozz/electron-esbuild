@@ -42,7 +42,7 @@ export class Build extends Cli {
 
     const { mainConfig, rendererConfig } = worker.parse(
       configByEnv(false, worker.mainConfig.type),
-      configByEnv(false, worker.rendererConfig.type),
+      configByEnv(false, worker.rendererConfig?.type ?? null),
     )
 
     logger.debug('Parsed config')
@@ -52,7 +52,7 @@ export class Build extends Cli {
     logger.debug('Created builders')
     logger.log('Creating production build...')
 
-    await Promise.all([main.build(), renderer.build()])
+    await Promise.all([main.build(), renderer?.build() ?? Promise.resolve()])
 
     return 0
   }

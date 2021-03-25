@@ -11,7 +11,7 @@ import { createBuilders, Builder } from '../builder'
 import { Cli, CliResult } from '../cli'
 import { ElectronEsbuildWorker } from '../config'
 import { CONFIG_FILE_NAME } from '../config/constants'
-import { ElectronEsbuildConfigItem } from '../config/types'
+import { ElectronEsbuildConfigItem, ItemConfig, PossibleConfiguration } from '../config/types'
 import { configByEnv } from '../config/utils'
 import { Logger } from '../console'
 
@@ -22,11 +22,11 @@ const logger = new Logger('Commands/Dev')
 
 export class Dev extends Cli {
   private readonly worker: ElectronEsbuildWorker
-  private readonly mainConfig: ElectronEsbuildConfigItem
-  private readonly rendererConfig: ElectronEsbuildConfigItem
+  private readonly mainConfig: ElectronEsbuildConfigItem<PossibleConfiguration, ItemConfig>
+  private readonly rendererConfig: ElectronEsbuildConfigItem<PossibleConfiguration | null>
   private electronProcess: ChildProcessWithoutNullStreams | undefined
   private readonly mainBuilder: Builder
-  private readonly rendererBuilder: Builder
+  private readonly rendererBuilder: Builder | null
 
   constructor(cli: CliResult) {
     super(cli)
@@ -39,7 +39,7 @@ export class Dev extends Cli {
 
     const { mainConfig, rendererConfig } = this.worker.parse(
       configByEnv(true, this.worker.mainConfig.type),
-      configByEnv(true, this.worker.rendererConfig.type),
+      configByEnv(true, this.worker.rendererConfig?.type ?? null),
     )
 
     logger.debug('Parsed config')
@@ -62,11 +62,11 @@ export class Dev extends Cli {
 
     logger.debug('Starting dev builders')
     this.mainBuilder.dev(start)
-    this.rendererBuilder.dev(start)
+    this.rendererBuilder?.dev(start)
     logger.debug('Started dev builders')
     logger.debug('Starting initial builds')
 
-    await Promise.all([this.mainBuilder.build(), this.rendererBuilder.build()])
+    await Promise.all([this.mainBuilder.build(), this.rendererBuilder?.build()])
 
     logger.debug('Initial builds finished')
 

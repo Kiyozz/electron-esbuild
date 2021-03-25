@@ -1,3 +1,9 @@
+## Unreleased
+
+### Features
+
+- Add ability to use electron-esbuild without a renderer
+
 ## v1.2.5
 
 ### Dependencies

@@ -25,7 +25,7 @@ const schema = Joi.object<ElectronEsbuildConfigYaml>({
     src: Joi.string().required(),
     output: Joi.string().required(),
     html: Joi.string().optional(),
-  }).required(),
+  }).optional(),
 })
 
 export function validate(config: unknown): true | never {
