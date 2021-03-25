@@ -28,7 +28,9 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
         logger.end('Your webpack configuration is invalid. Message from webpack', e.message)
       }
 
-      logger.end("It looks like you're trying to use webpack but it's not installed, try running `npm i -D webpack`")
+      logger.end(
+        "It looks like you're trying to use webpack but it's not installed, try running `npm i -D webpack webpack-dev-server`",
+      )
     }
   }
 
