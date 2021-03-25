@@ -66,12 +66,16 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
       const htmlPath = path.resolve(process.cwd(), this.config.fileConfig.html)
 
-      const html = (await fs.readFile(htmlPath))
-        .toString()
-        .replace(
-          '</body>',
-          '<script>new EventSource("/events").onmessage = () => window.location.reload()</script></body>',
-        )
+      const html = (await fs.readFile(htmlPath)).toString().replace(
+        '</body>',
+        `
+          <script>
+            const sse = new EventSource("/sse");
+            sse.addEventListener('reload', () => window.location.reload())
+            sse.addEventListener('stylesheet', (e) => document.querySelector(\`link[href^="\${e.data}"]\`).href = \`\${e.data}?${Date.now()}\`)
+          </script></body>
+        `.trim(),
+      )
 
       const handler = connect()
 
@@ -95,7 +99,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
           res.writeHead(200)
           res.end(html)
-        } else if (req.url === '/events') {
+        } else if (req.url === '/sse') {
           res.writeHead(200, {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
@@ -151,7 +155,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             } else {
               logger.log('Rebuild', this.env.toLowerCase())
 
-              const changes = new Set()
+              const changedFiles: string[] = []
 
               try {
                 const files = await fs.readdir(this.config.fileConfig.output)
@@ -175,7 +179,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
                     if (previousHash !== hash) {
                       logger.log('Changed file', file)
 
-                      changes.add(file)
+                      changedFiles.push(file)
                     }
                   }
 
@@ -184,14 +188,24 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
               } catch (e) {
                 logger.error('Changes', this.env.toLowerCase(), 'failed', e)
               } finally {
-                for (const [key, client] of Object.entries(this.clients)) {
-                  logger.debug('Reloading client', key)
+                if (changedFiles.length === 0 || changedFiles.some((changedFile) => !changedFile.endsWith('.css'))) {
+                  for (const [key, client] of Object.entries(this.clients)) {
+                    logger.debug('Reloading client', key)
 
-                  client.write(
-                    changes.size > 0 ? `data: ${Array.from(changes.keys()).join(',')}\n\n` : 'data: reload\n\n',
-                  )
+                    client.write(`id: ${Date.now()}\nevent: reload\ndata: ${changedFiles.join(',')}\n\n`)
 
-                  client.flush()
+                    client.flush()
+                  }
+                } else {
+                  for (const [key, client] of Object.entries(this.clients)) {
+                    logger.debug('Sending changed stylesheets to client', key)
+
+                    for (const changedFile of changedFiles) {
+                      client.write(`id: ${Date.now()}\nevent: stylesheet\ndata: ${changedFile}\n\n`)
+                    }
+
+                    client.flush()
+                  }
                 }
               }
             }
