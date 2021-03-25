@@ -78,16 +78,14 @@
   },
   "peerDependencies": {
     "esbuild": "^0.10.0",
-    "webpack": ">=4"
+    "webpack": ">=4",
+    "webpack-dev-server": "^3.11.2"
   },
   "peerDependenciesMeta": {
     "webpack": {
       "optional": true
     },
     "webpack-dev-server": {
-      "optional": true
-    },
-    "webpack-dev-middleware": {
       "optional": true
     }
   },
