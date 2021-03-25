@@ -4,6 +4,7 @@
  * All rights reserved.
  */
 
+import compression from 'compression'
 import connect from 'connect'
 import crypto from 'crypto'
 import esbuild, { BuildResult } from 'esbuild'
@@ -24,7 +25,8 @@ type StartCallback = () => void
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   private builder: BuildResult | undefined
-  private clients: Record<string, ServerResponse> = {}
+  private clients: Record<string, ServerResponse & { flush: () => void }> = {}
+  private outputFilesHashes: Map<string, string> = new Map()
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
     super(config)
@@ -73,7 +75,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
       const handler = connect()
 
-      // handler.use(compression() as never)
+      handler.use(compression() as never)
 
       let publicPath = ''
 
@@ -104,7 +106,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           logger.debug('Client connected', key)
 
-          this.clients[key] = res
+          this.clients[key] = res as ServerResponse & { flush: () => void }
 
           req.on('close', () => {
             logger.debug('Client disconnected', key)
@@ -119,6 +121,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           logger.debug('Pinging client', key)
 
           client.write(`:\n\n`)
+          client.flush()
         }
       }, 10000)
 
@@ -142,16 +145,54 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       this.builder = await esbuild.build({
         ...this.config.config,
         watch: {
-          onRebuild: (error: unknown) => {
+          onRebuild: async (error: unknown) => {
             if (error) {
               logger.error('Rebuild', this.env.toLowerCase(), 'failed', error)
             } else {
               logger.log('Rebuild', this.env.toLowerCase())
 
-              for (const [key, client] of Object.entries(this.clients)) {
-                logger.debug('Reloading client', key)
+              const changes = new Set()
 
-                client.write('data: reload\n\n')
+              try {
+                const files = await fs.readdir(this.config.fileConfig.output)
+
+                const outputFilesHashes = await Promise.all<[string, string]>(
+                  files.map((file) =>
+                    fs.readFile(path.join(this.config.fileConfig.output, file)).then((buffer) => {
+                      const hash = crypto.createHash('md5')
+
+                      hash.update(buffer)
+
+                      return [file, hash.digest('hex')]
+                    }),
+                  ),
+                )
+
+                for (const [file, hash] of outputFilesHashes) {
+                  let previousHash: string | undefined
+
+                  if ((previousHash = this.outputFilesHashes.get(file))) {
+                    if (previousHash !== hash) {
+                      logger.log('Changed file', file)
+
+                      changes.add(file)
+                    }
+                  }
+
+                  this.outputFilesHashes.set(file, hash)
+                }
+              } catch (e) {
+                logger.error('Changes', this.env.toLowerCase(), 'failed', e)
+              } finally {
+                for (const [key, client] of Object.entries(this.clients)) {
+                  logger.debug('Reloading client', key)
+
+                  client.write(
+                    changes.size > 0 ? `data: ${Array.from(changes.keys()).join(',')}\n\n` : 'data: reload\n\n',
+                  )
+
+                  client.flush()
+                }
               }
             }
           },
