@@ -24,7 +24,7 @@ Examples
   $ electron-esbuild dev
   $ electron-esbuild build`,
   {
-    version: '1.3.0',
+    version: '1.3.1',
     flags: {
       clean: {
         type: 'boolean',
