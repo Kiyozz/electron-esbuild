@@ -1,3 +1,9 @@
+## Unreleased
+
+### Dependencies
+
+- Upgrade to esbuild v0.10.0
+
 ## v1.2.4
 
 ### Bug fixes
