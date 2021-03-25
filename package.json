@@ -86,6 +86,9 @@
     },
     "webpack-dev-server": {
       "optional": true
+    },
+    "webpack-dev-middleware": {
+      "optional": true
     }
   },
   "husky": {
