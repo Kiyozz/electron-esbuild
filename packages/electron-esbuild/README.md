@@ -1,0 +1,108 @@
+# electron-esbuild
+
+[![electron-esbuild version](https://img.shields.io/npm/v/electron-esbuild.svg?label=%20)](./CHANGELOG.md)
+
+## Getting Started
+
+```shell
+npm init @electron-esbuild/app
+```
+
+## Manual
+
+```shell
+npm i -D electron-esbuild
+```
+
+Start a development build ([example](../../examples/react-typescript))
+
+```shell
+npx electron-esbuild dev
+```
+
+Create a build ([example](../../examples/react-typescript))
+
+```shell
+npx electron-esbuild build
+```
+
+```shell
+npx electron-esbuild build --no-clean # do not clean output before build
+```
+
+Package the app ([example](../../examples/react-typescript))
+
+```shell
+npx electron-builder
+```
+
+You can use this [example](../../examples/react-typescript) for a starter React with TypeScript
+
+## Configuration
+
+Create a electron-esbuild configuration [electron-esbuild.config.yaml](../../examples/react-typescript/electron-esbuild.config.yaml)
+
+```yaml
+mainConfig:
+  type: esbuild # currently, only esbuild is supported for mainConfig
+  path: esbuild.main.config.js
+  src: src/main/main.ts
+  output: dist/main
+rendererConfig:
+  type: esbuild # 'webpack' for using webpack in renderer, see examples/react-typescript-webpack
+  path: esbuild.renderer.config.js
+  html: src/renderer/index.html
+  src: src/renderer/index.tsx
+  output: dist/renderer
+```
+
+### Main esbuild config
+
+See [example](../../examples/react-typescript/esbuild.main.config.js)
+
+```javascript
+const path = require('path')
+
+/** @var {Partial<import('esbuild').BuildOptions>} */
+module.exports = {
+  platform: 'node',
+  entryPoints: [path.resolve('src/main/main.ts')],
+  bundle: true,
+  target: 'node14.16.0', // electron version target
+  loader: {
+    '.ts': 'ts',
+  },
+}
+```
+
+### Renderer esbuild configuration
+
+See [example](../../examples/react-typescript/esbuild.renderer.config.js)
+
+```javascript
+const path = require('path')
+
+/** @var {Partial<import('esbuild').BuildOptions>} */
+module.exports = {
+  platform: 'browser',
+  entryPoints: [path.resolve('src/renderer/index.tsx')],
+  bundle: true,
+  target: 'chrome89', // electron version target
+  loader: {
+    '.ts': 'ts',
+    '.tsx': 'tsx',
+    '.css': 'css',
+  },
+}
+```
+
+## Development
+
+electron-esbuild is built using `node@>=15.12` and `npm@>=7.6`. Any pull-request using lower version will be rejected.
+
+### Setup
+
+```bash
+npm i
+npm run build
+```

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true,
     "noImplicitReturns": false,
     "noEmit": true,
-    "esModuleInterop": true,
-    "outDir": "dist"
+    "esModuleInterop": true
   },
-  "include": ["src"]
+  "exclude": ["examples"]
 }

@@ -1,12 +1,6 @@
 # Dependencies
 /node_modules
 
-# Build output
-/dist
-
-# Errors logs
-yarn-error.log
-
 # examples build output
 /examples/**/dist
 /examples/**/package-lock.json

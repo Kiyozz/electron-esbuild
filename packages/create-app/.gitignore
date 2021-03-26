@@ -1,0 +1,8 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Used for testing created app through create-electron-esbuild-app
+var
