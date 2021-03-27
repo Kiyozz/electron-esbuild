@@ -4,31 +4,99 @@
  * All rights reserved.
  */
 
-import chokidar from 'chokidar'
 import compression from 'compression'
 import connect from 'connect'
-import debounce from 'debounce-fn'
+import crypto from 'crypto'
 import esbuild from 'esbuild'
-import { BuildIncremental, BuildOptions } from 'esbuild'
+import { BuildIncremental, BuildOptions, BuildResult } from 'esbuild'
 import { promises as fs } from 'fs'
-import { createServer } from 'http'
-import httpProxy from 'http-proxy'
-import livereload from 'livereload'
+import { createServer, ServerResponse } from 'http'
 import path from 'path'
+import serveStatic from 'serve-static'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
 import { isMain, isRenderer } from '../config/utils'
 import { Logger } from '../console'
-import { getDeps } from '../deps'
 import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Esbuild')
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
-  private builder: BuildIncremental | undefined
+  private builder: BuildResult | undefined
+  private clients: Record<string, ServerResponse & { flush: () => void }> = {}
+  private outputFilesHashes: Map<string, string> = new Map()
 
   constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
     super(config)
+  }
+
+  async watch() {
+    this.builder = await esbuild.build({
+      ...this.config.config,
+      watch: {
+        onRebuild: async (error) => {
+          if (error) {
+            logger.error('Rebuild', this.env.toLowerCase(), 'failed', error)
+          } else {
+            logger.log('Rebuild', this.env.toLowerCase())
+
+            const changedFiles: string[] = []
+
+            try {
+              const files = await fs.readdir(this.config.fileConfig.output)
+
+              const outputFilesHashes = await Promise.all<[string, string]>(
+                files.map((file) =>
+                  fs.readFile(path.join(this.config.fileConfig.output, file)).then((buffer) => {
+                    const hash = crypto.createHash('md5')
+
+                    hash.update(buffer)
+
+                    return [file, hash.digest('hex')]
+                  }),
+                ),
+              )
+
+              for (const [file, hash] of outputFilesHashes) {
+                let previousHash: string | undefined
+
+                if ((previousHash = this.outputFilesHashes.get(file))) {
+                  if (previousHash !== hash) {
+                    logger.log('Changed file', file)
+
+                    changedFiles.push(file)
+                  }
+                }
+
+                this.outputFilesHashes.set(file, hash)
+              }
+            } catch (e) {
+              logger.error('Changes', this.env.toLowerCase(), 'failed', e)
+            } finally {
+              if (changedFiles.length === 0 || changedFiles.some((changedFile) => !changedFile.endsWith('.css'))) {
+                for (const [key, client] of Object.entries(this.clients)) {
+                  logger.debug('Reloading client', key)
+
+                  client.write(`id: ${Date.now()}\nevent: reload\ndata: ${changedFiles.join(',')}\n\n`)
+
+                  client.flush()
+                }
+              } else {
+                for (const [key, client] of Object.entries(this.clients)) {
+                  logger.debug('Sending changed stylesheets to client', key)
+
+                  for (const changedFile of changedFiles) {
+                    client.write(`id: ${Date.now()}\nevent: stylesheet\ndata: ${changedFile}\n\n`)
+                  }
+
+                  client.flush()
+                }
+              }
+            }
+          }
+        },
+      },
+    })
   }
 
   async build(): Promise<void> {
@@ -44,104 +112,114 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     logger.log(this.env, 'built')
   }
 
-  dev(start: () => void): void {
+  async dev(start: () => void): Promise<void> {
     if (this.config.fileConfig === null) {
       return
     }
 
     if (isMain(this.config)) {
-      const sources = path.join(path.resolve(path.dirname(this.config.fileConfig.src)), '**', '*.{js,ts,tsx}')
-      const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this.config.fileConfig.src))])
+      this.builder = (await esbuild.build({
+        ...this.config.config,
+        watch: {
+          onRebuild: (error) => {
+            if (error) {
+              logger.error('Refresh', this.env.toLowerCase(), 'failed', error)
+              return
+            }
 
-      watcher.on('ready', () => {
-        watcher.on(
-          'all',
-          debounce(
-            async () => {
-              await this.build()
+            logger.log('Refresh', this.env.toLowerCase())
 
-              start()
+            start()
+          },
+        },
+      })) as BuildResult
 
-              await watcher.close()
-              this.dev(start)
-            },
-            { wait: 200 },
-          ),
-        )
-      })
+      start()
     } else if (isRenderer(this.config)) {
       if (typeof this.config.fileConfig.html === 'undefined') {
         logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
       }
 
-      const srcDir = path.resolve(process.cwd(), path.dirname(this.config.fileConfig.src))
+      const htmlPath = path.resolve(process.cwd(), this.config.fileConfig.html)
 
-      esbuild
-        .serve(
-          {
-            host: 'localhost',
-            port: 9081,
-          },
-          this.config.config,
-        )
-        .then(async (builder) => {
-          if (typeof this.config.fileConfig?.html === 'undefined') {
-            logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
-            return
-          }
+      const html = (await fs.readFile(htmlPath)).toString().replace(
+        '</body>',
+        `<script>
+                const sse = new EventSource("/sse");
+                sse.addEventListener('reload', () => window.location.reload())
+                sse.addEventListener('stylesheet', (e) => document.querySelector(\`link[href^="\${e.data}"]\`).href = \`\${e.data}?${Date.now()}\`)
+              </script></body>`,
+      )
 
-          const livereloadPort = 35729
-          const htmlPath = path.resolve(process.cwd(), this.config.fileConfig.html)
-          const html = (await fs.readFile(htmlPath))
-            .toString()
-            .replace('</body>', `<script src="/livereload.js?snipver=1"></script></body>`)
+      const handler = connect()
 
-          const proxy = httpProxy.createProxy({ target: 'http://localhost:9081' })
-          const proxyLr = httpProxy.createProxy({ target: `http://localhost:${livereloadPort}` })
-          const lrServer = livereload.createServer({ port: livereloadPort })
+      let publicPath = ''
 
-          const handler = connect()
+      if (this.config.config.outdir !== undefined && this.config.config.outfile === undefined) {
+        publicPath = this.config.config.outdir
+      } else if (this.config.config.outdir === undefined && this.config.config.outfile !== undefined) {
+        publicPath = path.dirname(this.config.config.outfile)
+      } else {
+        logger.end('Missing outdir/outfile in esbuild configuration. This is maybe an error from electron-esbuild.')
+      }
 
-          handler.use(compression() as never)
-          handler.use((req, res) => {
-            if (req.url === '/' || req.url === '') {
-              res.setHeader('Content-Type', 'text/html')
-              res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
-              res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
-              res.writeHead(200)
-              res.end(html)
-            } else if (req.url?.includes('livereload.js')) {
-              proxyLr.web(req, res)
-            } else {
-              proxy.web(req, res)
-            }
+      handler.use(compression() as never)
+      handler.use(serveStatic(publicPath, { index: false }))
+      handler.use((req, res) => {
+        if (req.url === '/' || req.url === '') {
+          res.setHeader('Content-Type', 'text/html')
+          res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
+          res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
+          res.writeHead(200)
+          res.end(html)
+        } else if (req.url === '/sse') {
+          res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
           })
 
-          const server = createServer(handler)
+          const key = crypto.randomBytes(8).toString('hex')
 
-          server.on('upgrade', (req, socket, head) => {
-            proxyLr.ws(req, socket, head)
+          logger.debug('Client connected', key)
+
+          this.clients[key] = res as ServerResponse & { flush: () => void }
+
+          req.on('close', () => {
+            logger.debug('Client disconnected', key)
+
+            delete this.clients[key]
           })
+        }
+      })
 
-          const sources = `${srcDir}/**/*.{js,jsx,ts,tsx,css,scss}`
-          const watcher = chokidar.watch(sources, { disableGlobbing: false })
+      const server = createServer(handler)
 
-          watcher.on('ready', () => {
-            watcher.on('all', async (eventName, file) => {
-              logger.log('Refresh', this.env.toLowerCase())
-              lrServer.refresh(file)
-            })
-          })
+      const keepAliveInterval = setInterval(() => {
+        for (const [key, client] of Object.entries(this.clients)) {
+          logger.debug('Pinging client', key)
 
-          process.on('exit', async () => {
-            server.close()
-            lrServer.close()
-            await watcher.close()
-            builder.stop()
-          })
+          client.write(`:\n\n`)
+          client.flush()
+        }
+      }, 10000)
 
-          server.listen(9080)
-        })
+      process.on('exit', async () => {
+        clearInterval(keepAliveInterval)
+
+        for (const [key, client] of Object.entries(this.clients)) {
+          logger.debug('Ending client', key)
+
+          client.end()
+        }
+
+        server.close()
+        this.builder?.stop?.()
+      })
+
+      server.listen(9080)
+
+      this.watch()
     }
   }
 
