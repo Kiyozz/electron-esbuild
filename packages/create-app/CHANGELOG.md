@@ -1,3 +1,10 @@
+## v1.4.1
+
+### Features
+
+- Cli is now interactive
+- Dependencies are now longer preinstalled
+
 ## v1.3.1
 
 ### Bug fixes

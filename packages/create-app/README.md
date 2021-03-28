@@ -1,16 +1,31 @@
-# Create Electron Esbuild App
+# @electron-esbuild/create-app
 
-[![create-electron-esbuild-app version](https://img.shields.io/npm/v/create-electron-esbuild-app.svg?label=%20)](./CHANGELOG.md)
+[![@electron-esbuild/create-app version](https://img.shields.io/npm/v/@electron-esbuild/create-app.svg)](./CHANGELOG.md)
 
-The easiest way to get started with Esbuild/Webpack in Electron by using `create-electron-esbuild-app`. This simple CLI tool enables you to quickly start building a new Electron application.
+The easiest way to get started with Esbuild/Webpack in Electron by using `@electron-esbuild/create-app`. This simple CLI tool enables you to quickly start building a new Electron application.
 
-    npx create-electron-esbuild-app --name my-app
+With npm:
+
+    npm init @electron-esbuild/app
+
+With yarn:
+
+    yarn create @electron-esbuild/app
 
 ## Options
 
-`create-electron-esbuild-app` comes with the following options:
+`@electron-esbuild/create-app` comes with the following options:
 
-- --name [name] - Name of your application (required)
-- --template [main-only-javascript,main-only-typescript,react-typescript,react-javascript,react-typescript-webpack] - An name of template to use
-- --package-manager [npm,yarn,pnpm] - Package manager to use when installing dependencies
-- --no-install - Do not install dependencies, You'll have to manually set version of dependencies
+- -t, --template use template
+- -p, --package-manager use this package manager [npm, pnpm, yarn]
+- -o, --override remove existing output folder
+- --version prints version
+- --help show help
+
+## Supported templates
+
+- `main`
+- `main-ts`
+- `react`
+- `react-ts`
+- `react-ts-webpack`

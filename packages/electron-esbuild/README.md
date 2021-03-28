@@ -4,9 +4,13 @@
 
 ## Getting Started
 
-```shell
-npm init @electron-esbuild/app
-```
+With npm:
+
+    npm init @electron-esbuild/app
+
+With yarn:
+
+    yarn create @electron-esbuild/app
 
 ## Manual
 

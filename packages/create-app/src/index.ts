@@ -19,6 +19,7 @@ import isTemplateValid, { TEMPLATES } from './helpers/is-template-valid'
 import { warn } from './helpers/log'
 
 const argv = minimist(process.argv.slice(2))
+const VERSION = '1.4.1'
 
 if (argv.help) {
   console.log(
@@ -41,7 +42,7 @@ ${cyan('--help')}                 show this help
 }
 
 if (argv.version) {
-  console.log('1.4.0')
+  console.log(VERSION)
 
   process.exit(0)
 }

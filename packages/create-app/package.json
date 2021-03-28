@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "dist/index.js",
   "keywords": [
     "electron",
@@ -10,7 +10,7 @@
     "cli"
   ],
   "description": "Create Electron esbuild powered apps with one command",
-  "repository": "https://github.com/Kiyozz/create-electron-esbuild-app",
+  "repository": "https://github.com/Kiyozz/electron-esbuild",
   "scripts": {
     "build": "ee src/index.ts --format cjs --target node12 --bundle",
     "prepublishOnly": "ee src/index.ts --format cjs --target node12 --bundle --minify --check-types",
