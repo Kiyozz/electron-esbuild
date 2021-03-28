@@ -1,3 +1,9 @@
+## v1.4.2
+
+### Bug fixes
+
+- Fix -p flag
+
 ## v1.4.1
 
 ### Features
