@@ -40,7 +40,10 @@
     }
   },
   "lint-staged": {
-    "*.{md,json,js,yml}": [
+    "*.{md,json,yml}": [
+      "prettier --write"
+    ],
+    "!(dist)/**/*.{js}": [
       "prettier --write"
     ],
     "*.{ts}": [

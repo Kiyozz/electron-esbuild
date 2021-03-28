@@ -100,7 +100,7 @@ async function start() {
     template = stripColors(t) as Template
   }
 
-  packageManager = packageManager || /yarn/.test(process.env.npm_execpath ?? '') ? 'yarn' : 'npm'
+  packageManager = packageManager || (/yarn/.test(process.env.npm_execpath ?? '') ? 'yarn' : 'npm')
 
   createApp({ name: projectName, packageManager, template, out })
 }
