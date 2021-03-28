@@ -3,8 +3,7 @@ name: CI
 on:
   push:
     paths:
-      - 'src/**.ts'
-      - 'scripts/**.js'
+      - 'packages/**/src/**.ts'
       - '.github/workflows/**.yml'
 
 jobs:
@@ -13,20 +12,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: npm-cache
+      - name: Cache .pnpm-store
+        uses: actions/cache@v1
         with:
-          path: |
-            ~/.npm
-          key: "${{ runner.os }}-modules-${{ hashFiles('package-lock.json') }}"
-      - uses: actions/setup-node@v2
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - name: Setup node
+        uses: actions/setup-node@v1.4.4
         with:
-          node-version: 15.x
+          node-version: 15
+
       - name: Dependencies
-        run: npm ci
-      - name: 'Lint'
-        run: npm run lint
-      - name: 'tsc'
-        run: npx tsc
-      - name: 'Build'
-        run: npm run build
+        uses: pnpm/action-setup@v1.2.1
+        with:
+          version: 5.18
+          run_install: true
+      - name: Lint
+        run: pnpm -r lint
+      - name: Build
+        run: pnpm -r prepublishOnly

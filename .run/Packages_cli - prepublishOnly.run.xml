@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Packages/cli - prepublishOnly" type="js.build_tools.npm" activateToolWindowBeforeRun="false">
+    <package-json value="$PROJECT_DIR$/packages/cli/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="prepublishOnly" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2">
+      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/packages/cli/tsconfig.json" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Packages/ee - prepublishOnly" run_configuration_type="js.build_tools.npm" />
+    </method>
+  </configuration>
+</component>
