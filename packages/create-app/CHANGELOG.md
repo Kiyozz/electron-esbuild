@@ -1,3 +1,9 @@
+## v1.5.0
+
+### Features
+
+- New template `svelte` using [vite](https://github.com/vitejs/vite)
+
 ## v1.4.2
 
 ### Bug fixes

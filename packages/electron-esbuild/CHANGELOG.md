@@ -1,3 +1,12 @@
+## v1.4.0
+
+### Features
+
+- Use vite in the renderer!
+
+  Vite is available in the `svelte` template when using `npm init @electron-esbuild/app`.
+  More template using `vite` are coming
+
 ## v1.3.1
 
 ### Dependencies
