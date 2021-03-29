@@ -2,6 +2,7 @@
 
 ![electron-esbuild version](https://img.shields.io/npm/v/electron-esbuild.svg?label=%20)
 ![github-actions](https://github.com/Kiyozz/electron-esbuild/workflows/CI/badge.svg)
+![electron-esbuild downloads](https://img.shields.io/npm/dm/electron-esbuild.svg)
 
 Easily integrate `esbuild`/`vite`/`webpack` for your Electron environment.
 
