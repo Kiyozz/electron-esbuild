@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "electron-esbuild internal source code builder. ee for electron-esbuild",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "main": "dist/index.js",
