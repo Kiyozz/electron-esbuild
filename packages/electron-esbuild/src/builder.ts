@@ -5,9 +5,10 @@
  */
 
 import { EsbuildBuilder } from './builder/esbuild'
+import { ViteBuilder } from './builder/vite'
 import { WebpackBuilder } from './builder/webpack'
 import { ElectronEsbuildConfigItem, ItemConfig, PossibleConfiguration } from './config/types'
-import { isEsbuild, isWebpack } from './config/utils'
+import { isEsbuild, isVite, isWebpack } from './config/utils'
 import { unsupportedType } from './console'
 
 export interface Builder {
@@ -28,6 +29,8 @@ export function createBuilders(
     mainBuilder = new EsbuildBuilder(mainConfig)
   } else if (isWebpack(mainConfig)) {
     mainBuilder = new WebpackBuilder(mainConfig)
+  } else if (isVite(mainConfig)) {
+    mainBuilder = new ViteBuilder(mainConfig)
   } else {
     unsupportedType(mainConfig.fileConfig.type, 'main')
   }
@@ -38,6 +41,8 @@ export function createBuilders(
     rendererBuilder = new EsbuildBuilder(rendererConfig)
   } else if (isWebpack(rendererConfig)) {
     rendererBuilder = new WebpackBuilder(rendererConfig)
+  } else if (isVite(rendererConfig)) {
+    rendererBuilder = new ViteBuilder(rendererConfig)
   } else {
     unsupportedType(rendererConfig.fileConfig.type, 'renderer')
   }

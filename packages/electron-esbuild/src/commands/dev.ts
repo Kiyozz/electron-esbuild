@@ -12,7 +12,7 @@ import { Cli, CliResult } from '../cli'
 import { ElectronEsbuildWorker } from '../config'
 import { CONFIG_FILE_NAME } from '../config/constants'
 import { ElectronEsbuildConfigItem, ItemConfig, PossibleConfiguration } from '../config/types'
-import { configByEnv } from '../config/utils'
+import { configByEnv, isVite } from '../config/utils'
 import { Logger } from '../console'
 
 const isWindows = process.platform === 'win32'
@@ -66,7 +66,10 @@ export class Dev extends Cli {
     logger.debug('Started dev builders')
     logger.debug('Starting initial builds')
 
-    await Promise.all([this.mainBuilder.build(), this.rendererBuilder?.build()])
+    await Promise.all([
+      this.mainBuilder.build(),
+      !isVite(this.rendererConfig) ? this.rendererBuilder?.build() : undefined,
+    ])
 
     logger.debug('Initial builds finished')
 

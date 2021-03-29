@@ -5,6 +5,7 @@
  */
 
 import { BuildOptions } from 'esbuild'
+import { InlineConfig } from 'vite'
 import { Configuration } from 'webpack'
 
 import { Target, TypeConfig } from './enums'
@@ -27,6 +28,8 @@ export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConf
         } as BuildOptions
       case TypeConfig.Webpack:
         return { mode: 'development', devtool: 'eval' } as Configuration
+      case TypeConfig.Vite:
+        return {}
     }
   }
 
@@ -41,6 +44,8 @@ export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConf
       } as BuildOptions
     case TypeConfig.Webpack:
       return { mode: 'production', devtool: false } as Configuration
+    case TypeConfig.Vite:
+      return {}
   }
 }
 
@@ -54,6 +59,12 @@ export function isWebpack(
   configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
 ): configItem is ElectronEsbuildConfigItem<Configuration, ItemConfig> {
   return configItem.fileConfig?.type === TypeConfig.Webpack
+}
+
+export function isVite(
+  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
+): configItem is ElectronEsbuildConfigItem<InlineConfig, ItemConfig> {
+  return configItem.fileConfig?.type === TypeConfig.Vite
 }
 
 export function isMain(configItem: ElectronEsbuildConfigItem | Target): boolean {

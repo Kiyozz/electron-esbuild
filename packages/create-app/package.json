@@ -7,13 +7,14 @@
     "react",
     "esbuild",
     "webpack",
+    "svelte",
     "cli"
   ],
   "description": "Create Electron esbuild powered apps with one command",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "scripts": {
-    "build": "ee src/index.ts --format cjs --target node12 --bundle",
-    "prepublishOnly": "ee src/index.ts --format cjs --target node12 --bundle --minify --check-types",
+    "build": "ee 'src/index.ts' --format cjs --target node12 --bundle",
+    "prepublishOnly": "ee 'src/index.ts' --format cjs --target node12 --bundle --minify --check-types",
     "lint": "eslint src --ext ts"
   },
   "author": "Kiyozz <https://github.com/Kiyozz>",
