@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Example Build" type="NodeJSConfigurationType" application-parameters="build" path-to-js-file="../../packages/cli/dist/index.js" working-dir="$PROJECT_DIR$/examples/react-typescript">
+  <configuration default="false" name="Example Build" type="NodeJSConfigurationType" application-parameters="build" path-to-js-file="../../packages/electron-esbuild/dist/index.js" working-dir="$PROJECT_DIR$/examples/react-typescript">
     <envs>
       <env name="DEBUG" value="1" />
     </envs>

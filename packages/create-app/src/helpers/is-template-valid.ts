@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import { cyan, stripColors, yellow } from 'kolorist'
+import { cyan, red, stripColors, yellow } from 'kolorist'
 
 import { Template } from '../enums/template'
 
@@ -14,6 +14,7 @@ export const TEMPLATES = [
   cyan(Template.ReactJavaScript),
   cyan(Template.ReactTypeScript),
   cyan(Template.ReactTypeScriptWebpack),
+  red(Template.SvelteJavaScript),
 ]
 
 export default function isTemplateValid(template?: string): template is Template {

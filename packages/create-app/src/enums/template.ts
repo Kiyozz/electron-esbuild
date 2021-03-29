@@ -10,4 +10,5 @@ export enum Template {
   ReactTypeScriptWebpack = 'react-ts-webpack',
   MainOnlyTypeScript = 'main-ts',
   MainOnlyJavaScript = 'main',
+  SvelteJavaScript = 'svelte',
 }

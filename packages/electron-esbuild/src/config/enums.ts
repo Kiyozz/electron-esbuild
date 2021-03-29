@@ -7,6 +7,7 @@
 export const enum TypeConfig {
   Esbuild = 'esbuild',
   Webpack = 'webpack',
+  Vite = 'vite',
 }
 
 export const enum Target {

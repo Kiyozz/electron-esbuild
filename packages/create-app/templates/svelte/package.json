@@ -1,0 +1,61 @@
+{
+  "name": "electron-esbuild-svelte",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "electron-esbuild dev",
+    "build": "electron-esbuild build",
+    "package": "electron-builder"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "next",
+    "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
+    "electron-esbuild": "^1.3.1",
+    "electron-util": "^0.14.2",
+    "esbuild": "^0.11.0",
+    "svelte": "^3.35.0",
+    "svelte-preprocess": "^4.7.0",
+    "vite": "^2.1.3"
+  },
+  "build": {
+    "appId": "io.comp.myapp",
+    "productName": "My App",
+    "extraMetadata": {
+      "name": "My App",
+      "main": "main.js"
+    },
+    "files": [
+      {
+        "from": ".",
+        "filter": [
+          "package.json"
+        ]
+      },
+      {
+        "from": "dist/main"
+      },
+      {
+        "from": "dist/renderer"
+      }
+    ],
+    "win": {
+      "target": [
+        "zip"
+      ]
+    },
+    "mac": {
+      "target": [
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "zip"
+      ]
+    },
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null
+  }
+}

@@ -39,7 +39,7 @@ export default function getPackageManager(pm: string): PackageManager {
       },
     },
     pnpm: {
-      install: '',
+      install: 'i',
       add: 'add',
       run: '',
       flags: {

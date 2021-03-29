@@ -5,6 +5,7 @@
  */
 
 import { BuildOptions } from 'esbuild'
+import { InlineConfig } from 'vite'
 import { Configuration } from 'webpack'
 
 import { Target, TypeConfig } from './enums'
@@ -17,7 +18,7 @@ export interface ItemConfig {
   html?: string
 }
 
-export type PossibleConfiguration = Configuration | BuildOptions
+export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
 
 export interface ElectronEsbuildConfigItem<T = PossibleConfiguration, F = ItemConfig | null> {
   config: T
@@ -38,4 +39,5 @@ export interface ElectronEsbuildConfigYaml {
 export interface ConfigMapping {
   [TypeConfig.Esbuild]: BuildOptions
   [TypeConfig.Webpack]: Configuration
+  [TypeConfig.Vite]: InlineConfig
 }

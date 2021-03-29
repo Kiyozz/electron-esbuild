@@ -20,7 +20,7 @@ const schema = Joi.object<ElectronEsbuildConfigYaml>({
     output: Joi.string().required(),
   }).required(),
   rendererConfig: Joi.object({
-    type: Joi.string().valid(TypeConfig.Esbuild, TypeConfig.Webpack).required(),
+    type: Joi.string().valid(TypeConfig.Esbuild, TypeConfig.Webpack, TypeConfig.Vite).required(),
     path: Joi.string().required(),
     src: Joi.string().required(),
     output: Joi.string().required(),
