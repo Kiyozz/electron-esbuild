@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "dist/index.js",
   "keywords": [
     "electron",
