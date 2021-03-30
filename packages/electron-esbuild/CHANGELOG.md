@@ -4,8 +4,7 @@
 
 - Use vite in the renderer!
 
-  Vite is available in the `svelte` template when using `npm init @electron-esbuild/app`.
-  More template using `vite` are coming
+  Vite is available in the `svelte`, `svelte-ts`, `react-vite`, `react-vite-ts` templates when using `npm init @electron-esbuild/app`.
 
 ## v1.3.1
 
