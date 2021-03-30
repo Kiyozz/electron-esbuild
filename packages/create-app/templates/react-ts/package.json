@@ -11,12 +11,13 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "electron": "^12.0.2",
-    "electron-builder": "^22.9.1",
+    "electron-builder": "^22.10.5",
     "electron-esbuild": "1.x",
     "electron-util": "^0.14.2",
     "esbuild": "0.x",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "typescript": "^4.2.3"
   },
   "build": {
     "appId": "io.comp.myapp",

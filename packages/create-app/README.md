@@ -29,4 +29,7 @@ With yarn:
 - `react`
 - `react-ts`
 - `react-ts-webpack`
+- `react-vite`
+- `react-vite-ts`
 - `svelte`
+- `svelte-ts`

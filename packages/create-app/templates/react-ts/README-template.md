@@ -1,1 +1,1 @@
-# Bootstrapped with create-electron-esbuild-app
+# Bootstrapped with @electron-esbuild/create-app

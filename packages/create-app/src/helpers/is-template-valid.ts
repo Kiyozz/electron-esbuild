@@ -14,7 +14,10 @@ export const TEMPLATES = [
   cyan(Template.ReactJavaScript),
   cyan(Template.ReactTypeScript),
   cyan(Template.ReactTypeScriptWebpack),
+  cyan(Template.ReactViteJavaScript),
+  cyan(Template.ReactViteTypeScript),
   red(Template.SvelteJavaScript),
+  red(Template.SvelteTypeScript),
 ]
 
 export default function isTemplateValid(template?: string): template is Template {

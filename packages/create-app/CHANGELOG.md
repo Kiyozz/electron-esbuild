@@ -1,3 +1,11 @@
+## Unreleased
+
+### Features
+
+- New template `svelte-ts` using [vite](https://github.com/vitejs/vite)
+- New template `react-vite` using [vite](https://github.com/vitejs/vite)
+- New template `react-vite-ts` using [vite](https://github.com/vitejs/vite)
+
 ## v1.5.0
 
 ### Features
