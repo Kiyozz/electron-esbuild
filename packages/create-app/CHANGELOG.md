@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- Invalid esbuild loader for `svelte-ts` template
+
 ## v1.6.0
 
 ### Features

@@ -7,6 +7,6 @@ module.exports = {
   bundle: true,
   target: 'node14.16.0', // electron version target
   loader: {
-    '.js': 'js',
+    '.ts': 'ts',
   },
 }
