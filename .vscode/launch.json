@@ -1,0 +1,39 @@
+{
+  // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+  // Pointez pour afficher la description des attributs existants.
+  // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "electron-esbuild@dev",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/packages/create-app/templates/svelte-ts",
+      "preLaunchTask": "electron-esbuild@build",
+      "program": "${workspaceFolder}/packages/electron-esbuild/dist/index.js",
+      "args": ["dev"],
+      "presentation": {
+        "hidden": false,
+        "group": "electron-esbuild",
+        "order": 1
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "name": "create-app@start",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/packages/create-app",
+      "preLaunchTask": "create-app@build",
+      "program": "${workspaceFolder}/packages/create-app/dist/index.js",
+      "args": ["var"],
+      "presentation": {
+        "hidden": false,
+        "group": "create-app",
+        "order": 1
+      }
+    }
+  ]
+}
