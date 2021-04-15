@@ -20,7 +20,7 @@
   "license": "MIT",
   "engines": {
     "node": ">=10",
-    "pnpm": "^6.0.1"
+    "pnpm": "^6.0.2"
   },
   "scripts": {
     "prepare": "husky install"
