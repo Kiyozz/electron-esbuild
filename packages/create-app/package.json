@@ -27,7 +27,7 @@
     "templates"
   ],
   "devDependencies": {
-    "@electron-esbuild/ee": "workspace:^0.1.2",
+    "@electron-esbuild/ee": "workspace:^0.2.0",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.1",
     "@types/node": "^14.14.39",
