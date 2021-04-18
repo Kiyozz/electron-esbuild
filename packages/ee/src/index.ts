@@ -20,13 +20,17 @@ if (argv.version) {
 }
 
 const entries = argv._
-const { _, '--': ex, 'check-types': checkTypes, format, ...options } = argv
+const { _, '--': ex, 'check-types': checkTypes, format, external, ...options } = argv
 
 const formats: Format[] = typeof format === 'string' ? [format] : format
+const externals: string[] = typeof external === 'string' ? [external] : external
 
 build({
   entries,
   checkTypes,
   formats,
-  options,
+  options: {
+    ...options,
+    external: externals,
+  },
 })
