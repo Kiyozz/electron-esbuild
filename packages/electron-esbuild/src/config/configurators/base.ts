@@ -5,10 +5,11 @@
  */
 
 import { Target, TypeConfig } from '../enums'
-import { ConfigMapping } from '../types'
+import { ConfigMapping, ItemConfig } from '../types'
 
-export abstract class Configurator<P extends TypeConfig> {
-  public abstract type: TypeConfig
+export interface Configurator<P extends TypeConfig> {
+  type: TypeConfig
+  config: ItemConfig
 
-  abstract load(partial: Partial<ConfigMapping[P]>, config: ConfigMapping[P], target: Target): ConfigMapping[P]
+  load(partial: Partial<ConfigMapping[P]>, config: ConfigMapping[P], target: Target): ConfigMapping[P]
 }

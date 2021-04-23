@@ -17,7 +17,6 @@ import livereload from 'livereload'
 import path from 'path'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
-import { isMain, isRenderer } from '../config/utils'
 import { Logger } from '../console'
 import { getDeps } from '../deps'
 import { BaseBuilder } from './base'
@@ -25,33 +24,35 @@ import { BaseBuilder } from './base'
 const logger = new Logger('Builder/Esbuild')
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
-  private builder: BuildIncremental | undefined
+  hasInitialBuild = true
 
-  constructor(protected config: ElectronEsbuildConfigItem<BuildOptions>) {
-    super(config)
+  private _builder: BuildIncremental | undefined
+
+  constructor(protected _config: ElectronEsbuildConfigItem<BuildOptions>) {
+    super(_config)
   }
 
   async build(): Promise<void> {
     logger.log('Building', this.env.toLowerCase())
 
-    if (this.builder) {
-      await this.builder.rebuild()
+    if (this._builder) {
+      await this._builder.rebuild()
     } else {
-      this.builder = (await esbuild.build(this.config.config)) as BuildIncremental
-      await this.copyHtml()
+      this._builder = (await esbuild.build(this._config.config)) as BuildIncremental
+      await this._copyHtml()
     }
 
     logger.log(this.env, 'built')
   }
 
   dev(start: () => void): void {
-    if (this.config.fileConfig === null) {
+    if (this._config.fileConfig === null) {
       return
     }
 
-    if (isMain(this.config)) {
-      const sources = path.join(path.resolve(path.dirname(this.config.fileConfig.src)), '**', '*.{js,ts,tsx}')
-      const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this.config.fileConfig.src))])
+    if (this._config.isMain) {
+      const sources = path.join(path.resolve(path.dirname(this._config.fileConfig.src)), '**', '*.{js,ts,tsx}')
+      const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this._config.fileConfig.src))])
 
       watcher.on('ready', () => {
         watcher.on(
@@ -69,12 +70,16 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           ),
         )
       })
-    } else if (isRenderer(this.config)) {
-      if (typeof this.config.fileConfig.html === 'undefined') {
+
+      process.on('exit', async () => {
+        await watcher.close()
+      })
+    } else if (this._config.isRenderer) {
+      if (typeof this._config.fileConfig.html === 'undefined') {
         logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
       }
 
-      const srcDir = path.resolve(process.cwd(), path.dirname(this.config.fileConfig.src))
+      const srcDir = path.resolve(process.cwd(), path.dirname(this._config.fileConfig.src))
 
       esbuild
         .serve(
@@ -82,16 +87,16 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             host: 'localhost',
             port: 9081,
           },
-          this.config.config,
+          this._config.config,
         )
         .then(async (builder) => {
-          if (typeof this.config.fileConfig?.html === 'undefined') {
+          if (typeof this._config.fileConfig?.html === 'undefined') {
             logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
             return
           }
 
           const livereloadPort = 35729
-          const htmlPath = path.resolve(process.cwd(), this.config.fileConfig.html)
+          const htmlPath = path.resolve(process.cwd(), this._config.fileConfig.html)
           const html = (await fs.readFile(htmlPath))
             .toString()
             .replace('</body>', `<script src="/livereload.js?snipver=1"></script></body>`)
@@ -145,10 +150,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     }
   }
 
-  private async copyHtml() {
-    if (this.config.fileConfig?.html) {
-      const out = path.resolve(process.cwd(), this.config.fileConfig.output)
-      const html = path.resolve(process.cwd(), this.config.fileConfig.html)
+  private async _copyHtml() {
+    if (this._config.fileConfig?.html) {
+      const out = path.resolve(process.cwd(), this._config.fileConfig.output)
+      const html = path.resolve(process.cwd(), this._config.fileConfig.html)
 
       await fs.copyFile(html, path.join(out, path.basename(html)))
     }

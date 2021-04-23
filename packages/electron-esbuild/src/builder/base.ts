@@ -6,13 +6,14 @@
 
 import type { Builder } from '../builder'
 import { ElectronEsbuildConfigItem } from '../config/types'
-import { isMain, isRenderer } from '../config/utils'
 
 export abstract class BaseBuilder<T> implements Builder {
-  public env: string
+  env: string
 
-  protected constructor(protected config: ElectronEsbuildConfigItem<T>) {
-    this.env = isMain(this.config) ? 'Main' : isRenderer(this.config) ? 'Renderer' : 'Unknown env'
+  abstract hasInitialBuild: boolean
+
+  protected constructor(protected _config: ElectronEsbuildConfigItem<T>) {
+    this.env = this._config.isMain ? 'Main' : this._config.isRenderer ? 'Renderer' : 'Unknown env'
   }
 
   abstract build(): Promise<void>

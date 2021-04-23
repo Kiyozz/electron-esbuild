@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "electron-esbuild@dev",
       "skipFiles": ["<node_internals>/**"],
-      "cwd": "${workspaceFolder}/packages/create-app/templates/svelte-ts",
+      "cwd": "${workspaceFolder}/examples/react-typescript",
       "preLaunchTask": "electron-esbuild@build",
       "program": "${workspaceFolder}/packages/electron-esbuild/dist/index.js",
       "args": ["dev"],

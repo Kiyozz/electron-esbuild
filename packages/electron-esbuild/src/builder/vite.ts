@@ -8,21 +8,22 @@ import path from 'path'
 import type { build, createServer, InlineConfig } from 'vite'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
-import { isMain, isRenderer } from '../config/utils'
 import { Logger, unsupportedType } from '../console'
 import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Vite')
 
 export class ViteBuilder extends BaseBuilder<InlineConfig> {
-  private readonly inlineConfig: InlineConfig
-  private readonly viteBuild: typeof build
-  private readonly viteCreateServer: typeof createServer
+  hasInitialBuild = false
 
-  constructor(protected config: ElectronEsbuildConfigItem<InlineConfig>) {
-    super(config)
+  private readonly _inlineConfig: InlineConfig
+  private readonly _viteBuild: typeof build
+  private readonly _viteCreateServer: typeof createServer
 
-    if (!this.config.fileConfig) {
+  constructor(_config: ElectronEsbuildConfigItem<InlineConfig>) {
+    super(_config)
+
+    if (!this._config.fileConfig) {
       logger.end('No file config')
       process.exit(0)
     }
@@ -37,52 +38,52 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
 
     const { build: vBuild, createServer: vCreateServer } = require('vite')
 
-    this.viteBuild = vBuild
-    this.viteCreateServer = vCreateServer
-    this.inlineConfig = {
-      configFile: path.resolve(process.cwd(), this.config.fileConfig.path),
-      root: path.resolve(process.cwd(), path.dirname(this.config.fileConfig.src)),
+    this._viteBuild = vBuild
+    this._viteCreateServer = vCreateServer
+    this._inlineConfig = {
+      configFile: path.resolve(process.cwd(), this._config.fileConfig.path),
+      root: path.resolve(process.cwd(), path.dirname(this._config.fileConfig.src)),
       base: '',
       build: {
-        outDir: path.resolve(process.cwd(), this.config.fileConfig?.output),
+        outDir: path.resolve(process.cwd(), this._config.fileConfig?.output),
       },
     }
   }
 
   async build(): Promise<void> {
-    if (!this.config.fileConfig) {
+    if (!this._config.fileConfig) {
       logger.end('No file config')
       return
     }
 
-    if (isMain(this.config)) {
+    if (this._config.isMain) {
       logger.debug('Vite cannot be used in the main process')
-      unsupportedType(this.config.fileConfig.type, 'main')
+      unsupportedType(this._config.fileConfig.type, 'main')
     }
 
     logger.log('Building', this.env.toLowerCase())
 
-    await this.viteBuild(this.inlineConfig)
+    await this._viteBuild(this._inlineConfig)
 
     logger.log(this.env, 'built')
   }
 
   async dev(): Promise<void> {
-    if (!this.config.fileConfig) {
+    if (!this._config.fileConfig) {
       logger.end('No file config')
       return
     }
 
-    if (isMain(this.config)) {
+    if (this._config.isMain) {
       logger.debug('Vite cannot be used in the main process')
-      unsupportedType(this.config.fileConfig.type, 'main')
+      unsupportedType(this._config.fileConfig.type, 'main')
     }
 
-    if (isRenderer(this.config)) {
+    if (this._config.isRenderer) {
       logger.log('Start vite dev server')
 
-      const server = await this.viteCreateServer({
-        ...this.inlineConfig,
+      const server = await this._viteCreateServer({
+        ...this._inlineConfig,
         server: {
           port: 9080,
         },

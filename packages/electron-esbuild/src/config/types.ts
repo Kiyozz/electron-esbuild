@@ -20,15 +20,55 @@ export interface ItemConfig {
 
 export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
 
-export interface ElectronEsbuildConfigItem<T = PossibleConfiguration, F = ItemConfig | null> {
+export class ElectronEsbuildConfigItem<
+  T extends PossibleConfiguration | null = PossibleConfiguration,
+  F extends ItemConfig | null = ItemConfig | null
+> {
   config: T
   fileConfig: F
   target: Target
+
+  constructor({ config, fileConfig, target }: { config: T; fileConfig: F; target: Target }) {
+    this.config = config
+    this.fileConfig = fileConfig
+    this.target = target
+  }
+
+  get isVite(): boolean {
+    return this.fileConfig?.type === TypeConfig.Vite
+  }
+
+  get isWebpack(): boolean {
+    return this.fileConfig?.type === TypeConfig.Webpack
+  }
+
+  get isEsbuild(): boolean {
+    return this.fileConfig?.type === TypeConfig.Esbuild
+  }
+
+  get isMain(): boolean {
+    return this.target === Target.Main
+  }
+
+  get isRenderer(): boolean {
+    return this.target === Target.Renderer
+  }
 }
 
-export interface ElectronEsbuildConfig<M = PossibleConfiguration, R = PossibleConfiguration> {
-  mainConfig: ElectronEsbuildConfigItem<M, ItemConfig>
-  rendererConfig: ElectronEsbuildConfigItem<R | null>
+export class ElectronEsbuildConfig<M = PossibleConfiguration, R = PossibleConfiguration> {
+  main: ElectronEsbuildConfigItem<M, ItemConfig>
+  renderer: ElectronEsbuildConfigItem<R | null>
+
+  constructor({
+    main,
+    renderer,
+  }: {
+    main: ElectronEsbuildConfigItem<M, ItemConfig>
+    renderer: ElectronEsbuildConfigItem<R | null>
+  }) {
+    this.main = main
+    this.renderer = renderer
+  }
 }
 
 export interface ElectronEsbuildConfigYaml {

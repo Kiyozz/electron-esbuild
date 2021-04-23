@@ -25,7 +25,7 @@ Examples
   $ electron-esbuild dev
   $ electron-esbuild build`,
   {
-    version: '1.3.1',
+    version: '1.4.0',
     flags: {
       clean: {
         type: 'boolean',
@@ -51,9 +51,7 @@ function isValidAction(command: string): command is Commands {
 if (isValidAction(command)) {
   const action: Cli = new commands[command](cli)
 
-  action.init().then((code) => {
-    if (typeof code !== 'undefined') {
-      process.exit(code)
-    }
+  action.init().then(() => {
+    // process.exit(0)
   })
 }

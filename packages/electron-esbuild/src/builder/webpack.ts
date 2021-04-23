@@ -7,22 +7,23 @@
 import { Compiler, Configuration } from 'webpack'
 
 import { ElectronEsbuildConfigItem } from '../config/types'
-import { isMain } from '../config/utils'
 import { Logger } from '../console'
 import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Webpack')
 
 export class WebpackBuilder extends BaseBuilder<Configuration> {
-  private readonly compiler!: Compiler
+  hasInitialBuild = false
 
-  constructor(protected config: ElectronEsbuildConfigItem<Configuration>) {
-    super(config)
+  private readonly _compiler!: Compiler
+
+  constructor(_config: ElectronEsbuildConfigItem<Configuration>) {
+    super(_config)
 
     try {
       const webpack = require('webpack')
       require('webpack-dev-server') // check that user can use webpack-dev-server
-      this.compiler = webpack(this.config.config)
+      this._compiler = webpack(this._config.config)
     } catch (e) {
       if (e.message?.includes('Invalid configuration object')) {
         logger.end('Your webpack configuration is invalid. Message from webpack', e.message)
@@ -38,12 +39,12 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
     logger.log('Building', this.env.toLowerCase())
 
     return new Promise<void>((resolve, reject) => {
-      if (((this.compiler as unknown) as { running: boolean }).running) {
+      if (((this._compiler as unknown) as { running: boolean }).running) {
         resolve()
         return
       }
 
-      this.compiler.run((err) => {
+      this._compiler.run((err) => {
         if (err) {
           logger.error(this.env, 'error', err)
           reject(err)
@@ -56,11 +57,11 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
   }
 
   dev(): void {
-    if (isMain(this.config)) {
+    if (this._config.isMain) {
       // TODO: webpack main watch
     } else {
       const WebpackDevServer = require('webpack-dev-server')
-      const rendererServer = new WebpackDevServer(this.compiler, {
+      const rendererServer = new WebpackDevServer(this._compiler, {
         hot: true,
         overlay: true,
       })

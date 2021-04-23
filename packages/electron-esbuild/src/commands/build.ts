@@ -26,7 +26,7 @@ export class Build extends Cli {
     super(cli)
   }
 
-  async init(): Promise<number> {
+  async init(): Promise<void> {
     process.env.NODE_ENV = 'production'
     logger.debug('Start')
 
@@ -40,20 +40,18 @@ export class Build extends Cli {
 
     logger.debug('Created worker')
 
-    const { mainConfig, rendererConfig } = worker.parse(
-      configByEnv(false, worker.mainConfig.type),
-      configByEnv(false, worker.rendererConfig?.type ?? null),
+    const config = worker.parse(
+      configByEnv(false, worker.configurator.main.type),
+      configByEnv(false, worker.configurator.renderer?.type ?? null),
     )
 
     logger.debug('Parsed config')
 
-    const [main, renderer] = createBuilders(mainConfig, rendererConfig)
+    const [main, renderer] = createBuilders(config.main, config.renderer)
 
     logger.debug('Created builders')
     logger.log('Creating production build...')
 
     await Promise.all([main.build(), renderer?.build() ?? Promise.resolve()])
-
-    return 0
   }
 }

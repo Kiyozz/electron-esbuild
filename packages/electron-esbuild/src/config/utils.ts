@@ -5,11 +5,10 @@
  */
 
 import { BuildOptions } from 'esbuild'
-import { InlineConfig } from 'vite'
 import { Configuration } from 'webpack'
 
-import { Target, TypeConfig } from './enums'
-import { ElectronEsbuildConfigItem, ItemConfig, PossibleConfiguration } from './types'
+import { TypeConfig } from './enums'
+import { PossibleConfiguration } from './types'
 
 export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConfiguration {
   if (type === null) {
@@ -47,34 +46,4 @@ export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConf
     case TypeConfig.Vite:
       return {}
   }
-}
-
-export function isEsbuild(
-  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
-): configItem is ElectronEsbuildConfigItem<BuildOptions, ItemConfig> {
-  return configItem.fileConfig?.type === TypeConfig.Esbuild
-}
-
-export function isWebpack(
-  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
-): configItem is ElectronEsbuildConfigItem<Configuration, ItemConfig> {
-  return configItem.fileConfig?.type === TypeConfig.Webpack
-}
-
-export function isVite(
-  configItem: ElectronEsbuildConfigItem<PossibleConfiguration | null>,
-): configItem is ElectronEsbuildConfigItem<InlineConfig, ItemConfig> {
-  return configItem.fileConfig?.type === TypeConfig.Vite
-}
-
-export function isMain(configItem: ElectronEsbuildConfigItem | Target): boolean {
-  const target = typeof configItem === 'object' ? configItem.target : configItem
-
-  return target === Target.Main
-}
-
-export function isRenderer(configItem: ElectronEsbuildConfigItem | Target): boolean {
-  const target = typeof configItem === 'object' ? configItem.target : configItem
-
-  return target === Target.Renderer
 }

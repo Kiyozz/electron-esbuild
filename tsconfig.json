@@ -6,7 +6,8 @@
     "skipLibCheck": true,
     "noImplicitReturns": false,
     "noEmit": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictPropertyInitialization": false
   },
   "exclude": ["examples"]
 }

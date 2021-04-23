@@ -11,19 +11,16 @@ import path from 'path'
 
 import { Target, TypeConfig } from '../enums'
 import { ItemConfig } from '../types'
-import { isMain } from '../utils'
 import { Configurator } from './base'
 
-export class EsbuildConfigurator extends Configurator<TypeConfig.Esbuild> {
+export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
   public type = TypeConfig.Esbuild
 
-  constructor(private config: ItemConfig) {
-    super()
-  }
+  constructor(public config: ItemConfig) {}
 
   load(partial: Partial<BuildOptions>, userConfig: BuildOptions, target: Target): BuildOptions {
     const additional: Partial<BuildOptions> = {}
-    const out = path.resolve(process.cwd(), this.config.output, isMain(target) ? 'main.js' : 'index.js')
+    const out = path.resolve(process.cwd(), this.config.output, target === Target.Main ? 'main.js' : 'index.js')
 
     if (userConfig.entryPoints?.length ?? 1 > 1) {
       additional.outdir = path.dirname(out)
