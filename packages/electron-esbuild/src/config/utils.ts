@@ -10,7 +10,13 @@ import { Configuration } from 'webpack'
 import { TypeConfig } from './enums'
 import { PossibleConfiguration } from './types'
 
-export function configByEnv(dev: boolean, type: TypeConfig | null): PossibleConfiguration {
+export function configByEnv({
+  dev,
+  type,
+}: {
+  dev: boolean
+  type: TypeConfig | null
+}): PossibleConfiguration {
   if (type === null) {
     return {}
   }

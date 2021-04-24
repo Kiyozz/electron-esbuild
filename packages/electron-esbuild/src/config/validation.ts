@@ -8,11 +8,11 @@ import Joi from 'joi'
 
 import { Logger } from '../console'
 import { TypeConfig } from './enums'
-import { ElectronEsbuildConfigYaml } from './types'
+import { YamlSkeleton } from './yaml'
 
-const logger = new Logger('Config/Validation')
+const _logger = new Logger('Config/Validation')
 
-const schema = Joi.object<ElectronEsbuildConfigYaml>({
+const _schema = Joi.object<YamlSkeleton>({
   mainConfig: Joi.object({
     type: Joi.string().valid(TypeConfig.Esbuild).required(),
     path: Joi.string().required(),
@@ -20,7 +20,9 @@ const schema = Joi.object<ElectronEsbuildConfigYaml>({
     output: Joi.string().required(),
   }).required(),
   rendererConfig: Joi.object({
-    type: Joi.string().valid(TypeConfig.Esbuild, TypeConfig.Webpack, TypeConfig.Vite).required(),
+    type: Joi.string()
+      .valid(TypeConfig.Esbuild, TypeConfig.Webpack, TypeConfig.Vite)
+      .required(),
     path: Joi.string().required(),
     src: Joi.string().required(),
     output: Joi.string().required(),
@@ -29,10 +31,13 @@ const schema = Joi.object<ElectronEsbuildConfigYaml>({
 })
 
 export function validate(config: unknown): true | never {
-  const result = schema.validate(config)
+  const result = _schema.validate(config)
 
   if (result.error) {
-    logger.end('Configuration file contains errors', result.error.details.map((item) => item.message).join('; '))
+    return _logger.end(
+      'Configuration file contains errors',
+      result.error.details.map((item) => item.message).join('; '),
+    )
   }
 
   return true

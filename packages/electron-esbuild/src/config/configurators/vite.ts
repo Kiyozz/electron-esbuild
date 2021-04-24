@@ -7,14 +7,14 @@
 import nodeModule from 'module'
 import { InlineConfig } from 'vite'
 
+import type { ItemConfig } from '../config'
 import { TypeConfig } from '../enums'
-import { ItemConfig } from '../types'
-import { Configurator } from './base'
+import type { Configurator } from './base'
 
 export class ViteConfigurator implements Configurator<TypeConfig.Vite> {
-  public type = TypeConfig.Vite
+  public readonly type = TypeConfig.Vite
 
-  constructor(public config: ItemConfig) {}
+  constructor(public readonly config: ItemConfig) {}
 
   load(partial: Partial<InlineConfig>): InlineConfig {
     let external = partial?.build?.rollupOptions?.external
@@ -27,7 +27,11 @@ export class ViteConfigurator implements Configurator<TypeConfig.Vite> {
       build: {
         emptyOutDir: true,
         rollupOptions: {
-          external: [...(external ?? []), 'electron', ...nodeModule.builtinModules],
+          external: [
+            ...(external ?? []),
+            'electron',
+            ...nodeModule.builtinModules,
+          ],
         },
       },
     }

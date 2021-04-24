@@ -9,18 +9,26 @@ import { BuildOptions } from 'esbuild'
 import nodeModule from 'module'
 import path from 'path'
 
+import type { ItemConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
-import { ItemConfig } from '../types'
-import { Configurator } from './base'
+import type { Configurator } from './base'
 
 export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
-  public type = TypeConfig.Esbuild
+  public readonly type = TypeConfig.Esbuild
 
-  constructor(public config: ItemConfig) {}
+  constructor(public readonly config: ItemConfig) {}
 
-  load(partial: Partial<BuildOptions>, userConfig: BuildOptions, target: Target): BuildOptions {
+  load(
+    partial: Partial<BuildOptions>,
+    userConfig: BuildOptions,
+    target: Target,
+  ): BuildOptions {
     const additional: Partial<BuildOptions> = {}
-    const out = path.resolve(process.cwd(), this.config.output, target === Target.Main ? 'main.js' : 'index.js')
+    const out = path.resolve(
+      process.cwd(),
+      this.config.output,
+      target === Target.Main ? 'main.js' : 'index.js',
+    )
 
     if (userConfig.entryPoints?.length ?? 1 > 1) {
       additional.outdir = path.dirname(out)
@@ -31,7 +39,13 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
     return deepMerge(
       deepMerge(
         partial,
-        { external: [...(partial.external ?? []), 'electron', ...nodeModule.builtinModules] },
+        {
+          external: [
+            ...(partial.external ?? []),
+            'electron',
+            ...nodeModule.builtinModules,
+          ],
+        },
         { clone: false },
       ),
       additional,

@@ -9,68 +9,75 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
 
-import { Configurator } from './config/configurators/base'
-import { EsbuildConfigurator } from './config/configurators/esbuild'
-import { ViteConfigurator } from './config/configurators/vite'
-import { WebpackConfigurator } from './config/configurators/webpack'
-import { Target, TypeConfig } from './config/enums'
 import {
-  ElectronEsbuildConfig,
-  ElectronEsbuildConfigYaml,
+  Config,
   PossibleConfiguration,
+  ConfigItem,
   ItemConfig,
-  ElectronEsbuildConfigItem,
-} from './config/types'
+} from './config/config'
+import { Configurator } from './config/configurators/base'
+import { Target, TypeConfig } from './config/enums'
+import { configByEnv } from './config/utils'
 import { validate } from './config/validation'
-import { Logger, unsupportedType } from './console'
+import { Yaml, YamlSkeleton } from './config/yaml'
+import { Logger } from './console'
 import { Env } from './env'
 
-const logger = new Logger('Config')
+const _logger = new Logger('Config')
 
-class ElectronEsbuildConfigurator {
-  constructor(public main: Configurator<TypeConfig>, public renderer: Configurator<TypeConfig> | null) {}
+class _WorkerConfigurator {
+  constructor(
+    public readonly main: Configurator<TypeConfig>,
+    public readonly renderer: Configurator<TypeConfig> | null,
+  ) {}
 
-  static fromYaml(yaml: ElectronEsbuildConfigYaml): ElectronEsbuildConfigurator {
-    const main = this._fromItemConfig(yaml.mainConfig) as Configurator<TypeConfig>
-    const renderer = yaml.rendererConfig ? this._fromItemConfig(yaml.rendererConfig) : null
+  static fromYaml(yaml: Yaml): _WorkerConfigurator {
+    const main = yaml.main.toConfigurator()
+    const renderer = yaml.renderer ? yaml.renderer.toConfigurator() : null
 
-    return new ElectronEsbuildConfigurator(main, renderer)
-  }
-
-  private static _fromItemConfig(config: ItemConfig): Configurator<TypeConfig> {
-    switch (config.type) {
-      case TypeConfig.Esbuild:
-        return new EsbuildConfigurator(config)
-      case TypeConfig.Webpack:
-        return new WebpackConfigurator(config)
-      case TypeConfig.Vite:
-        return new ViteConfigurator(config)
-      default:
-        unsupportedType(config.type)
-    }
+    return new _WorkerConfigurator(main, renderer)
   }
 }
 
-export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfiguration> {
-  configurator: ElectronEsbuildConfigurator
+export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
+  private readonly _file: string
+  private readonly _main: Partial<M>
+  private readonly _renderer: Partial<R>
 
-  constructor(private _electronEsbuildConfigFile: string, public env: Env) {
+  env: Env
+  configurator: _WorkerConfigurator
+
+  constructor({ file, env }: { file: string; env: Env }) {
+    this._file = file
+    this.env = env
+
     const yaml = this._loadYaml()
 
-    this.configurator = ElectronEsbuildConfigurator.fromYaml(yaml)
+    this.configurator = _WorkerConfigurator.fromYaml(yaml)
+
+    this._main = configByEnv({
+      dev: this.env === 'development',
+      type: this.configurator.main.type,
+    }) as Partial<M>
+    this._renderer = configByEnv({
+      dev: this.env === 'development',
+      type: this.configurator.renderer?.type ?? null,
+    }) as Partial<R>
   }
 
-  parse(mainPartial: Partial<M>, rendererPartial: Partial<R>): ElectronEsbuildConfig<M, R> {
+  toConfig(): Config<M, R> {
     const mainConfig = this.configurator.main.config
     const rendererConfig = this.configurator.renderer?.config ?? null
 
     if (!fs.existsSync(mainConfig.path)) {
-      logger.end(`Main config file '${mainConfig.path}' not found. Check your ${this._electronEsbuildConfigFile}`)
+      _logger.end(
+        `Main config file '${mainConfig.path}' not found. Check your ${this._file}`,
+      )
     }
 
     if (rendererConfig !== null && !fs.existsSync(rendererConfig.path)) {
-      logger.end(
-        `Renderer config file '${rendererConfig.path}' not found. Check your ${this._electronEsbuildConfigFile}`,
+      _logger.end(
+        `Renderer config file '${rendererConfig.path}' not found. Check your ${this._file}`,
       )
     }
 
@@ -78,9 +85,14 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
 
     const userMainConfig = require(path.resolve(process.cwd(), mainConfig.path))
     const userRendererConfig =
-      rendererConfig !== null ? require(path.resolve(process.cwd(), rendererConfig.path)) : null
+      rendererConfig !== null
+        ? require(path.resolve(process.cwd(), rendererConfig.path))
+        : null
 
-    if (typeof userMainConfig === 'function' || typeof userRendererConfig === 'function') {
+    if (
+      typeof userMainConfig === 'function' ||
+      typeof userRendererConfig === 'function'
+    ) {
       const configFileThatIsWrong = []
 
       if (typeof userMainConfig === 'function') {
@@ -93,19 +105,29 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
 
       const plural = configFileThatIsWrong.length > 1 ? 's' : ''
 
-      logger.end(
+      _logger.end(
         'Starting electron-esbuild v1.2.0, you need to export an object from your esbuild/webpack configuration file',
-        `Check your ${configFileThatIsWrong.join(', ')} configuration file${plural}`,
+        `Check your ${configFileThatIsWrong.join(
+          ', ',
+        )} configuration file${plural}`,
       )
     }
 
-    let mainConfigFinal: M = deepMerge(userMainConfig, mainPartial, { clone: false })
+    let mainConfigFinal: M = deepMerge(userMainConfig, this._main, {
+      clone: false,
+    })
     let rendererConfigFinal: R | null =
-      rendererConfig !== null ? deepMerge(userRendererConfig, rendererPartial, { clone: false }) : null
+      rendererConfig !== null
+        ? deepMerge(userRendererConfig, this._renderer, { clone: false })
+        : null
 
     mainConfigFinal = deepMerge(
       mainConfigFinal,
-      this.configurator.main.load(mainPartial, mainConfigFinal, Target.Main) as Partial<M>,
+      this.configurator.main.load(
+        this._main,
+        mainConfigFinal,
+        Target.Main,
+      ) as Partial<M>,
       { clone: false },
     )
 
@@ -114,19 +136,23 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
         ? this.configurator.renderer
           ? deepMerge(
               rendererConfigFinal,
-              this.configurator.renderer.load(rendererPartial, rendererConfigFinal, Target.Renderer) as Partial<R>,
+              this.configurator.renderer.load(
+                this._renderer,
+                rendererConfigFinal,
+                Target.Renderer,
+              ) as Partial<R>,
               { clone: false },
             )
           : null
         : null
 
-    return new ElectronEsbuildConfig<M, R>({
-      main: new ElectronEsbuildConfigItem({
+    return new Config<M, R>({
+      main: new ConfigItem({
         config: mainConfigFinal,
         fileConfig: mainConfig,
         target: Target.Main,
       }),
-      renderer: new ElectronEsbuildConfigItem({
+      renderer: new ConfigItem({
         config: rendererConfigFinal,
         fileConfig: rendererConfig,
         target: Target.Renderer,
@@ -134,23 +160,29 @@ export class ElectronEsbuildWorker<M = PossibleConfiguration, R = PossibleConfig
     })
   }
 
-  private _loadYaml(): ElectronEsbuildConfigYaml {
+  private _loadYaml(): Yaml {
     let fileContent = ''
 
     try {
-      fileContent = fs.readFileSync(path.resolve(this._electronEsbuildConfigFile)).toString()
+      fileContent = fs.readFileSync(path.resolve(this._file)).toString()
     } catch (e) {
-      logger.end('Cannot find file', this._electronEsbuildConfigFile)
+      _logger.end('Cannot find file', this._file)
     }
 
-    const electronEsbuildConfig = (yaml.load(fileContent) as unknown) as ElectronEsbuildConfigYaml
+    const config = (yaml.load(fileContent) as unknown) as YamlSkeleton
 
-    validate(electronEsbuildConfig)
+    validate(config)
 
-    if (electronEsbuildConfig.rendererConfig === undefined) {
-      electronEsbuildConfig.rendererConfig = null
+    if (config.rendererConfig === undefined) {
+      config.rendererConfig = null
     }
 
-    return electronEsbuildConfig
+    return new Yaml({
+      main: ItemConfig.fromYaml(config.mainConfig),
+      renderer:
+        config.rendererConfig !== null
+          ? ItemConfig.fromYaml(config.rendererConfig)
+          : null,
+    })
   }
 }

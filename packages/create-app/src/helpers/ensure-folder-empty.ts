@@ -10,7 +10,9 @@ import path from 'path'
 
 import isPathExists from './is-path-exists'
 
-export default async function ensureFolderEmpty(fileOrFolder: string): Promise<boolean> | never {
+export default async function ensureFolderEmpty(
+  fileOrFolder: string,
+): Promise<boolean> | never {
   const validFiles = ['.DS_Store', '.git', 'Thumbs.db']
 
   if (await isPathExists(fileOrFolder)) {
@@ -23,10 +25,16 @@ export default async function ensureFolderEmpty(fileOrFolder: string): Promise<b
     }
 
     const filesInFolder = await fs.readdir(fileOrFolder)
-    const notValidFilesInFolder = filesInFolder.filter((fileOrFolder) => !validFiles.includes(fileOrFolder))
+    const notValidFilesInFolder = filesInFolder.filter(
+      (fileOrFolder) => !validFiles.includes(fileOrFolder),
+    )
 
     if (notValidFilesInFolder.length > 0) {
-      console.log(`The directory ${green(fileOrFolder)} contains files that could conflict:`)
+      console.log(
+        `The directory ${green(
+          fileOrFolder,
+        )} contains files that could conflict:`,
+      )
 
       for (const file of notValidFilesInFolder) {
         try {
@@ -43,7 +51,9 @@ export default async function ensureFolderEmpty(fileOrFolder: string): Promise<b
       }
 
       console.log()
-      console.log('Either try using a new directory name, or remove the files listed above.')
+      console.log(
+        'Either try using a new directory name, or remove the files listed above.',
+      )
       process.exit(1)
     }
   }

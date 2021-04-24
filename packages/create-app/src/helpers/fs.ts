@@ -25,7 +25,9 @@ function shouldRename(file: string): file is keyof typeof renameFiles {
 }
 
 export function write({ file, content, out, templateDir }: WriteOptions): void {
-  const targetPath = shouldRename(file) ? path.join(out, renameFiles[file]) : path.join(out, file)
+  const targetPath = shouldRename(file)
+    ? path.join(out, renameFiles[file])
+    : path.join(out, file)
 
   if (content) {
     fs.writeFileSync(targetPath, content)

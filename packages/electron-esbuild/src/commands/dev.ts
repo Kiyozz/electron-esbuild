@@ -7,25 +7,24 @@
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import path from 'path'
 
-import { createBuilders, Builder } from '../builder'
+import { Builder } from '../builder'
 import { Cli, CliResult } from '../cli'
-import { ElectronEsbuildWorker } from '../config'
+import { Worker } from '../config'
 import { CONFIG_FILE_NAME } from '../config/constants'
-import { configByEnv } from '../config/utils'
 import { Logger } from '../console'
 
-const isWindows = process.platform === 'win32'
-const electronBin = isWindows ? 'electron.cmd' : 'electron'
+const _isWindows = process.platform === 'win32'
+const _electronBin = _isWindows ? 'electron.cmd' : 'electron'
 
-const logger = new Logger('Commands/Dev')
+const _logger = new Logger('Commands/Dev')
 
-class ApplicationStarter {
+class _ApplicationStarter {
   private _electronProcess: ChildProcessWithoutNullStreams | undefined
 
   constructor() {
     process.on('exit', () => {
-      logger.log('Exiting...')
-      logger.log('Killing main process...')
+      _logger.log('Exiting...')
+      _logger.log('Killing main process...')
 
       this._kill()
     })
@@ -33,25 +32,28 @@ class ApplicationStarter {
 
   start(): void {
     if (this._electronProcess) {
-      logger.log('Kill latest main')
+      _logger.log('Kill latest main')
 
       try {
         this._kill()
       } catch (e) {
-        logger.error('Error occured while killing latest main', e)
+        _logger.error('Error occured while killing latest main', e)
       }
 
       this._electronProcess = undefined
     }
 
-    logger.log('Start application')
-    this._electronProcess = spawn(path.resolve(path.resolve(`node_modules/.bin/${electronBin}`)), ['dist/main/main.js'])
+    _logger.log('Start application')
+    this._electronProcess = spawn(
+      path.resolve(path.resolve(`node_modules/.bin/${_electronBin}`)),
+      ['dist/main/main.js'],
+    )
 
     this._electronProcess.stdout.on('data', (data) => {
-      logger.log(data.toString().trim())
+      _logger.log(data.toString().trim())
     })
     this._electronProcess.stderr.on('data', (data) => {
-      logger.log('STDERR', data.toString().trim())
+      _logger.log('STDERR', data.toString().trim())
     })
 
     this._electronProcess.on('close', (code, signal) => {
@@ -63,7 +65,7 @@ class ApplicationStarter {
 
   private _kill(): void {
     if (this._electronProcess) {
-      if (isWindows) {
+      if (_isWindows) {
         spawn('taskkill', ['/pid', `${this._electronProcess.pid}`, '/f', '/t'])
       } else {
         process.kill(this._electronProcess.pid)
@@ -73,54 +75,55 @@ class ApplicationStarter {
 }
 
 export class Dev extends Cli {
-  private readonly _worker: ElectronEsbuildWorker
+  private readonly _worker: Worker
   private readonly _mainBuilder: Builder
   private readonly _rendererBuilder: Builder | null
-  private readonly _applicationStarter: ApplicationStarter = new ApplicationStarter()
+  private readonly _applicationStarter: _ApplicationStarter = new _ApplicationStarter()
 
   constructor(cli: CliResult) {
     super(cli)
 
     process.env.NODE_ENV = 'development'
 
-    logger.debug('Creating worker')
+    _logger.debug('Creating worker')
 
-    this._worker = new ElectronEsbuildWorker(CONFIG_FILE_NAME, 'development')
+    this._worker = new Worker({ file: CONFIG_FILE_NAME, env: 'development' })
 
-    logger.debug('Created worker')
+    _logger.debug('Created worker')
 
-    const config = this._worker.parse(
-      configByEnv(true, this._worker.configurator.main.type),
-      configByEnv(true, this._worker.configurator.renderer?.type ?? null),
-    )
+    const config = this._worker.toConfig()
 
-    logger.debug('Parsed config')
+    _logger.debug('Parsed config')
 
-    const [mainBuilder, rendererBuilder] = createBuilders(config.main, config.renderer)
+    const [mainBuilder, rendererBuilder] = config.toBuilders()
 
-    logger.debug('Created builders')
+    _logger.debug('Created builders')
 
     this._mainBuilder = mainBuilder
     this._rendererBuilder = rendererBuilder
   }
 
   async init(): Promise<void> {
-    logger.debug('Start')
+    _logger.debug('Start')
 
     const start = () => this._applicationStarter.start()
 
-    logger.debug('Starting dev builders')
+    _logger.debug('Starting dev builders')
     this._mainBuilder.dev(start)
     this._rendererBuilder?.dev(start)
-    logger.debug('Started dev builders')
-    logger.debug('Starting initial builds')
+    _logger.debug('Started dev builders')
+    _logger.debug('Starting initial builds')
 
     await Promise.all([
-      this._mainBuilder.hasInitialBuild ? this._mainBuilder.build() : Promise.resolve(),
-      this._rendererBuilder?.hasInitialBuild ? this._rendererBuilder.build() : Promise.resolve(),
+      this._mainBuilder.hasInitialBuild
+        ? this._mainBuilder.build()
+        : Promise.resolve(),
+      this._rendererBuilder?.hasInitialBuild
+        ? this._rendererBuilder.build()
+        : Promise.resolve(),
     ])
 
-    logger.debug('Initial builds finished')
+    _logger.debug('Initial builds finished')
 
     this._applicationStarter.start()
   }

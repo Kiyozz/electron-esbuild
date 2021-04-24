@@ -6,18 +6,18 @@
 
 import { Compiler, Configuration } from 'webpack'
 
-import { ElectronEsbuildConfigItem } from '../config/types'
+import type { ConfigItem } from '../config/config'
 import { Logger } from '../console'
 import { BaseBuilder } from './base'
 
 const logger = new Logger('Builder/Webpack')
 
 export class WebpackBuilder extends BaseBuilder<Configuration> {
-  hasInitialBuild = false
+  readonly hasInitialBuild = false
 
   private readonly _compiler!: Compiler
 
-  constructor(_config: ElectronEsbuildConfigItem<Configuration>) {
+  constructor(readonly _config: ConfigItem<Configuration>) {
     super(_config)
 
     try {
@@ -25,8 +25,14 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
       require('webpack-dev-server') // check that user can use webpack-dev-server
       this._compiler = webpack(this._config.config)
     } catch (e) {
-      if (e.message?.includes('Invalid configuration object')) {
-        logger.end('Your webpack configuration is invalid. Message from webpack', e.message)
+      if (
+        e.message?.includes('MODULE_NOT_FOUND') ||
+        e.message?.includes('Invalid configuration object')
+      ) {
+        logger.end(
+          'Your webpack configuration is invalid. Message from webpack',
+          e.message,
+        )
       }
 
       logger.end(

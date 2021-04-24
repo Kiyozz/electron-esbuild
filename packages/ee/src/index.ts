@@ -15,12 +15,25 @@ import build from './build'
 const argv = minimist(process.argv.slice(2))
 
 if (argv.version) {
-  console.log(JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json')).toString('utf8')).version)
+  console.log(
+    JSON.parse(
+      fs
+        .readFileSync(path.resolve(__dirname, '../package.json'))
+        .toString('utf8'),
+    ).version,
+  )
   process.exit(0)
 }
 
 const entries = argv._
-const { _, '--': ex, 'check-types': checkTypes, format, external, ...options } = argv
+const {
+  _,
+  '--': ex,
+  'check-types': checkTypes,
+  format,
+  external,
+  ...options
+} = argv
 
 const formats: Format[] = typeof format === 'string' ? [format] : format
 const externals: string[] = typeof external === 'string' ? [external] : external

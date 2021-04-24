@@ -8,16 +8,20 @@ import deepMerge from 'deepmerge'
 import path from 'path'
 import { Configuration } from 'webpack'
 
+import type { ItemConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
-import { ItemConfig } from '../types'
-import { Configurator } from './base'
+import type { Configurator } from './base'
 
 export class WebpackConfigurator implements Configurator<TypeConfig.Webpack> {
-  public type = TypeConfig.Webpack
+  public readonly type = TypeConfig.Webpack
 
-  constructor(public config: ItemConfig) {}
+  constructor(public readonly config: ItemConfig) {}
 
-  load(partial: Partial<Configuration>, _: Configuration, target: Target): Configuration {
+  load(
+    partial: Partial<Configuration>,
+    _: Configuration,
+    target: Target,
+  ): Configuration {
     return deepMerge(
       partial,
       {

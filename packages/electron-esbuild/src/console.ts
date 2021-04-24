@@ -7,7 +7,10 @@
 import { TypeConfig } from './config/enums'
 import { track } from './track'
 
-export function unsupportedType(type: TypeConfig, env?: 'main' | 'renderer'): never {
+export function unsupportedType(
+  type: TypeConfig,
+  env?: 'main' | 'renderer',
+): never {
   const args = [track(), 'unsupported type', type]
 
   if (env) {

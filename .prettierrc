@@ -1,6 +1,6 @@
 {
   "endOfLine": "lf",
-  "printWidth": 120,
+  "printWidth": 80,
   "useTabs": false,
   "trailingComma": "all",
   "semi": false,

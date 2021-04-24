@@ -16,33 +16,35 @@ import httpProxy from 'http-proxy'
 import livereload from 'livereload'
 import path from 'path'
 
-import { ElectronEsbuildConfigItem } from '../config/types'
+import type { ConfigItem } from '../config/config'
 import { Logger } from '../console'
 import { getDeps } from '../deps'
 import { BaseBuilder } from './base'
 
-const logger = new Logger('Builder/Esbuild')
+const _logger = new Logger('Builder/Esbuild')
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
-  hasInitialBuild = true
+  readonly hasInitialBuild = true
 
   private _builder: BuildIncremental | undefined
 
-  constructor(protected _config: ElectronEsbuildConfigItem<BuildOptions>) {
+  constructor(readonly _config: ConfigItem<BuildOptions>) {
     super(_config)
   }
 
   async build(): Promise<void> {
-    logger.log('Building', this.env.toLowerCase())
+    _logger.log('Building', this.env.toLowerCase())
 
     if (this._builder) {
       await this._builder.rebuild()
     } else {
-      this._builder = (await esbuild.build(this._config.config)) as BuildIncremental
+      this._builder = (await esbuild.build(
+        this._config.config,
+      )) as BuildIncremental
       await this._copyHtml()
     }
 
-    logger.log(this.env, 'built')
+    _logger.log(this.env, 'built')
   }
 
   dev(start: () => void): void {
@@ -51,8 +53,15 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     }
 
     if (this._config.isMain) {
-      const sources = path.join(path.resolve(path.dirname(this._config.fileConfig.src)), '**', '*.{js,ts,tsx}')
-      const watcher = chokidar.watch([sources, ...getDeps(path.resolve(this._config.fileConfig.src))])
+      const sources = path.join(
+        path.resolve(path.dirname(this._config.fileConfig.src)),
+        '**',
+        '*.{js,ts,tsx}',
+      )
+      const watcher = chokidar.watch([
+        sources,
+        ...getDeps(path.resolve(this._config.fileConfig.src)),
+      ])
 
       watcher.on('ready', () => {
         watcher.on(
@@ -76,10 +85,15 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       })
     } else if (this._config.isRenderer) {
       if (typeof this._config.fileConfig.html === 'undefined') {
-        logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
+        _logger.end(
+          'Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`',
+        )
       }
 
-      const srcDir = path.resolve(process.cwd(), path.dirname(this._config.fileConfig.src))
+      const srcDir = path.resolve(
+        process.cwd(),
+        path.dirname(this._config.fileConfig.src),
+      )
 
       esbuild
         .serve(
@@ -91,18 +105,30 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         )
         .then(async (builder) => {
           if (typeof this._config.fileConfig?.html === 'undefined') {
-            logger.end('Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`')
+            _logger.end(
+              'Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`',
+            )
             return
           }
 
           const livereloadPort = 35729
-          const htmlPath = path.resolve(process.cwd(), this._config.fileConfig.html)
+          const htmlPath = path.resolve(
+            process.cwd(),
+            this._config.fileConfig.html,
+          )
           const html = (await fs.readFile(htmlPath))
             .toString()
-            .replace('</body>', `<script src="/livereload.js?snipver=1"></script></body>`)
+            .replace(
+              '</body>',
+              `<script src="/livereload.js?snipver=1"></script></body>`,
+            )
 
-          const proxy = httpProxy.createProxy({ target: 'http://localhost:9081' })
-          const proxyLr = httpProxy.createProxy({ target: `http://localhost:${livereloadPort}` })
+          const proxy = httpProxy.createProxy({
+            target: 'http://localhost:9081',
+          })
+          const proxyLr = httpProxy.createProxy({
+            target: `http://localhost:${livereloadPort}`,
+          })
           const lrServer = livereload.createServer({ port: livereloadPort })
 
           const handler = connect()
@@ -133,7 +159,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           watcher.on('ready', () => {
             watcher.on('all', async (eventName, file) => {
-              logger.log('Refresh', this.env.toLowerCase())
+              _logger.log('Refresh', this.env.toLowerCase())
               lrServer.refresh(file)
             })
           })

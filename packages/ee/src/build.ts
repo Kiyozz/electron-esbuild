@@ -43,7 +43,11 @@ function task(label: string): { end: () => void } {
   return {
     end() {
       const duration = Date.now() - now
-      console.log(`${bgGreen(black(' DONE '))} ${green(`${label} - ${humanizeDuration(duration)}`)}`)
+      console.log(
+        `${bgGreen(black(' DONE '))} ${green(
+          `${label} - ${humanizeDuration(duration)}`,
+        )}`,
+      )
     },
   }
 }

@@ -7,9 +7,7 @@
 import { Build } from './build'
 import { Dev } from './dev'
 
-const commands = {
+export const commands = {
   build: Build,
   dev: Dev,
 }
-
-export { commands }
