@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- The Electron process should now be killed when an error appears when starting the application
+
 ## v1.4.0
 
 ### Features
