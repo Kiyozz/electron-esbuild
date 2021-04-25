@@ -28,7 +28,7 @@
         "reveal": "always",
         "focus": false,
         "panel": "shared",
-        "showReuseMessage": false,
+        "showReuseMessage": true,
         "clear": false
       },
       "label": "create-app@build",
@@ -45,7 +45,7 @@
         "reveal": "always",
         "focus": false,
         "panel": "shared",
-        "showReuseMessage": false,
+        "showReuseMessage": true,
         "clear": false
       },
       "label": "electron-esbuild@build",

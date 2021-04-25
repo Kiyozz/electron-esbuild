@@ -12,7 +12,7 @@ export interface Configurator<P extends TypeConfig> {
   readonly type: TypeConfig
   readonly config: ItemConfig
 
-  load(
+  toBuilderConfig(
     partial: Partial<ConfigMapping[P]>,
     config: ConfigMapping[P],
     target: Target,

@@ -16,7 +16,7 @@ export class ViteConfigurator implements Configurator<TypeConfig.Vite> {
 
   constructor(public readonly config: ItemConfig) {}
 
-  load(partial: Partial<InlineConfig>): InlineConfig {
+  toBuilderConfig(partial: Partial<InlineConfig>): InlineConfig {
     let external = partial?.build?.rollupOptions?.external
 
     if (!Array.isArray(external)) {

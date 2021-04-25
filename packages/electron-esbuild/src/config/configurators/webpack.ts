@@ -17,7 +17,7 @@ export class WebpackConfigurator implements Configurator<TypeConfig.Webpack> {
 
   constructor(public readonly config: ItemConfig) {}
 
-  load(
+  toBuilderConfig(
     partial: Partial<Configuration>,
     _: Configuration,
     target: Target,

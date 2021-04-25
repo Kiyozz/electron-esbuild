@@ -123,7 +123,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
 
     mainConfigFinal = deepMerge(
       mainConfigFinal,
-      this.configurator.main.load(
+      this.configurator.main.toBuilderConfig(
         this._main,
         mainConfigFinal,
         Target.Main,
@@ -136,7 +136,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
         ? this.configurator.renderer
           ? deepMerge(
               rendererConfigFinal,
-              this.configurator.renderer.load(
+              this.configurator.renderer.toBuilderConfig(
                 this._renderer,
                 rendererConfigFinal,
                 Target.Renderer,

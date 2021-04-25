@@ -18,7 +18,7 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
 
   constructor(public readonly config: ItemConfig) {}
 
-  load(
+  toBuilderConfig(
     partial: Partial<BuildOptions>,
     userConfig: BuildOptions,
     target: Target,
