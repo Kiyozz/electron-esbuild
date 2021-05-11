@@ -16,7 +16,7 @@ import httpProxy from 'http-proxy'
 import livereload from 'livereload'
 import path from 'path'
 
-import type { ConfigItem } from '../config/config'
+import type { Item } from '../config/config'
 import { Logger } from '../console'
 import { getDeps } from '../deps'
 import { BaseBuilder } from './base'
@@ -28,7 +28,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
   private _builder: BuildIncremental | undefined
 
-  constructor(readonly _config: ConfigItem<BuildOptions>) {
+  constructor(readonly _config: Item<BuildOptions>) {
     super(_config)
   }
 

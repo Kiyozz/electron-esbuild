@@ -1,3 +1,10 @@
+## Unreleased
+
+### Features
+
+- Expose main process debug port at 9223 (--inspect)
+- Expose renderer process debug port at 9222 (--remote-debugging-port)
+
 ## v1.4.1
 
 ### Bug fixes

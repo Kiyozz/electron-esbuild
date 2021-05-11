@@ -5,12 +5,13 @@
  */
 
 export const enum TypeConfig {
-  Esbuild = 'esbuild',
-  Webpack = 'webpack',
-  Vite = 'vite',
+  esbuild = 'esbuild',
+  webpack = 'webpack',
+  vite = 'vite',
+  typescript = 'tsc',
 }
 
 export const enum Target {
-  Main,
-  Renderer,
+  main,
+  renderer,
 }

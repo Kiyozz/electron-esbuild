@@ -13,7 +13,8 @@ import { TypeConfig } from './enums'
 export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
 
 export interface ConfigMapping {
-  [TypeConfig.Esbuild]: BuildOptions
-  [TypeConfig.Webpack]: Configuration
-  [TypeConfig.Vite]: InlineConfig
+  [TypeConfig.esbuild]: BuildOptions
+  [TypeConfig.webpack]: Configuration
+  [TypeConfig.vite]: InlineConfig
+  [TypeConfig.typescript]: unknown
 }

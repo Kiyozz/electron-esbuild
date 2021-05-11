@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021 Kiyozz.
+ *
+ * All rights reserved.
+ */
+
 import { BuildOptions } from 'esbuild'
 import { InlineConfig } from 'vite'
 import { Configuration } from 'webpack'
@@ -14,7 +20,9 @@ import { WebpackConfigurator } from './configurators/webpack'
 import { Target, TypeConfig } from './enums'
 import { YamlItem } from './yaml'
 
-export class ItemConfig {
+export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
+
+export class EnvConfig {
   readonly type: TypeConfig
   readonly path: string
   readonly src: string
@@ -41,21 +49,8 @@ export class ItemConfig {
     this.html = html
   }
 
-  toConfigurator(): Configurator<TypeConfig> {
-    switch (this.type) {
-      case TypeConfig.Esbuild:
-        return new EsbuildConfigurator(this)
-      case TypeConfig.Webpack:
-        return new WebpackConfigurator(this)
-      case TypeConfig.Vite:
-        return new ViteConfigurator(this)
-      default:
-        unsupportedType(this.type)
-    }
-  }
-
-  static fromYaml(yaml: YamlItem): ItemConfig {
-    return new ItemConfig({
+  static fromYaml(yaml: YamlItem): EnvConfig {
+    return new EnvConfig({
       type: yaml.type,
       path: yaml.path,
       src: yaml.src,
@@ -63,17 +58,28 @@ export class ItemConfig {
       html: yaml.html,
     })
   }
+
+  toConfigurator(): Configurator<TypeConfig> {
+    switch (this.type) {
+      case TypeConfig.esbuild:
+        return new EsbuildConfigurator(this)
+      case TypeConfig.webpack:
+        return new WebpackConfigurator(this)
+      case TypeConfig.vite:
+        return new ViteConfigurator(this)
+      default:
+        unsupportedType(this.type)
+    }
+  }
 }
 
-export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
-
-export class ConfigItem<
+export class Item<
   T extends PossibleConfiguration | null = PossibleConfiguration,
-  F extends ItemConfig | null = ItemConfig | null
+  F extends EnvConfig | null = EnvConfig | null
 > {
-  config: T
-  fileConfig: F
-  target: Target
+  readonly config: T
+  readonly fileConfig: F
+  readonly target: Target
 
   constructor({
     config,
@@ -90,32 +96,32 @@ export class ConfigItem<
   }
 
   get isVite(): boolean {
-    return this.fileConfig?.type === TypeConfig.Vite
+    return this.fileConfig?.type === TypeConfig.vite
   }
 
   get isWebpack(): boolean {
-    return this.fileConfig?.type === TypeConfig.Webpack
+    return this.fileConfig?.type === TypeConfig.webpack
   }
 
   get isEsbuild(): boolean {
-    return this.fileConfig?.type === TypeConfig.Esbuild
+    return this.fileConfig?.type === TypeConfig.esbuild
   }
 
   get isMain(): boolean {
-    return this.target === Target.Main
+    return this.target === Target.main
   }
 
   get isRenderer(): boolean {
-    return this.target === Target.Renderer
+    return this.target === Target.renderer
   }
 
   toBuilder(): Builder | null {
     if (this.isEsbuild) {
-      return new EsbuildBuilder(this as ConfigItem<BuildOptions>)
+      return new EsbuildBuilder(this as Item<BuildOptions>)
     } else if (this.isWebpack) {
-      return new WebpackBuilder(this as ConfigItem<Configuration>)
+      return new WebpackBuilder(this as Item<Configuration>)
     } else if (this.isVite) {
-      return new ViteBuilder(this as ConfigItem<InlineConfig>)
+      return new ViteBuilder(this as Item<InlineConfig>)
     }
 
     if (this.fileConfig !== null) {
@@ -127,15 +133,15 @@ export class ConfigItem<
 }
 
 export class Config<M = PossibleConfiguration, R = PossibleConfiguration> {
-  readonly main: ConfigItem<M, ItemConfig>
-  readonly renderer: ConfigItem<R | null>
+  readonly main: Item<M, EnvConfig>
+  readonly renderer: Item<R | null>
 
   constructor({
     main,
     renderer,
   }: {
-    main: ConfigItem<M, ItemConfig>
-    renderer: ConfigItem<R | null>
+    main: Item<M, EnvConfig>
+    renderer: Item<R | null>
   }) {
     this.main = main
     this.renderer = renderer

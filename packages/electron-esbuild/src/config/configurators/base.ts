@@ -4,13 +4,13 @@
  * All rights reserved.
  */
 
-import type { ItemConfig } from '../config'
+import type { EnvConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
 import { ConfigMapping } from '../types'
 
 export interface Configurator<P extends TypeConfig> {
   readonly type: TypeConfig
-  readonly config: ItemConfig
+  readonly config: EnvConfig
 
   toBuilderConfig(
     partial: Partial<ConfigMapping[P]>,

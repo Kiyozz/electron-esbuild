@@ -9,14 +9,14 @@ import { BuildOptions } from 'esbuild'
 import nodeModule from 'module'
 import path from 'path'
 
-import type { ItemConfig } from '../config'
+import type { EnvConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
 import type { Configurator } from './base'
 
-export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
-  public readonly type = TypeConfig.Esbuild
+export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
+  public readonly type = TypeConfig.esbuild
 
-  constructor(public readonly config: ItemConfig) {}
+  constructor(public readonly config: EnvConfig) {}
 
   toBuilderConfig(
     partial: Partial<BuildOptions>,
@@ -27,7 +27,7 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.Esbuild> {
     const out = path.resolve(
       process.cwd(),
       this.config.output,
-      target === Target.Main ? 'main.js' : 'index.js',
+      target === Target.main ? 'main.js' : 'index.js',
     )
 
     if (userConfig.entryPoints?.length ?? 1 > 1) {

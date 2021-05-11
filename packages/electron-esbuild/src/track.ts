@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-let startedAt: number | undefined
+let _startedAt: number | undefined
 
 function zeros(value: number, fixed: number): string {
   const fixedValue = value.toFixed(fixed)
@@ -21,11 +21,11 @@ function zeros(value: number, fixed: number): string {
 }
 
 export function track(): string {
-  if (typeof startedAt === 'undefined') {
-    startedAt = Date.now()
+  if (typeof _startedAt === 'undefined') {
+    _startedAt = Date.now()
   }
 
-  const value = (Date.now() - startedAt) / 1000
+  const value = (Date.now() - _startedAt) / 1000
 
   return `[${zeros(value, 2)}]`
 }

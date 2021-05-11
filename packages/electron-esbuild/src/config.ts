@@ -9,16 +9,11 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 import path from 'path'
 
-import {
-  Config,
-  PossibleConfiguration,
-  ConfigItem,
-  ItemConfig,
-} from './config/config'
+import { Config, PossibleConfiguration, Item } from './config/config'
 import { Configurator } from './config/configurators/base'
 import { Target, TypeConfig } from './config/enums'
 import { configByEnv } from './config/utils'
-import { validate } from './config/validation'
+import { ConfigFile } from './config/validation'
 import { Yaml, YamlSkeleton } from './config/yaml'
 import { Logger } from './console'
 import { Env } from './env'
@@ -26,16 +21,25 @@ import { Env } from './env'
 const _logger = new Logger('Config')
 
 class _WorkerConfigurator {
-  constructor(
-    public readonly main: Configurator<TypeConfig>,
-    public readonly renderer: Configurator<TypeConfig> | null,
-  ) {}
+  readonly main: Configurator<TypeConfig>
+  readonly renderer: Configurator<TypeConfig> | null
+
+  constructor({
+    main,
+    renderer,
+  }: {
+    main: Configurator<TypeConfig>
+    renderer: Configurator<TypeConfig> | null
+  }) {
+    this.main = main
+    this.renderer = renderer
+  }
 
   static fromYaml(yaml: Yaml): _WorkerConfigurator {
     const main = yaml.main.toConfigurator()
     const renderer = yaml.renderer ? yaml.renderer.toConfigurator() : null
 
-    return new _WorkerConfigurator(main, renderer)
+    return new _WorkerConfigurator({ main, renderer })
   }
 }
 
@@ -93,7 +97,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       typeof userMainConfig === 'function' ||
       typeof userRendererConfig === 'function'
     ) {
-      const configFileThatIsWrong = []
+      const configFileThatIsWrong: string[] = []
 
       if (typeof userMainConfig === 'function') {
         configFileThatIsWrong.push('main')
@@ -126,7 +130,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       this.configurator.main.toBuilderConfig(
         this._main,
         mainConfigFinal,
-        Target.Main,
+        Target.main,
       ) as Partial<M>,
       { clone: false },
     )
@@ -139,7 +143,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
               this.configurator.renderer.toBuilderConfig(
                 this._renderer,
                 rendererConfigFinal,
-                Target.Renderer,
+                Target.renderer,
               ) as Partial<R>,
               { clone: false },
             )
@@ -147,15 +151,15 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
         : null
 
     return new Config<M, R>({
-      main: new ConfigItem({
+      main: new Item({
         config: mainConfigFinal,
         fileConfig: mainConfig,
-        target: Target.Main,
+        target: Target.main,
       }),
-      renderer: new ConfigItem({
+      renderer: new Item({
         config: rendererConfigFinal,
         fileConfig: rendererConfig,
-        target: Target.Renderer,
+        target: Target.renderer,
       }),
     })
   }
@@ -166,23 +170,15 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
     try {
       fileContent = fs.readFileSync(path.resolve(this._file)).toString()
     } catch (e) {
-      _logger.end('Cannot find file', this._file)
+      _logger.end('Unable to find electron-esbuild config file at:', this._file)
     }
 
-    const config = (yaml.load(fileContent) as unknown) as YamlSkeleton
+    const configFile = new ConfigFile(
+      (yaml.load(fileContent) as unknown) as YamlSkeleton,
+    )
 
-    validate(config)
+    configFile.ensureValid()
 
-    if (config.rendererConfig === undefined) {
-      config.rendererConfig = null
-    }
-
-    return new Yaml({
-      main: ItemConfig.fromYaml(config.mainConfig),
-      renderer:
-        config.rendererConfig !== null
-          ? ItemConfig.fromYaml(config.rendererConfig)
-          : null,
-    })
+    return configFile.toYaml()
   }
 }

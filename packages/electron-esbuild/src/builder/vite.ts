@@ -7,7 +7,7 @@
 import path from 'path'
 import type { build, createServer, InlineConfig } from 'vite'
 
-import type { ConfigItem } from '../config/config'
+import type { Item } from '../config/config'
 import { Logger, unsupportedType } from '../console'
 import { BaseBuilder } from './base'
 
@@ -20,7 +20,7 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
   private readonly _viteBuild: typeof build
   private readonly _viteCreateServer: typeof createServer
 
-  constructor(_config: ConfigItem<InlineConfig>) {
+  constructor(_config: Item<InlineConfig>) {
     super(_config)
 
     if (!this._config.fileConfig) {

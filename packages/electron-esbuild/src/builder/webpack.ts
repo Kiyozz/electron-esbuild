@@ -6,18 +6,18 @@
 
 import { Compiler, Configuration } from 'webpack'
 
-import type { ConfigItem } from '../config/config'
+import type { Item } from '../config/config'
 import { Logger } from '../console'
 import { BaseBuilder } from './base'
 
-const logger = new Logger('Builder/Webpack')
+const _logger = new Logger('Builder/Webpack')
 
 export class WebpackBuilder extends BaseBuilder<Configuration> {
   readonly hasInitialBuild = false
 
   private readonly _compiler!: Compiler
 
-  constructor(readonly _config: ConfigItem<Configuration>) {
+  constructor(readonly _config: Item<Configuration>) {
     super(_config)
 
     try {
@@ -29,20 +29,20 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
         e.message?.includes('MODULE_NOT_FOUND') ||
         e.message?.includes('Invalid configuration object')
       ) {
-        logger.end(
+        _logger.end(
           'Your webpack configuration is invalid. Message from webpack',
           e.message,
         )
       }
 
-      logger.end(
+      _logger.end(
         "It looks like you're trying to use webpack but it's not installed, try running `npm i -D webpack webpack-dev-server`",
       )
     }
   }
 
   build(): Promise<void> {
-    logger.log('Building', this.env.toLowerCase())
+    _logger.log('Building', this.env.toLowerCase())
 
     return new Promise<void>((resolve, reject) => {
       if (((this._compiler as unknown) as { running: boolean }).running) {
@@ -52,10 +52,10 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
 
       this._compiler.run((err) => {
         if (err) {
-          logger.error(this.env, 'error', err)
+          _logger.error(this.env, 'error', err)
           reject(err)
         } else {
-          logger.log(this.env, 'built')
+          _logger.log(this.env, 'built')
           resolve()
         }
       })
@@ -74,9 +74,9 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
 
       rendererServer.listen(9080, 'localhost', (err: Error | undefined) => {
         if (err) {
-          logger.error(this.env, 'error', err)
+          _logger.error(this.env, 'error', err)
         } else {
-          logger.log(this.env, ': starting webpack dev server')
+          _logger.log(this.env, ': starting webpack dev server')
         }
       })
     }

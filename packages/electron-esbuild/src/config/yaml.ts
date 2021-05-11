@@ -1,7 +1,13 @@
-import type { ItemConfig } from './config'
+/*
+ * Copyright (c) 2021 Kiyozz.
+ *
+ * All rights reserved.
+ */
+
+import type { EnvConfig } from './config'
 import { TypeConfig } from './enums'
 
-export interface YamlItem {
+export type YamlItem = {
   type: TypeConfig
   path: string
   src: string
@@ -9,21 +15,21 @@ export interface YamlItem {
   html?: string
 }
 
-export interface YamlSkeleton {
+export type YamlSkeleton = {
   mainConfig: YamlItem
   rendererConfig: YamlItem | null
 }
 
 export class Yaml {
-  readonly main: ItemConfig
-  readonly renderer: ItemConfig | null
+  readonly main: EnvConfig
+  readonly renderer: EnvConfig | null
 
   constructor({
     main,
     renderer,
   }: {
-    main: ItemConfig
-    renderer: ItemConfig | null
+    main: EnvConfig
+    renderer: EnvConfig | null
   }) {
     this.main = main
     this.renderer = renderer

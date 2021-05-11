@@ -45,10 +45,6 @@ async function createWindow() {
   win.on('ready-to-show', () => {
     win!.show()
     win!.focus()
-
-    if (isDev) {
-      win!.webContents.openDevTools({ mode: 'bottom' })
-    }
   })
 }
 

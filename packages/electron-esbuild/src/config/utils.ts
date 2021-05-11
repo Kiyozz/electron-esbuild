@@ -23,7 +23,7 @@ export function configByEnv({
 
   if (dev) {
     switch (type) {
-      case TypeConfig.Esbuild:
+      case TypeConfig.esbuild:
         return {
           incremental: true,
           sourcemap: 'inline',
@@ -31,15 +31,20 @@ export function configByEnv({
             'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
           },
         } as BuildOptions
-      case TypeConfig.Webpack:
-        return { mode: 'development', devtool: 'eval' } as Configuration
-      case TypeConfig.Vite:
+      case TypeConfig.webpack:
+        return {
+          mode: 'development',
+          devtool: 'eval-source-map',
+        } as Configuration
+      case TypeConfig.vite:
+        return {}
+      case TypeConfig.typescript:
         return {}
     }
   }
 
   switch (type) {
-    case TypeConfig.Esbuild:
+    case TypeConfig.esbuild:
       return {
         sourcemap: false,
         minify: true,
@@ -47,9 +52,11 @@ export function configByEnv({
           'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
         },
       } as BuildOptions
-    case TypeConfig.Webpack:
+    case TypeConfig.webpack:
       return { mode: 'production', devtool: false } as Configuration
-    case TypeConfig.Vite:
+    case TypeConfig.vite:
+      return {}
+    case TypeConfig.typescript:
       return {}
   }
 }

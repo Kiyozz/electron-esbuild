@@ -15,6 +15,8 @@ import { Logger } from '../console'
 
 const _isWindows = process.platform === 'win32'
 const _electronBin = _isWindows ? 'electron.cmd' : 'electron'
+const _mainDebugPort = 9223
+const _rendererDebugPort = 9222
 
 const _logger = new Logger('Commands/Dev')
 
@@ -44,9 +46,15 @@ class _ApplicationStarter {
     }
 
     _logger.log('Start application')
+    _logger.log(`Debugger listening on ${_mainDebugPort}`)
+    _logger.log(`Remote debugger listening on ${_rendererDebugPort}`)
     this._electronProcess = spawn(
       path.resolve(path.resolve(`node_modules/.bin/${_electronBin}`)),
-      ['dist/main/main.js'],
+      [
+        'dist/main/main.js',
+        `--inspect=${_mainDebugPort}`,
+        `--remote-debugging-port=${_rendererDebugPort}`,
+      ],
     )
 
     this._electronProcess.stdout.on('data', (data) => {
