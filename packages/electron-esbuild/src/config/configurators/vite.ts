@@ -34,6 +34,11 @@ export class ViteConfigurator implements Configurator<TypeConfig.vite> {
           ],
         },
       },
+      server: {
+        fsServe: {
+          root: '../..',
+        },
+      },
     }
   }
 }
