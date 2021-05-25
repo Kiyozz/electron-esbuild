@@ -135,9 +135,6 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           handler.use(compression() as never)
           handler.use((req, res) => {
-            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
-            res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
-
             if (req.url === '/' || req.url === '') {
               res.setHeader('Content-Type', 'text/html')
               res.writeHead(200)
