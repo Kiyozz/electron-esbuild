@@ -7,7 +7,7 @@
 
 ### Bug fixes
 
-- Remove COEP headers in esbuild development server (@josteph), closed by #17
+- Remove COEP headers in esbuild development server (from [@josteph](https://github.com/josteph)), closed by [#17](https://github.com/Kiyozz/electron-esbuild/pull/17)
 
 ## v1.4.1
 
