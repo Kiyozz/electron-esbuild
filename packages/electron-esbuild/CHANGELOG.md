@@ -5,6 +5,10 @@
 - Expose main process debug port at 9223 (--inspect)
 - Expose renderer process debug port at 9222 (--remote-debugging-port)
 
+### Bug fixes
+
+- Remove COEP headers in esbuild development server (@josteph), closed by #17
+
 ## v1.4.1
 
 ### Bug fixes
