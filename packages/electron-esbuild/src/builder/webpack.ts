@@ -45,7 +45,7 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
     _logger.log('Building', this.env.toLowerCase())
 
     return new Promise<void>((resolve, reject) => {
-      if (((this._compiler as unknown) as { running: boolean }).running) {
+      if ((this._compiler as unknown as { running: boolean }).running) {
         resolve()
         return
       }

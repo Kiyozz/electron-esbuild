@@ -75,7 +75,7 @@ export class EnvConfig {
 
 export class Item<
   T extends PossibleConfiguration | null = PossibleConfiguration,
-  F extends EnvConfig | null = EnvConfig | null
+  F extends EnvConfig | null = EnvConfig | null,
 > {
   readonly config: T
   readonly fileConfig: F

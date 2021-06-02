@@ -86,7 +86,8 @@ export class Dev extends Cli {
   private readonly _worker: Worker
   private readonly _mainBuilder: Builder
   private readonly _rendererBuilder: Builder | null
-  private readonly _applicationStarter: _ApplicationStarter = new _ApplicationStarter()
+  private readonly _applicationStarter: _ApplicationStarter =
+    new _ApplicationStarter()
 
   constructor(cli: CliResult) {
     super(cli)

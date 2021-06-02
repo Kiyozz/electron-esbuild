@@ -174,7 +174,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
     }
 
     const configFile = new ConfigFile(
-      (yaml.load(fileContent) as unknown) as YamlSkeleton,
+      yaml.load(fileContent) as unknown as YamlSkeleton,
     )
 
     configFile.ensureValid()

@@ -9,13 +9,11 @@ async function getEntries(paths: string[]): Promise<string[]> {
   const base = process.cwd()
 
   const result = await Promise.all(
-    paths.map(
-      (p): Promise<string[]> => {
-        const absP = path.resolve(base, p)
+    paths.map((p): Promise<string[]> => {
+      const absP = path.resolve(base, p)
 
-        return glob(absP)
-      },
-    ),
+      return glob(absP)
+    }),
   )
 
   return result.flat()
