@@ -30,11 +30,11 @@
     "@electron-esbuild/ee": "workspace:^0.2.0",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.1",
-    "@types/node": "^15.6.0",
+    "@types/node": "^15.12.2",
     "cross-spawn": "^7.0.3",
     "enquirer": "^2.3.6",
     "kolorist": "^1.4.1",
     "minimist": "^1.2.5",
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.2"
   }
 }
