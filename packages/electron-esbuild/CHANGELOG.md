@@ -1,3 +1,9 @@
+## Unreleased
+
+### Bug fixes
+
+- Using electron-esbuild without rendererConfig
+
 ## v1.5.0
 
 ### Features
