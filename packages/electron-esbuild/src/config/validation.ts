@@ -12,7 +12,6 @@ import { TypeConfig } from './enums'
 import { Yaml, YamlSkeleton } from './yaml'
 
 const _logger = new Logger('Config/Validation')
-
 const _schema = Joi.object<YamlSkeleton>({
   mainConfig: Joi.object({
     type: Joi.string().valid(TypeConfig.esbuild).required(),
@@ -28,7 +27,9 @@ const _schema = Joi.object<YamlSkeleton>({
     src: Joi.string().required(),
     output: Joi.string().required(),
     html: Joi.string().optional(),
-  }).optional(),
+  })
+    .optional()
+    .allow(null),
 })
 
 export class ConfigFile {
@@ -43,7 +44,7 @@ export class ConfigFile {
 
     if (result.error) {
       return _logger.end(
-        'Configuration file contains errors',
+        'Configuration file contains errors,',
         result.error.details.map((item) => item.message).join('; '),
       )
     }

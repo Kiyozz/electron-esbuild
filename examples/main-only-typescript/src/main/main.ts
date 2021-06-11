@@ -22,7 +22,7 @@ async function createWindow() {
 
   const isDev = is.development
 
-  win.loadURL('https://google.com') // load any url you want to use with electron
+  win.loadURL('https://duckduckgo.com') // load any url you want to use with electron
 
   win.on('closed', () => {
     win = null
