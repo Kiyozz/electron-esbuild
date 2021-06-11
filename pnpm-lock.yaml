@@ -179,14 +179,14 @@ packages:
       - supports-color
     dev: true
 
-  /@hapi/hoek/9.1.1:
-    resolution: {integrity: sha512-CAEbWH7OIur6jEOzaai83jq3FmKmv4PmX1JYfs9IrYcGEVI/lyL1EXJGCj7eFVJ0bg5QR8LMxBlEtA+xKiLpFw==}
+  /@hapi/hoek/9.2.0:
+    resolution: {integrity: sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug==}
     dev: false
 
   /@hapi/topo/5.0.0:
     resolution: {integrity: sha512-tFJlT47db0kMqVm3H4nQYgn6Pwg10GTZHb1pwmSiv1K4ks6drQOtfEF5ZnPjkvC+y4/bUPHK+bc87QvLcL+WMw==}
     dependencies:
-      '@hapi/hoek': 9.1.1
+      '@hapi/hoek': 9.2.0
     dev: false
 
   /@nodelib/fs.scandir/2.1.4:
@@ -207,10 +207,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.4
       fastq: 1.11.0
 
-  /@sideway/address/4.1.1:
-    resolution: {integrity: sha512-+I5aaQr3m0OAmMr7RQ3fR9zx55sejEYR2BFJaxL+zT3VM2611X0SHvPWIbAUBZVTn/YzYKbV8gJ2oT/QELknfQ==}
+  /@sideway/address/4.1.2:
+    resolution: {integrity: sha512-idTz8ibqWFrPU8kMirL0CoPH/A29XOzzAzpyN3zQ4kAWnzmNfFmRaoMNN6VI8ske5M73HZyhIaW4OuSFIdM4oA==}
     dependencies:
-      '@hapi/hoek': 9.1.1
+      '@hapi/hoek': 9.2.0
     dev: false
 
   /@sideway/formula/3.0.0:
@@ -2984,9 +2984,9 @@ packages:
   /joi/17.4.0:
     resolution: {integrity: sha512-F4WiW2xaV6wc1jxete70Rw4V/VuMd6IN+a5ilZsxG4uYtUXWu2kq9W5P2dz30e7Gmw8RCbY/u/uk+dMPma9tAg==}
     dependencies:
-      '@hapi/hoek': 9.1.1
+      '@hapi/hoek': 9.2.0
       '@hapi/topo': 5.0.0
-      '@sideway/address': 4.1.1
+      '@sideway/address': 4.1.2
       '@sideway/formula': 3.0.0
       '@sideway/pinpoint': 2.0.0
     dev: false

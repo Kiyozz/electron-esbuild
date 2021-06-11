@@ -76,7 +76,11 @@ class _ApplicationStarter {
       if (_isWindows) {
         spawn('taskkill', ['/pid', `${this._electronProcess.pid}`, '/f', '/t'])
       } else {
-        process.kill(this._electronProcess.pid)
+        const pid = this._electronProcess.pid
+
+        if (pid !== undefined) {
+          process.kill(pid)
+        }
       }
     }
   }
