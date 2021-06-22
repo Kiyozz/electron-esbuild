@@ -31,22 +31,22 @@ importers:
       '@electron-esbuild/ee': workspace:^0.2.0
       '@types/cross-spawn': ^6.0.2
       '@types/minimist': ^1.2.1
-      '@types/node': ^15.12.2
+      '@types/node': ^15.12.4
       cross-spawn: ^7.0.3
       enquirer: ^2.3.6
-      kolorist: ^1.4.1
+      kolorist: ^1.5.0
       minimist: ^1.2.5
-      typescript: ^4.3.2
+      typescript: ^4.3.4
     devDependencies:
       '@electron-esbuild/ee': link:../ee
       '@types/cross-spawn': 6.0.2
       '@types/minimist': 1.2.1
-      '@types/node': 15.12.2
+      '@types/node': 15.12.4
       cross-spawn: 7.0.3
       enquirer: 2.3.6
-      kolorist: 1.4.1
+      kolorist: 1.5.0
       minimist: 1.2.5
-      typescript: 4.3.2
+      typescript: 4.3.4
 
   packages/ee:
     specifiers:
@@ -3120,6 +3120,10 @@ packages:
 
   /kolorist/1.4.1:
     resolution: {integrity: sha512-jucnNxW4qfamxkbT4hCLRk/WyAQD/aS0KIkY8z5VoQI5K9QF65nj7vTeuFcySO7eibxPQwVWM+mby1Hm9TyokQ==}
+    dev: true
+
+  /kolorist/1.5.0:
+    resolution: {integrity: sha512-pPobydIHK884YBtkS/tWSZXpSAEpcMbilyun3KL37ot935qL2HNKm/tI45i/Rd+MxdIWEhm7/LmUQzWZYK+Qhg==}
     dev: true
 
   /levn/0.3.0:
