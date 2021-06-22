@@ -35,7 +35,7 @@
     "dist"
   ],
   "dependencies": {
-    "chokidar": "^3.5.1",
+    "chokidar": "^3.5.2",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
     "debounce-fn": "^4.0.0",
@@ -56,15 +56,15 @@
     "@types/http-proxy": "^1.17.6",
     "@types/js-yaml": "^4.0.1",
     "@types/livereload": "^0.9.0",
-    "@types/node": "^15.12.2",
+    "@types/node": "^15.12.4",
     "@types/rimraf": "^3.0.0",
     "@types/webpack-dev-server": "^3.11.4",
     "cross-spawn": "^6.0.5",
-    "esbuild": "^0.12.8",
+    "esbuild": "^0.12.9",
     "fast-glob": "^3.2.5",
-    "typescript": "^4.3.2",
-    "vite": "^2.3.7",
-    "webpack": "^5.38.1",
+    "typescript": "^4.3.4",
+    "vite": "^2.3.8",
+    "webpack": "^5.40.0",
     "webpack-dev-server": "^3.11.2"
   },
   "peerDependencies": {
