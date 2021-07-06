@@ -1,3 +1,9 @@
+## Unreleased
+
+### Breaking Changes
+
+- Change minimum vite version to >=2.4
+
 ## v1.5.1
 
 ### Bug fixes
