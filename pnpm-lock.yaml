@@ -31,44 +31,44 @@ importers:
       '@electron-esbuild/ee': workspace:^0.2.0
       '@types/cross-spawn': ^6.0.2
       '@types/minimist': ^1.2.1
-      '@types/node': ^15.12.4
+      '@types/node': ^16.0.0
       cross-spawn: ^7.0.3
       enquirer: ^2.3.6
       kolorist: ^1.5.0
       minimist: ^1.2.5
-      typescript: ^4.3.4
+      typescript: ^4.3.5
     devDependencies:
       '@electron-esbuild/ee': link:../ee
       '@types/cross-spawn': 6.0.2
       '@types/minimist': 1.2.1
-      '@types/node': 15.12.4
+      '@types/node': 16.0.0
       cross-spawn: 7.0.3
       enquirer: 2.3.6
       kolorist: 1.5.0
       minimist: 1.2.5
-      typescript: 4.3.4
+      typescript: 4.3.5
 
   packages/ee:
     specifiers:
       '@types/cross-spawn': ^6.0.2
       '@types/minimist': ^1.2.1
-      '@types/node': ^15.12.4
+      '@types/node': ^15.14.1
       cross-spawn: ^7.0.3
-      esbuild: ^0.12.9
-      fast-glob: ^3.2.5
+      esbuild: ^0.12.15
+      fast-glob: ^3.2.6
       kolorist: ^1.5.0
       minimist: ^1.2.5
-      typescript: ^4.3.4
+      typescript: ^4.3.5
     devDependencies:
       '@types/cross-spawn': 6.0.2
       '@types/minimist': 1.2.1
-      '@types/node': 15.12.4
+      '@types/node': 15.14.1
       cross-spawn: 7.0.3
-      esbuild: 0.12.9
-      fast-glob: 3.2.5
+      esbuild: 0.12.15
+      fast-glob: 3.2.6
       kolorist: 1.5.0
       minimist: 1.2.5
-      typescript: 4.3.4
+      typescript: 4.3.5
 
   packages/electron-esbuild:
     specifiers:
@@ -373,12 +373,12 @@ packages:
   /@types/minimist/1.2.1:
     resolution: {integrity: sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==}
 
-  /@types/node/15.12.4:
-    resolution: {integrity: sha512-zrNj1+yqYF4WskCMOHwN+w9iuD12+dGm0rQ35HLl9/Ouuq52cEtd0CH9qMgrdNmi5ejC1/V7vKEXYubB+65DkA==}
-    dev: true
-
   /@types/node/15.14.1:
     resolution: {integrity: sha512-wF6hazbsnwaW3GhK4jFuw5NaLDQVRQ6pWQUGAUrJzxixFkTaODSiAKMPXuHwPEPkAKQWHAzj6uJ5h+3zU9gQxg==}
+    dev: true
+
+  /@types/node/16.0.0:
+    resolution: {integrity: sha512-TmCW5HoZ2o2/z2EYi109jLqIaPIi9y/lc2LmDCWzuCi35bcaQ+OtUh6nwBiFK7SOu25FAU5+YKdqFZUwtqGSdg==}
     dev: true
 
   /@types/normalize-package-data/2.4.0:
@@ -1790,12 +1790,6 @@ packages:
     requiresBuild: true
     dev: true
 
-  /esbuild/0.12.9:
-    resolution: {integrity: sha512-MWRhAbMOJ9RJygCrt778rz/qNYgA4ZVj6aXnNPxFjs7PmIpb0fuB9Gmg5uWrr6n++XKwwm/RmSz6RR5JL2Ocsw==}
-    hasBin: true
-    requiresBuild: true
-    dev: true
-
   /escalade/3.1.1:
     resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
     engines: {node: '>=6'}
@@ -2153,18 +2147,6 @@ packages:
 
   /fast-diff/1.2.0:
     resolution: {integrity: sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==}
-    dev: true
-
-  /fast-glob/3.2.5:
-    resolution: {integrity: sha512-2DtFcgT68wiTTiwZ2hNdJfcHNke9XOfnwmBRWXhmeKM8rF0TGwmC/Qto3S7RoZKp5cilZbxzO5iTNTQsJ+EeDg==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.7
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.4
-      picomatch: 2.3.0
     dev: true
 
   /fast-glob/3.2.6:
@@ -3963,6 +3945,7 @@ packages:
   /picomatch/2.3.0:
     resolution: {integrity: sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==}
     engines: {node: '>=8.6'}
+    dev: false
 
   /pify/2.3.0:
     resolution: {integrity: sha1-7RQaasBDqEnqWISY59yosVMw6Qw=}
@@ -5100,12 +5083,6 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: false
-
-  /typescript/4.3.4:
-    resolution: {integrity: sha512-uauPG7XZn9F/mo+7MrsRjyvbxFpzemRjKEZXS4AK83oP2KKOJPvb+9cO/gmnv8arWZvhnjVOXz7B49m1l0e9Ew==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: true
 
   /typescript/4.3.5:
     resolution: {integrity: sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==}
