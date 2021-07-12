@@ -192,6 +192,14 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       format: 'cjs',
     })
 
+    const removeOut = () => {
+      try {
+        fs.unlinkSync(out)
+      } catch {
+        // Silent error
+      }
+    }
+
     try {
       let userConfig = Worker._requireUncached(out)
 
@@ -199,14 +207,12 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
         userConfig = userConfig.default
       }
 
-      try {
-        fs.unlinkSync(out)
-      } catch {
-        // Silent error
-      }
+      removeOut()
 
       return userConfig as C
     } catch (e) {
+      removeOut()
+
       _logger.error('electron-esbuild could not load file', configPath)
       _logger.error('below stack:')
       _logger.end(e)
