@@ -15,7 +15,7 @@ async function createWindow() {
       devTools: true,
       enableRemoteModule: false,
       contextIsolation: true,
-      preload: path.join(app.getAppPath(), 'preload.js')
+      preload: path.join(app.getAppPath(), 'preload.js'),
     },
     show: false,
   })

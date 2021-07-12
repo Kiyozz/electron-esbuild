@@ -1,3 +1,10 @@
+## Unreleased
+
+### Features
+
+- Updated dependencies
+- Updated templates to reflect new version of electron-esbuild
+
 ## v1.6.1
 
 ### Bug fixes

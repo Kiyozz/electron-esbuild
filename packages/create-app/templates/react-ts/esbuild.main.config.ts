@@ -1,9 +1,7 @@
-const path = require('path')
+import { BuildOptions } from 'esbuild'
+import path from 'path'
 
-/**
- * @var {Partial<import('esbuild').BuildOptions>}
- */
-module.exports = {
+export default {
   platform: 'node',
   entryPoints: [path.resolve('src/main/main.ts')],
   bundle: true,
@@ -11,4 +9,4 @@ module.exports = {
   loader: {
     '.ts': 'ts',
   },
-}
+} as BuildOptions

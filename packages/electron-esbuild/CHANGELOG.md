@@ -4,6 +4,12 @@
 
 - Change minimum vite version to >=2.4
 
+### Features
+
+- Use esm, TypeScript or cjs for your configuration files (esbuild, vite, webpack)
+
+  You will be able to write your esbuild/vite/webpack config in TypeScript/ESM/CJS (CJS was the default behavior)
+
 ## v1.5.1
 
 ### Bug fixes

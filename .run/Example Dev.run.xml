@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Example Dev" type="NodeJSConfigurationType" application-parameters="dev" path-to-js-file="../../packages/electron-esbuild/dist/index.js" working-dir="$PROJECT_DIR$/examples/main-only-typescript">
+  <configuration default="false" name="Example Dev" type="NodeJSConfigurationType" application-parameters="dev" path-to-js-file="../../../packages/electron-esbuild/dist/index.js" working-dir="$PROJECT_DIR$/packages/create-app/var">
     <envs>
       <env name="DEBUG" value="1" />
     </envs>
