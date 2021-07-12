@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild-monorepo",
-  "version": "1.6.0-rc.1",
+  "version": "2.0.0",
   "keywords": [
     "esbuild",
     "electron",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "engines": {
     "node": ">=10",
-    "pnpm": "^6.6.2"
+    "pnpm": "^6.10.0"
   },
   "scripts": {
     "prepare": "husky install"
