@@ -18,10 +18,10 @@ import { emptyDir, isDirEmpty } from './helpers/fs'
 import isTemplateValid, { TEMPLATES } from './helpers/is-template-valid'
 import { warn } from './helpers/log'
 
-const argv = minimist(process.argv.slice(2))
-const VERSION = '1.4.1'
+const _argv = minimist(process.argv.slice(2))
+const _version = '1.7.0-rc.1'
 
-if (argv.help) {
+if (_argv.help) {
   console.log(
     `
 create-app <app-name> [options]
@@ -41,13 +41,13 @@ ${cyan('--help')}                 show this help
   process.exit(0)
 }
 
-if (argv.version) {
-  console.log(VERSION)
+if (_argv.version) {
+  console.log(_version)
 
   process.exit(0)
 }
 
-let [projectName] = argv._ ?? []
+let [projectName] = _argv._ ?? []
 
 async function start() {
   if (projectName === undefined) {
@@ -62,7 +62,7 @@ async function start() {
   }
 
   const out = path.resolve(process.cwd(), projectName)
-  const override = (argv.o || argv.override) ?? false
+  const override = (_argv.o || _argv.override) ?? false
 
   if (override) {
     if (!isDirEmpty(out)) {
@@ -73,13 +73,13 @@ async function start() {
     await ensureFolderEmpty(out)
   }
 
-  let packageManager = argv.p || argv['package-manager']
+  let packageManager = _argv.p || _argv['package-manager']
 
   if (packageManager && !['pnpm', 'npm', 'yarn'].includes(packageManager)) {
     console.warn(warn(), `${packageManager} is not a known package manager.`)
   }
 
-  let template: Template | undefined = argv.t || argv.template
+  let template: Template | undefined = _argv.t || _argv.template
   let templateMessage = 'Select a template:'
 
   if (template !== undefined) {
