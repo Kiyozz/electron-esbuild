@@ -10,7 +10,7 @@
   "devDependencies": {
     "electron": "^13.1.6",
     "electron-builder": "^22.11.7",
-    "electron-esbuild": "1.x",
+    "electron-esbuild": "2.x",
     "electron-util": "^0.17.0",
     "esbuild": "0.x"
   },
