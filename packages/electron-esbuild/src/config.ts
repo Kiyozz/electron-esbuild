@@ -5,7 +5,9 @@
  */
 
 import deepMerge from 'deepmerge'
+import { buildSync } from 'esbuild'
 import fs from 'fs'
+import has from 'has'
 import yaml from 'js-yaml'
 import path from 'path'
 
@@ -48,6 +50,8 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
   private readonly _main: Partial<M>
   private readonly _renderer: Partial<R>
 
+  private readonly _cwd = process.cwd()
+
   env: Env
   configurator: _WorkerConfigurator
 
@@ -69,28 +73,37 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
     }) as Partial<R>
   }
 
+  private static _requireUncached(module: string) {
+    delete require.cache[require.resolve(module)]
+
+    return require(module)
+  }
+
   toConfig(): Config<M, R> {
     const mainConfig = this.configurator.main.config
     const rendererConfig = this.configurator.renderer?.config ?? null
 
     if (!fs.existsSync(mainConfig.path)) {
       _logger.end(
-        `Main config file '${mainConfig.path}' not found. Check your ${this._file}`,
+        `Main config file '${mainConfig.path}' not found. Check your ${this._file} file`,
       )
     }
 
     if (rendererConfig !== null && !fs.existsSync(rendererConfig.path)) {
       _logger.end(
-        `Renderer config file '${rendererConfig.path}' not found. Check your ${this._file}`,
+        `Renderer config file '${rendererConfig.path}' not found. Check your ${this._file} file`,
       )
     }
 
     process.env.NODE_ENV = this.env
 
-    const userMainConfig = require(path.resolve(process.cwd(), mainConfig.path))
+    const userMainConfig = this._buildUserConfig<M>(
+      this._resolve(mainConfig.path),
+    )
+
     const userRendererConfig =
       rendererConfig !== null
-        ? require(path.resolve(process.cwd(), rendererConfig.path))
+        ? this._buildUserConfig<R>(this._resolve(rendererConfig.path))
         : null
 
     if (
@@ -121,7 +134,7 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       clone: false,
     })
     let rendererConfigFinal: R | null =
-      rendererConfig !== null
+      rendererConfig !== null && userRendererConfig !== null
         ? deepMerge(userRendererConfig, this._renderer, { clone: false })
         : null
 
@@ -162,6 +175,43 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
         target: Target.renderer,
       }),
     })
+  }
+
+  private _resolve(...paths: string[]): string {
+    return path.resolve(this._cwd, ...paths)
+  }
+
+  private _buildUserConfig<C = PossibleConfiguration>(configPath: string): C {
+    const out = this._resolve('out.js')
+
+    buildSync({
+      target: 'node14',
+      outfile: out,
+      entryPoints: [configPath],
+      platform: 'node',
+      format: 'cjs',
+    })
+
+    try {
+      let userConfig = Worker._requireUncached(out)
+
+      if (has(userConfig, 'default')) {
+        userConfig = userConfig.default
+      }
+
+      try {
+        fs.unlinkSync(out)
+      } catch {
+        // Silent error
+      }
+
+      return userConfig as C
+    } catch (e) {
+      _logger.error('electron-esbuild could not load file', configPath)
+      _logger.error('below stack:')
+      _logger.end(e)
+      process.exit(1)
+    }
   }
 
   private _loadYaml(): Yaml {

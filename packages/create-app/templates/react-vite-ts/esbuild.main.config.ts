@@ -1,12 +1,9 @@
-const path = require('path')
+import { BuildOptions } from 'esbuild'
+import path from 'path'
 
-/** @var {Partial<import('esbuild').BuildOptions>} */
-module.exports = {
+export default {
   platform: 'node',
   entryPoints: [path.resolve('src/main/main.ts')],
   bundle: true,
   target: 'node14.16.0', // electron version target
-  loader: {
-    '.ts': 'ts',
-  },
-}
+} as BuildOptions

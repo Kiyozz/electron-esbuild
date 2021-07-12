@@ -1,16 +1,18 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
-const webpack = require('webpack')
+import webpack, { Configuration as WebpackConfiguration } from 'webpack'
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
+import path from 'path'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin'
 
-/**
- * @return {Partial<webpack.Configuration>}
- */
-const createConfig = () => {
+interface Configuration extends WebpackConfiguration {
+  devServer?: WebpackDevServerConfiguration
+}
+
+const createConfig = (): Configuration => {
   const isProduction = process.env.NODE_ENV === 'production'
 
   const plugins = [
@@ -28,10 +30,12 @@ const createConfig = () => {
 
   const rendererSources = path.resolve(__dirname, 'src', 'renderer')
 
-  /** @type {import('webpack').Configuration} */
-  const configuration = {
+  const configuration: Configuration = {
     entry: {
-      renderer: [path.join(rendererSources, 'index.tsx'), path.join(rendererSources, 'index.css')],
+      renderer: [
+        path.join(rendererSources, 'index.tsx'),
+        path.join(rendererSources, 'index.css'),
+      ],
     },
     target: 'electron-renderer',
     resolve: {
@@ -42,9 +46,12 @@ const createConfig = () => {
         {
           test: /\.css$/,
           include: rendererSources,
-          use: [!isProduction && 'css-hot-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'].filter(
-            Boolean,
-          ),
+          use: [
+            !isProduction && 'css-hot-loader',
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'postcss-loader',
+          ].filter(Boolean),
         },
         {
           test: /\.tsx?$/,
@@ -64,7 +71,10 @@ const createConfig = () => {
                   ],
                 ],
                 plugins: [
-                  !isProduction && ['react-refresh/babel', { skipEnvCheck: true }],
+                  !isProduction && [
+                    'react-refresh/babel',
+                    { skipEnvCheck: true },
+                  ],
                   '@babel/plugin-proposal-optional-chaining',
                   '@babel/plugin-proposal-nullish-coalescing-operator',
                   '@babel/plugin-proposal-class-properties',
@@ -114,15 +124,19 @@ const createConfig = () => {
 
     configuration.devServer = {
       host: 'localhost',
-      port: '9080',
+      port: 9080,
       hot: true,
       overlay: true,
     }
 
-    configuration.entry.renderer.unshift('css-hot-loader/hotModuleReplacement')
+    const entries = configuration.entry as Record<'renderer', string[]>
+
+    entries.renderer.unshift('css-hot-loader/hotModuleReplacement')
+
+    configuration.entry = entries
   }
 
   return configuration
 }
 
-module.exports = createConfig()
+export default createConfig()

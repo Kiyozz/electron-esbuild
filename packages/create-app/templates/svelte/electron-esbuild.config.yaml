@@ -1,7 +1,7 @@
 mainConfig:
   type: esbuild
   path: esbuild.main.config.js
-  src: src/main/main.ts
+  src: src/main/main.js
   output: dist/main
 rendererConfig:
   type: vite
