@@ -130,21 +130,21 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       )
     }
 
-    let mainConfigFinal: M = deepMerge(userMainConfig, this._main, {
+    let mainConfigFinal: M = deepMerge(this._main, userMainConfig, {
       clone: false,
     })
     let rendererConfigFinal: R | null =
       rendererConfig !== null && userRendererConfig !== null
-        ? deepMerge(userRendererConfig, this._renderer, { clone: false })
+        ? deepMerge(this._renderer, userRendererConfig, { clone: false })
         : null
 
     mainConfigFinal = deepMerge(
-      mainConfigFinal,
       this.configurator.main.toBuilderConfig(
         this._main,
         mainConfigFinal,
         Target.main,
       ) as Partial<M>,
+      mainConfigFinal,
       { clone: false },
     )
 
@@ -152,12 +152,12 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
       rendererConfigFinal !== null
         ? this.configurator.renderer
           ? deepMerge(
-              rendererConfigFinal,
               this.configurator.renderer.toBuilderConfig(
                 this._renderer,
                 rendererConfigFinal,
                 Target.renderer,
               ) as Partial<R>,
+              rendererConfigFinal,
               { clone: false },
             )
           : null
