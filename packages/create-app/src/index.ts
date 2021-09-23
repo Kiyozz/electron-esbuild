@@ -19,7 +19,7 @@ import isTemplateValid, { TEMPLATES } from './helpers/is-template-valid'
 import { warn } from './helpers/log'
 
 const _argv = minimist(process.argv.slice(2))
-const _version = '1.7.1'
+const _version = '1.8.0'
 
 if (_argv.help) {
   console.log(
