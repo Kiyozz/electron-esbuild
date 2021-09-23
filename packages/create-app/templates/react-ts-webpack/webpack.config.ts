@@ -37,7 +37,7 @@ const createConfig = (): Configuration => {
         path.join(rendererSources, 'index.css'),
       ],
     },
-    target: 'electron-renderer',
+    target: 'web',
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
     },

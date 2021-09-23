@@ -1,3 +1,9 @@
+## v1.8.1
+
+### Bug fixes
+
+- Fix react-ts-webpack template webpack.target
+
 ## v1.8.0
 
 ### Features
