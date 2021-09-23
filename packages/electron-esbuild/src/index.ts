@@ -25,7 +25,7 @@ Examples
   $ electron-esbuild dev
   $ electron-esbuild build`,
   {
-    version: '1.6.0',
+    version: '3.0.0-rc.1',
     flags: {
       clean: {
         type: 'boolean',

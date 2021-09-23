@@ -1,3 +1,10 @@
+## v1.8.0
+
+### Features
+
+- Update dependencies
+- Update templates
+
 ## v1.7.0
 
 ### Features
