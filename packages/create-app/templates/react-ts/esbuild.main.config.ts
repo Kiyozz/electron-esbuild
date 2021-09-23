@@ -1,12 +1,11 @@
 import { BuildOptions } from 'esbuild'
 import path from 'path'
 
-export default {
+const config: BuildOptions = {
   platform: 'node',
   entryPoints: [path.resolve('src/main/main.ts')],
   bundle: true,
-  target: 'node14.16.0', // electron version target
-  loader: {
-    '.ts': 'ts',
-  },
-} as BuildOptions
+  target: 'node16.5.0', // electron version target
+}
+
+export default config

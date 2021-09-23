@@ -1,3 +1,2 @@
-/examples
-/packages/**/templates
+/packages/create-app/templates
 /packages/**/dist

@@ -1,3 +1,14 @@
+## Unreleased
+
+### Breaking Changes
+
+- This is a breaking change if you're using webpack for your renderer: now require webpack-dev-server 4 and webpack 5,
+  and it's new dependencies
+
+### Changes
+
+- Update @electron-esbuild/create-app templates
+
 ## v2.0.0
 
 ### Breaking Changes

@@ -1,4 +1,4 @@
 packages:
-  - 'packages/**'
-  - '!packages/create-app/{templates,var}/**'
-  - '!examples/**'
+  - 'packages/create-app'
+  - 'packages/ee'
+  - 'packages/electron-esbuild'

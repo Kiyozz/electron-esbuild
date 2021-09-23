@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "keywords": [
     "esbuild",
     "electron",
@@ -41,38 +41,38 @@
     "debounce-fn": "^4.0.0",
     "deepmerge": "^4.2.2",
     "dependency-tree-81": "^8.1.2",
-    "esbuild": "^0.12.15",
+    "esbuild": "^0.13.1",
     "has": "^1.0.3",
     "http-proxy": "^1.18.1",
-    "joi": "^17.4.1",
+    "joi": "^17.4.2",
     "js-yaml": "^4.1.0",
     "livereload": "^0.9.1",
     "meow": "^9.0.0",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@electron-esbuild/ee": "workspace:^0.2.0",
-    "@types/compression": "^1.7.1",
+    "@electron-esbuild/ee": "workspace:^0.3.0",
+    "@types/compression": "^1.7.2",
     "@types/connect": "^3.4.35",
     "@types/cross-spawn": "^6.0.2",
     "@types/has": "^1.0.0",
     "@types/http-proxy": "^1.17.7",
-    "@types/js-yaml": "^4.0.2",
+    "@types/js-yaml": "^4.0.3",
     "@types/livereload": "^0.9.1",
-    "@types/node": "^16.3.1",
-    "@types/rimraf": "^3.0.1",
-    "@types/webpack-dev-server": "^3.11.5",
+    "@types/node": "^16.9.6",
+    "@types/rimraf": "^3.0.2",
+    "@types/webpack-dev-server": "^4.1.0",
     "cross-spawn": "^6.0.5",
     "fast-glob": "^3.2.7",
-    "typescript": "^4.3.5",
-    "vite": "^2.4.2",
-    "webpack": "^5.44.0",
-    "webpack-dev-server": "^3.11.2"
+    "typescript": "^4.4.3",
+    "vite": "^2.5.10",
+    "webpack": "^5.53.0",
+    "webpack-dev-server": "^4.2.1"
   },
   "peerDependencies": {
-    "vite": "~2.4",
-    "webpack": ">=4",
-    "webpack-dev-server": ">=3"
+    "vite": "~2.5",
+    "webpack": "^5.0.0",
+    "webpack-dev-server": "^4.0.0"
   },
   "peerDependenciesMeta": {
     "webpack": {

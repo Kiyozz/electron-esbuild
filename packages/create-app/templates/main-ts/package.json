@@ -1,20 +1,19 @@
 {
   "name": "main-only-typescript",
   "version": "1.0.0",
-  "license": "MIT",
   "scripts": {
     "dev": "electron-esbuild dev",
     "build": "electron-esbuild build",
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@types/node": "^16.3.1",
-    "electron": "^13.1.6",
+    "@types/node": "^16.9.6",
+    "electron": "^15.0.0",
     "electron-builder": "^22.11.7",
-    "electron-esbuild": "2.x",
-    "electron-util": "^0.17.0",
+    "electron-esbuild": "3.x",
+    "electron-util": "^0.17.2",
     "esbuild": "0.x",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.3"
   },
   "build": {
     "appId": "io.comp.myapp",

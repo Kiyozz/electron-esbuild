@@ -11,10 +11,7 @@ async function createWindow() {
     minHeight: 600,
     minWidth: 650,
     webPreferences: {
-      nodeIntegration: true,
       devTools: true,
-      enableRemoteModule: false,
-      contextIsolation: true,
       preload: path.join(app.getAppPath(), 'preload.js'),
     },
     show: false,
@@ -22,7 +19,7 @@ async function createWindow() {
 
   const isDev = is.development
 
-  win.loadURL('https://google.com') // load any url you want to use with electron
+  win.loadURL('https://duckduckgo.com') // load any url you want to use with electron
 
   win.on('closed', () => {
     win = null
