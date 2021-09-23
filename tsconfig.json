@@ -8,6 +8,5 @@
     "noEmit": true,
     "esModuleInterop": true,
     "strictPropertyInitialization": false
-  },
-  "exclude": ["examples"]
+  }
 }

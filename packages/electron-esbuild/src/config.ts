@@ -52,8 +52,8 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
 
   private readonly _cwd = process.cwd()
 
-  env: Env
-  configurator: _WorkerConfigurator
+  readonly env: Env
+  readonly configurator: _WorkerConfigurator
 
   constructor({ file, env }: { file: string; env: Env }) {
     this._file = file
