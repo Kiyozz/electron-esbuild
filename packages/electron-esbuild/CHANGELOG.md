@@ -1,4 +1,4 @@
-## v3.0.0-rc.1
+## v3.0.0
 
 ### Breaking Changes
 
