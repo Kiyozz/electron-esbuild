@@ -1,12 +1,11 @@
 import { BuildOptions } from 'esbuild'
 import path from 'path'
 
-/**
- * @var {Partial<import('esbuild').BuildOptions>}
- */
-export default {
+const config: BuildOptions = {
   platform: 'browser',
   entryPoints: [path.resolve('src/renderer/index.tsx')],
   bundle: true,
-  target: 'chrome89', // electron version target
-} as BuildOptions
+  target: 'chrome94', // electron version target
+}
+
+export default config

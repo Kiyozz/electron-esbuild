@@ -5,6 +5,6 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 export default defineConfig({
   plugins: [reactRefresh()],
   build: {
-    target: 'chrome89',
+    target: 'chrome94', // electron version target
   },
 })

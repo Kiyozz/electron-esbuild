@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild-svelte",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "electron-esbuild dev",
     "build": "electron-esbuild build",
@@ -8,14 +8,14 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "next",
-    "electron": "^13.1.6",
+    "electron": "^15.0.0",
     "electron-builder": "^22.11.7",
-    "electron-esbuild": "2.x",
-    "electron-util": "^0.17.0",
+    "electron-esbuild": "3.x",
+    "electron-util": "^0.17.2",
     "esbuild": "0.x",
-    "svelte": "^3.38.3",
-    "svelte-preprocess": "^4.7.4",
-    "vite": "^2.4.2"
+    "svelte": "^3.43.0",
+    "svelte-preprocess": "^4.9.5",
+    "vite": "^2.5.10"
   },
   "build": {
     "appId": "io.comp.myapp",

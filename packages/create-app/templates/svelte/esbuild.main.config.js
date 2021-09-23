@@ -5,5 +5,5 @@ export default {
   platform: 'node',
   entryPoints: [path.resolve('src/main/main.js')],
   bundle: true,
-  target: 'node14.16.0', // electron version target
+  target: 'node16.5.0', // electron version target
 }

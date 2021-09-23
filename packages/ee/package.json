@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "electron-esbuild internal source code builder. ee for electron-esbuild",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "main": "dist/index.js",
@@ -20,12 +20,12 @@
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
-    "@types/node": "^16.3.1",
+    "@types/node": "^16.9.6",
     "cross-spawn": "^7.0.3",
-    "esbuild": "^0.12.15",
+    "esbuild": "^0.13.1",
     "fast-glob": "^3.2.7",
     "kolorist": "^1.5.0",
     "minimist": "^1.2.5",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.3"
   }
 }

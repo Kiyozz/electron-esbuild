@@ -31,7 +31,7 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
     try {
       require('vite')
     } catch (e) {
-      if (e.message.includes('MODULE_NOT_FOUND')) {
+      if (e instanceof Error && e.message.includes('MODULE_NOT_FOUND')) {
         _logger.end(
           "It looks like you're trying to use vite but it's not installed, try running `npm i -D vite`",
         )
