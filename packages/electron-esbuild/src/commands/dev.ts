@@ -4,7 +4,8 @@
  * All rights reserved.
  */
 
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
+import { ChildProcess, spawn } from 'child_process'
+import { EventEmitter } from 'events'
 import path from 'path'
 
 import { Builder } from '../builder'
@@ -21,25 +22,18 @@ const _rendererDebugPort = 9222
 const _logger = new Logger('Commands/Dev')
 
 class _ApplicationStarter {
-  private _electronProcess: ChildProcessWithoutNullStreams | undefined
+  private _electronProcess: ChildProcess | undefined
 
   constructor() {
-    process.on('exit', () => {
-      _logger.log('Exiting...')
-      _logger.log('Killing main process...')
-
-      this._kill()
-    })
+    this._cleanupProcess()
   }
 
   start(): void {
     if (this._electronProcess) {
-      _logger.log('Kill latest main')
-
       try {
         this._kill()
       } catch (e) {
-        _logger.error('Error occured while killing latest main', e)
+        _logger.end('Error occurred while killing latest main', e)
       }
 
       this._electronProcess = undefined
@@ -49,40 +43,68 @@ class _ApplicationStarter {
     _logger.log(`Debugger listening on ${_mainDebugPort}`)
     _logger.log(`Remote debugger listening on ${_rendererDebugPort}`)
     this._electronProcess = spawn(
-      path.resolve(path.resolve(`node_modules/.bin/${_electronBin}`)),
+      path.resolve(`node_modules/.bin/${_electronBin}`),
       [
         'dist/main/main.js',
         `--inspect=${_mainDebugPort}`,
         `--remote-debugging-port=${_rendererDebugPort}`,
       ],
+      {
+        stdio: 'inherit',
+      },
     )
 
-    this._electronProcess.stdout.on('data', (data) => {
-      _logger.log(data.toString().trim())
-    })
-    this._electronProcess.stderr.on('data', (data) => {
-      _logger.log('STDERR', data.toString().trim())
-    })
-
-    this._electronProcess.on('close', (code, signal) => {
-      if (signal !== null) {
-        process.exit(code || 0)
-      }
-    })
+    this._cleanupElectronProcess()
   }
 
   private _kill(): void {
     if (this._electronProcess) {
+      this._electronProcess.removeAllListeners('close')
+
       if (_isWindows) {
+        _logger.debug('kill electron process on windows')
+
         spawn('taskkill', ['/pid', `${this._electronProcess.pid}`, '/f', '/t'])
       } else {
+        _logger.debug('kill electron process on macOS/linux')
         const pid = this._electronProcess.pid
+        const killed = this._electronProcess.killed
+        this._electronProcess = undefined
 
-        if (pid !== undefined) {
+        if (pid !== undefined && !killed) {
           process.kill(pid)
         }
       }
     }
+  }
+
+  private _cleanupElectronProcess() {
+    this._electronProcess?.on('close', (code, signal) => {
+      if (code === null) {
+        _logger.error('Main Process exited with signal', signal)
+        process.exit(1)
+      }
+
+      process.exit(code)
+    })
+  }
+
+  private _cleanupProcess() {
+    const clean = (signal: NodeJS.Signals) => {
+      process.on(signal, () => {
+        _logger.log('Cleanup before exit...')
+        _logger.debug('Signal', signal)
+
+        if (!this._electronProcess?.killed ?? false) {
+          this._kill()
+        }
+
+        process.exit(0)
+      })
+    }
+
+    clean('SIGINT')
+    clean('SIGTERM')
   }
 }
 

@@ -45,7 +45,7 @@
       "prettier --write"
     ],
     "*.ts": [
-      "eslint --fix"
+      "eslint --fix --max-warnings=0"
     ]
   }
 }
