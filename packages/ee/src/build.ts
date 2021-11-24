@@ -3,6 +3,7 @@ import esbuild from 'esbuild'
 import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
 import { bgCyan, bgGreen, black, cyan, green } from 'kolorist'
+import { platform } from 'os'
 import path from 'path'
 
 async function getEntries(paths: string[]): Promise<string[]> {
@@ -10,7 +11,15 @@ async function getEntries(paths: string[]): Promise<string[]> {
 
   const result = await Promise.all(
     paths.map((p): Promise<string[]> => {
-      const absP = path.resolve(base, p)
+      let absP = path.resolve(base, p)
+
+      if (absP.includes("'")) {
+        absP = absP.replace(/'/g, '')
+      }
+
+      if (platform() === 'win32') {
+        absP = absP.replace(/\\/g, '/')
+      }
 
       return glob(absP)
     }),
