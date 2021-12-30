@@ -1,3 +1,9 @@
+## v3.0.1
+
+### Changes
+
+- Update peer dependencies to include vite@~2.7
+
 ## v3.0.0
 
 ### Breaking Changes

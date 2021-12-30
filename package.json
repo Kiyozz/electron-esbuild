@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild-monorepo",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "keywords": [
     "esbuild",
     "electron",
@@ -26,16 +26,16 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "eslint": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "7.0.4",
-    "lint-staged": "^12.1.2",
-    "prettier": "^2.4.1",
-    "typescript": "~4.5.2"
+    "lint-staged": "^12.1.4",
+    "prettier": "^2.5.1",
+    "typescript": "~4.5.4"
   },
   "lint-staged": {
     "*.{md,json,yml}": [
