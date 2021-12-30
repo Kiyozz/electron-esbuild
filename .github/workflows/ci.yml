@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'packages/**/src/**.ts'
+      - 'packages/**/src/**.json'
       - '.github/workflows/**.yml'
 
 jobs:
@@ -20,8 +21,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1.4.4
         with:
-          node-version: 16
-
+          node-version: 17
       - name: Dependencies
         uses: pnpm/action-setup@v2.0.0
         with:
