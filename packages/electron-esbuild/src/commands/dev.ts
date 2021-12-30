@@ -5,14 +5,14 @@
  */
 
 import { ChildProcess, spawn } from 'child_process'
-import { EventEmitter } from 'events'
 import path from 'path'
 
 import { Builder } from '../builder'
 import { Cli, CliResult } from '../cli'
-import { Worker } from '../config'
 import { CONFIG_FILE_NAME } from '../config/constants'
+import { PossibleConfiguration } from '../config/types'
 import { Logger } from '../console'
+import { Worker } from '../worker'
 
 const _isWindows = process.platform === 'win32'
 const _electronBin = _isWindows ? 'electron.cmd' : 'electron'
@@ -109,7 +109,7 @@ class _ApplicationStarter {
 }
 
 export class Dev extends Cli {
-  private readonly _worker: Worker
+  private readonly _worker: Worker<PossibleConfiguration, PossibleConfiguration>
   private readonly _mainBuilder: Builder
   private readonly _rendererBuilder: Builder | null
   private readonly _applicationStarter: _ApplicationStarter =
@@ -122,7 +122,10 @@ export class Dev extends Cli {
 
     _logger.debug('Creating worker')
 
-    this._worker = new Worker({ file: CONFIG_FILE_NAME, env: 'development' })
+    this._worker = Worker.fromFile({
+      file: CONFIG_FILE_NAME,
+      env: 'development',
+    })
 
     _logger.debug('Created worker')
 

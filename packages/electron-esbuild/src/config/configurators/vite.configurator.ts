@@ -9,7 +9,7 @@ import { InlineConfig } from 'vite'
 
 import type { EnvConfig } from '../config'
 import { TypeConfig } from '../enums'
-import type { Configurator } from './base'
+import type { Configurator } from './base.configurator'
 
 export class ViteConfigurator implements Configurator<TypeConfig.vite> {
   public readonly type = TypeConfig.vite

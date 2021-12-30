@@ -11,9 +11,10 @@ import has from 'has'
 import yaml from 'js-yaml'
 import path from 'path'
 
-import { Config, PossibleConfiguration, Item } from './config/config'
-import { Configurator } from './config/configurators/base'
+import { Config, Item } from './config/config'
+import { Configurator } from './config/configurators/base.configurator'
 import { Target, TypeConfig } from './config/enums'
+import { PossibleConfiguration } from './config/types'
 import { configByEnv } from './config/utils'
 import { ConfigFile } from './config/validation'
 import { Yaml, YamlSkeleton } from './config/yaml'
@@ -21,6 +22,69 @@ import { Logger } from './console'
 import { Env } from './env'
 
 const _logger = new Logger('Config')
+const _cwd = process.cwd()
+const _resolve = (...paths: string[]): string => path.resolve(_cwd, ...paths)
+const _requireUncached = (module: string) => {
+  delete require.cache[require.resolve(module)]
+
+  return require(module)
+}
+const _silentRemove = (file: string) => {
+  try {
+    fs.unlinkSync(file)
+  } catch {
+    // Silent error
+  }
+}
+const _buildUserConfig = <C extends PossibleConfiguration>(
+  configPath: string,
+): C => {
+  const out = _resolve('out.js')
+
+  buildSync({
+    target: 'node14',
+    outfile: out,
+    entryPoints: [configPath],
+    platform: 'node',
+    format: 'cjs',
+  })
+
+  try {
+    let userConfig = _requireUncached(out)
+
+    if (has(userConfig, 'default')) {
+      userConfig = userConfig.default
+    }
+
+    _silentRemove(out)
+
+    return userConfig as C
+  } catch (e) {
+    _silentRemove(out)
+
+    _logger.error('electron-esbuild could not load file', configPath)
+    _logger.error('below stack:')
+    _logger.end(e)
+    process.exit(1)
+  }
+}
+const _loadYaml = (file: string): Yaml => {
+  let fileContent = ''
+
+  try {
+    fileContent = fs.readFileSync(path.resolve(file)).toString()
+  } catch (e) {
+    _logger.end('Unable to find electron-esbuild config file at:', file)
+  }
+
+  const configFile = new ConfigFile(
+    yaml.load(fileContent) as unknown as YamlSkeleton,
+  )
+
+  configFile.ensureValid()
+
+  return configFile.toYaml()
+}
 
 class _WorkerConfigurator {
   readonly main: Configurator<TypeConfig>
@@ -41,42 +105,63 @@ class _WorkerConfigurator {
     const main = yaml.main.toConfigurator()
     const renderer = yaml.renderer ? yaml.renderer.toConfigurator() : null
 
-    return new _WorkerConfigurator({ main, renderer })
+    return new this({ main, renderer })
   }
 }
 
-export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
+export class Worker<
+  M extends PossibleConfiguration,
+  R extends PossibleConfiguration,
+> {
   private readonly _file: string
   private readonly _main: Partial<M>
   private readonly _renderer: Partial<R>
 
-  private readonly _cwd = process.cwd()
-
   readonly env: Env
   readonly configurator: _WorkerConfigurator
 
-  constructor({ file, env }: { file: string; env: Env }) {
+  constructor({
+    file,
+    env,
+    main,
+    renderer,
+    configurator,
+  }: {
+    file: string
+    env: Env
+    configurator: _WorkerConfigurator
+    main: Partial<M>
+    renderer: Partial<R>
+  }) {
     this._file = file
     this.env = env
-
-    const yaml = this._loadYaml()
-
-    this.configurator = _WorkerConfigurator.fromYaml(yaml)
-
-    this._main = configByEnv({
-      dev: this.env === 'development',
-      type: this.configurator.main.type,
-    }) as Partial<M>
-    this._renderer = configByEnv({
-      dev: this.env === 'development',
-      type: this.configurator.renderer?.type ?? null,
-    }) as Partial<R>
+    this._main = main
+    this._renderer = renderer
+    this.configurator = configurator
   }
 
-  private static _requireUncached(module: string) {
-    delete require.cache[require.resolve(module)]
+  static fromFile<
+    M extends PossibleConfiguration,
+    R extends PossibleConfiguration,
+  >({ file, env }: { file: string; env: Env }): Worker<M, R> {
+    const yaml = _loadYaml(file)
+    const configurator = _WorkerConfigurator.fromYaml(yaml)
+    const main = configByEnv({
+      dev: env === 'development',
+      type: configurator.main.type,
+    }) as Partial<M>
+    const renderer = configByEnv({
+      dev: env === 'development',
+      type: configurator.renderer?.type ?? null,
+    }) as Partial<R>
 
-    return require(module)
+    return new this({
+      file,
+      env,
+      configurator,
+      main,
+      renderer,
+    })
   }
 
   toConfig(): Config<M, R> {
@@ -97,13 +182,11 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
 
     process.env.NODE_ENV = this.env
 
-    const userMainConfig = this._buildUserConfig<M>(
-      this._resolve(mainConfig.path),
-    )
+    const userMainConfig = _buildUserConfig<M>(_resolve(mainConfig.path))
 
     const userRendererConfig =
       rendererConfig !== null
-        ? this._buildUserConfig<R>(this._resolve(rendererConfig.path))
+        ? _buildUserConfig<R>(_resolve(rendererConfig.path))
         : null
 
     if (
@@ -175,66 +258,5 @@ export class Worker<M = PossibleConfiguration, R = PossibleConfiguration> {
         target: Target.renderer,
       }),
     })
-  }
-
-  private _resolve(...paths: string[]): string {
-    return path.resolve(this._cwd, ...paths)
-  }
-
-  private _buildUserConfig<C = PossibleConfiguration>(configPath: string): C {
-    const out = this._resolve('out.js')
-
-    buildSync({
-      target: 'node14',
-      outfile: out,
-      entryPoints: [configPath],
-      platform: 'node',
-      format: 'cjs',
-    })
-
-    const removeOut = () => {
-      try {
-        fs.unlinkSync(out)
-      } catch {
-        // Silent error
-      }
-    }
-
-    try {
-      let userConfig = Worker._requireUncached(out)
-
-      if (has(userConfig, 'default')) {
-        userConfig = userConfig.default
-      }
-
-      removeOut()
-
-      return userConfig as C
-    } catch (e) {
-      removeOut()
-
-      _logger.error('electron-esbuild could not load file', configPath)
-      _logger.error('below stack:')
-      _logger.end(e)
-      process.exit(1)
-    }
-  }
-
-  private _loadYaml(): Yaml {
-    let fileContent = ''
-
-    try {
-      fileContent = fs.readFileSync(path.resolve(this._file)).toString()
-    } catch (e) {
-      _logger.end('Unable to find electron-esbuild config file at:', this._file)
-    }
-
-    const configFile = new ConfigFile(
-      yaml.load(fileContent) as unknown as YamlSkeleton,
-    )
-
-    configFile.ensureValid()
-
-    return configFile.toYaml()
   }
 }

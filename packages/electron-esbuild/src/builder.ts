@@ -9,5 +9,6 @@ export interface Builder {
   hasInitialBuild: boolean
 
   build(): Promise<void>
+
   dev(start: () => void): void
 }

@@ -9,7 +9,7 @@ import WebpackDevServer from 'webpack-dev-server'
 
 import type { Item } from '../config/config'
 import { Logger } from '../console'
-import { BaseBuilder } from './base'
+import { BaseBuilder } from './base.builder'
 
 const _logger = new Logger('Builder/Webpack')
 
@@ -19,7 +19,7 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
   private readonly _rendererServer: WebpackDevServer
   private readonly _compiler!: Compiler
 
-  constructor(readonly _config: Item<Configuration>) {
+  constructor(protected readonly _config: Item<Configuration>) {
     super(_config)
 
     try {

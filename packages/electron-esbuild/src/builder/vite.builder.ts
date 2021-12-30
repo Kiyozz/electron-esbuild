@@ -9,21 +9,24 @@ import type { build, createServer, InlineConfig } from 'vite'
 
 import type { Item } from '../config/config'
 import { Logger, unsupportedType } from '../console'
-import { BaseBuilder } from './base'
+import { BaseBuilder } from './base.builder'
 
 const _logger = new Logger('Builder/Vite')
+
+type Builder = typeof build
+type ServerFactory = typeof createServer
 
 export class ViteBuilder extends BaseBuilder<InlineConfig> {
   readonly hasInitialBuild = false
 
   private readonly _inlineConfig: InlineConfig
-  private readonly _viteBuild: typeof build
-  private readonly _viteCreateServer: typeof createServer
+  private readonly _viteBuild: Builder
+  private readonly _viteCreateServer: ServerFactory
 
-  constructor(_config: Item<InlineConfig>) {
+  constructor(protected readonly _config: Item<InlineConfig>) {
     super(_config)
 
-    if (!this._config.fileConfig) {
+    if (!_config.fileConfig) {
       _logger.end('No file config')
       process.exit(0)
     }
@@ -43,14 +46,11 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
     this._viteBuild = vBuild
     this._viteCreateServer = vCreateServer
     this._inlineConfig = {
-      configFile: path.resolve(process.cwd(), this._config.fileConfig.path),
-      root: path.resolve(
-        process.cwd(),
-        path.dirname(this._config.fileConfig.src),
-      ),
+      configFile: path.resolve(process.cwd(), _config.fileConfig.path),
+      root: path.resolve(process.cwd(), path.dirname(_config.fileConfig.src)),
       base: '',
       build: {
-        outDir: path.resolve(process.cwd(), this._config.fileConfig?.output),
+        outDir: path.resolve(process.cwd(), _config.fileConfig?.output),
       },
     }
   }
