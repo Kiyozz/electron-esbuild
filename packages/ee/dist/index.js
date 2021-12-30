@@ -6,7 +6,7 @@ var fa = Object.getOwnPropertyNames
 var pa = Object.getPrototypeOf,
   ha = Object.prototype.hasOwnProperty
 var da = (e) => Et(e, '__esModule', { value: !0 })
-var y = (e, t) => () => t || e((t = { exports: {} }).exports, t), t.exports
+var y = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports)
 var _a = (e, t, r) => {
     if ((t && typeof t == 'object') || typeof t == 'function')
       for (let n of fa(t))

@@ -8,15 +8,24 @@ import path from 'path'
 import rimraf from 'rimraf'
 
 import { Cli, CliResult } from '../cli'
-import { Worker } from '../config'
 import { CONFIG_FILE_NAME } from '../config/constants'
 import { Logger } from '../console'
+import { Worker } from '../worker'
 
 const _logger = new Logger('Commands/Build')
 
-function clean(): void {
+function clean(): Promise<void> {
   _logger.log('Cleaning')
-  rimraf.sync(path.resolve('dist'))
+
+  return new Promise((resolve, reject) => {
+    rimraf(path.resolve('dist'), (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
 }
 
 export class Build extends Cli {
@@ -29,12 +38,12 @@ export class Build extends Cli {
     _logger.debug('Start')
 
     if (this.cli.flags.clean) {
-      clean()
+      await clean()
     }
 
     _logger.debug('Creating worker')
 
-    const worker = new Worker({
+    const worker = Worker.fromFile({
       file: CONFIG_FILE_NAME,
       env: 'production',
     })

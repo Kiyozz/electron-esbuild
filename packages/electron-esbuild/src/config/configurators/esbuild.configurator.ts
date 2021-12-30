@@ -11,7 +11,7 @@ import path from 'path'
 
 import type { EnvConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
-import type { Configurator } from './base'
+import type { Configurator } from './base.configurator'
 
 export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
   public readonly type = TypeConfig.esbuild

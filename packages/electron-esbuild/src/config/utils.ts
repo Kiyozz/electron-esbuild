@@ -16,7 +16,7 @@ export function configByEnv({
 }: {
   dev: boolean
   type: TypeConfig | null
-}): PossibleConfiguration {
+}): Partial<PossibleConfiguration> {
   if (type === null) {
     return {}
   }

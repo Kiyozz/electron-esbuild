@@ -9,18 +9,17 @@ import { InlineConfig } from 'vite'
 import { Configuration } from 'webpack'
 
 import { Builder } from '../builder'
-import { EsbuildBuilder } from '../builder/esbuild'
-import { ViteBuilder } from '../builder/vite'
-import { WebpackBuilder } from '../builder/webpack'
+import { EsbuildBuilder } from '../builder/esbuild.builder'
+import { ViteBuilder } from '../builder/vite.builder'
+import { WebpackBuilder } from '../builder/webpack.builder'
 import { unsupportedType } from '../console'
-import { Configurator } from './configurators/base'
-import { EsbuildConfigurator } from './configurators/esbuild'
-import { ViteConfigurator } from './configurators/vite'
-import { WebpackConfigurator } from './configurators/webpack'
+import { Configurator } from './configurators/base.configurator'
+import { EsbuildConfigurator } from './configurators/esbuild.configurator'
+import { ViteConfigurator } from './configurators/vite.configurator'
+import { WebpackConfigurator } from './configurators/webpack.configurator'
 import { Target, TypeConfig } from './enums'
+import { PossibleConfiguration } from './types'
 import { YamlItem } from './yaml'
-
-export type PossibleConfiguration = Configuration | BuildOptions | InlineConfig
 
 export class EnvConfig {
   readonly type: TypeConfig
@@ -50,7 +49,7 @@ export class EnvConfig {
   }
 
   static fromYaml(yaml: YamlItem): EnvConfig {
-    return new EnvConfig({
+    return new this({
       type: yaml.type,
       path: yaml.path,
       src: yaml.src,
@@ -80,6 +79,11 @@ export class Item<
   readonly config: T
   readonly fileConfig: F
   readonly target: Target
+  readonly isVite: boolean
+  readonly isWebpack: boolean
+  readonly isEsbuild: boolean
+  readonly isMain: boolean
+  readonly isRenderer: boolean
 
   constructor({
     config,
@@ -93,26 +97,11 @@ export class Item<
     this.config = config
     this.fileConfig = fileConfig
     this.target = target
-  }
-
-  get isVite(): boolean {
-    return this.fileConfig?.type === TypeConfig.vite
-  }
-
-  get isWebpack(): boolean {
-    return this.fileConfig?.type === TypeConfig.webpack
-  }
-
-  get isEsbuild(): boolean {
-    return this.fileConfig?.type === TypeConfig.esbuild
-  }
-
-  get isMain(): boolean {
-    return this.target === Target.main
-  }
-
-  get isRenderer(): boolean {
-    return this.target === Target.renderer
+    this.isVite = this.fileConfig?.type === TypeConfig.vite
+    this.isWebpack = this.fileConfig?.type === TypeConfig.webpack
+    this.isEsbuild = this.fileConfig?.type === TypeConfig.esbuild
+    this.isMain = this.target === Target.main
+    this.isRenderer = this.target === Target.renderer
   }
 
   toBuilder(): Builder | null {
@@ -132,7 +121,10 @@ export class Item<
   }
 }
 
-export class Config<M = PossibleConfiguration, R = PossibleConfiguration> {
+export class Config<
+  M extends PossibleConfiguration,
+  R extends PossibleConfiguration,
+> {
   readonly main: Item<M, EnvConfig>
   readonly renderer: Item<R | null>
 

@@ -19,7 +19,7 @@ import path from 'path'
 import type { Item } from '../config/config'
 import { Logger } from '../console'
 import { getDeps } from '../deps'
-import { BaseBuilder } from './base'
+import { BaseBuilder } from './base.builder'
 
 const _logger = new Logger('Builder/Esbuild')
 
@@ -28,7 +28,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
   private _builder: BuildIncremental | undefined
 
-  constructor(readonly _config: Item<BuildOptions>) {
+  constructor(protected readonly _config: Item<BuildOptions>) {
     super(_config)
   }
 
@@ -120,7 +120,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             .toString()
             .replace(
               '</body>',
-              `<script src="/livereload.js?snipver=1"></script></body>`,
+              `<script src='/livereload.js?snipver=1'></script></body>`,
             )
 
           const proxy = httpProxy.createProxy({

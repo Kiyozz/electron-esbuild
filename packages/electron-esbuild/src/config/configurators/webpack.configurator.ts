@@ -10,7 +10,7 @@ import { Configuration } from 'webpack'
 
 import type { EnvConfig } from '../config'
 import { Target, TypeConfig } from '../enums'
-import type { Configurator } from './base'
+import type { Configurator } from './base.configurator'
 
 export class WebpackConfigurator implements Configurator<TypeConfig.webpack> {
   public readonly type = TypeConfig.webpack
