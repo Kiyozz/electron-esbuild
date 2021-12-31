@@ -32,7 +32,6 @@ Examples
         default: true,
       },
     },
-    importMeta: import.meta,
   },
 )
 

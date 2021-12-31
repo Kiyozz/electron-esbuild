@@ -147,7 +147,7 @@ export class Dev extends Cli {
     const start = () => this._applicationStarter.start()
 
     _logger.debug('Starting dev builders')
-    this._mainBuilder.dev(start)
+    await this._mainBuilder.dev(start)
     this._rendererBuilder?.dev(start)
     _logger.debug('Started dev builders')
     _logger.debug('Starting initial builds')

@@ -47,7 +47,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     _logger.log(this.env, 'built')
   }
 
-  dev(start: () => void): void {
+  async dev(start: () => void): Promise<void> {
     if (this._config.fileConfig === null) {
       return
     }
