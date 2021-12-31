@@ -22,5 +22,5 @@ export abstract class BaseBuilder<T> implements Builder {
 
   abstract build(): Promise<void>
 
-  abstract dev(start: () => void): void
+  abstract dev(start: () => void): void | Promise<void>
 }

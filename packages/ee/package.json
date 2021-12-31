@@ -5,8 +5,8 @@
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "main": "dist/index.js",
   "scripts": {
-    "build": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --minify",
-    "prepublishOnly": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --minify",
+    "build": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --sourcemap",
+    "prepublishOnly": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --sourcemap",
     "lint": "eslint src --ext ts"
   },
   "author": "Kiyozz <https://github.com/Kiyozz>",
@@ -17,15 +17,20 @@
   "files": [
     "dist"
   ],
+  "dependencies": {
+    "cross-spawn": "^7.0.3",
+    "fast-glob": "^3.2.7",
+    "kolorist": "^1.5.0",
+    "minimist": "^1.2.5"
+  },
   "devDependencies": {
+    "esbuild": "0.14.5",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
     "@types/node": "^16.11.10",
-    "cross-spawn": "^7.0.3",
-    "esbuild": "^0.13.15",
-    "fast-glob": "^3.2.7",
-    "kolorist": "^1.5.0",
-    "minimist": "^1.2.5",
     "typescript": "^4.5.2"
+  },
+  "peerDependencies": {
+    "esbuild": "^0.14.9"
   }
 }

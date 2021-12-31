@@ -28,8 +28,9 @@ if (argv.version) {
 const entries = argv._
 const {
   _,
-  '--': ex,
+  '--': __,
   'check-types': checkTypes,
+  'ts-project': tsProject = 'tsconfig.json',
   format,
   external,
   ...options
@@ -40,6 +41,7 @@ const externals: string[] = typeof external === 'string' ? [external] : external
 
 build({
   entries,
+  tsProject,
   checkTypes,
   formats,
   options: {

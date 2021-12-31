@@ -10,5 +10,5 @@ export interface Builder {
 
   build(): Promise<void>
 
-  dev(start: () => void): void
+  dev(start: () => void): void | Promise<void>
 }

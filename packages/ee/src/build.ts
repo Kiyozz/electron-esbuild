@@ -30,6 +30,7 @@ async function getEntries(paths: string[]): Promise<string[]> {
 
 interface BuildOptions {
   entries: string[]
+  tsProject: string
   checkTypes?: boolean
   options?: EsbuildBuildOptions
   formats?: Format[]
@@ -61,6 +62,7 @@ function task(label: string): { end: () => void } {
 
 export default async function build({
   entries,
+  tsProject,
   checkTypes = false,
   formats = ['cjs'],
   options,
@@ -69,7 +71,7 @@ export default async function build({
 
   if (checkTypes) {
     const cTask = task('CHECKING TYPES')
-    spawn.sync('tsc', { cwd: process.cwd(), stdio: 'inherit' })
+    spawn.sync(`tsc -p ${tsProject}`, { cwd: process.cwd(), stdio: 'inherit' })
     cTask.end()
   }
 
