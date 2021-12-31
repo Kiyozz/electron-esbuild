@@ -6,6 +6,6 @@ import sveltePreprocess from 'svelte-preprocess'
 export default defineConfig({
   plugins: [svelte({ preprocess: sveltePreprocess() })],
   build: {
-    target: 'chrome94', // electron version target
+    target: 'chrome96', // electron version target
   },
 })
