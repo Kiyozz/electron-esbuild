@@ -44,7 +44,7 @@
     "!(dist)/**/*.js": [
       "prettier --write"
     ],
-    "*.ts": [
+    "!(templates)/*.ts": [
       "eslint --fix --max-warnings=0"
     ]
   }

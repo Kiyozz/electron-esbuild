@@ -11,14 +11,15 @@ import path from 'path'
 
 import { Template } from './enums/template'
 import { makeDir, write } from './helpers/fs'
-import getPackageManager, {
+import {
+  getPackageManager,
   PackageManagerNames,
 } from './helpers/get-package-manager'
-import getTemplate from './helpers/get-template'
-import initializeGit from './helpers/git'
-import isPathExists from './helpers/is-path-exists'
+import { getTemplate } from './helpers/get-template'
+import { initializeGit } from './helpers/git'
+import { isPathExists } from './helpers/is-path-exists'
 import { error } from './helpers/log'
-import readFileJson from './helpers/read-file-json'
+import { readFileJson } from './helpers/read-file-json'
 import { Package } from './types/package'
 
 interface CreateOptions {
@@ -29,7 +30,7 @@ interface CreateOptions {
   out: string
 }
 
-export default async function createApp({
+export async function createApp({
   name,
   out,
   template,

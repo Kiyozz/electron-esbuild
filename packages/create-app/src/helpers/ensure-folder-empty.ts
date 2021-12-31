@@ -8,9 +8,9 @@ import { promises as fs } from 'fs'
 import { green, blue } from 'kolorist'
 import path from 'path'
 
-import isPathExists from './is-path-exists'
+import { isPathExists } from './is-path-exists'
 
-export default async function ensureFolderEmpty(
+export async function ensureFolderEmpty(
   fileOrFolder: string,
 ): Promise<boolean> | never {
   const validFiles = ['.DS_Store', '.git', 'Thumbs.db']

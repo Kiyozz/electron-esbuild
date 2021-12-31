@@ -6,6 +6,6 @@
 
 import path from 'path'
 
-export default function getTemplate(template: string): string {
+export function getTemplate(template: string): string {
   return path.resolve(__dirname, '../templates', template)
 }

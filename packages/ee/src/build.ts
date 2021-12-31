@@ -1,5 +1,5 @@
 import spawn from 'cross-spawn'
-import esbuild from 'esbuild'
+import { build as esbuildBuild } from 'esbuild'
 import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
 import { bgCyan, bgGreen, black, cyan, green } from 'kolorist'
@@ -60,7 +60,7 @@ function task(label: string): { end: () => void } {
   }
 }
 
-export default async function build({
+export async function build({
   entries,
   tsProject,
   checkTypes = false,
@@ -79,7 +79,7 @@ export default async function build({
 
   await Promise.all(
     formats.map((format) =>
-      esbuild.build({
+      esbuildBuild({
         entryPoints,
         outdir: 'dist',
         platform: 'node',

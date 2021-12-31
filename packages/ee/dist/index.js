@@ -6749,7 +6749,7 @@ var import_path2 = __toESM(require('path'))
 
 // src/build.ts
 var import_cross_spawn = __toESM(require_cross_spawn())
-var import_esbuild = __toESM(require('esbuild'))
+var import_esbuild = require('esbuild')
 var import_fast_glob = __toESM(require_out4())
 
 // ../../node_modules/.pnpm/kolorist@1.5.0/node_modules/kolorist/dist/esm/index.mjs
@@ -6847,7 +6847,7 @@ var bgLightCyan = kolorist(106, 49)
 var bgLightGray = kolorist(47, 49)
 
 // src/build.ts
-var import_os = __toESM(require('os'))
+var import_os = require('os')
 var import_path = __toESM(require('path'))
 async function getEntries(paths) {
   const base = process.cwd()
@@ -6904,7 +6904,7 @@ async function build({
   const bTask = task('BUILDING')
   await Promise.all(
     formats2.map((format2) =>
-      import_esbuild.default.build({
+      (0, import_esbuild.build)({
         entryPoints,
         outdir: 'dist',
         platform: 'node',

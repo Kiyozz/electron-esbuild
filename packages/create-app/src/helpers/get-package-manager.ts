@@ -27,7 +27,7 @@ function getName(pm: string): PackageManagerNames {
 
 export type PackageManagerNames = 'npm' | 'yarn' | 'pnpm' | 'unknown'
 
-export default function getPackageManager(pm: string): PackageManager {
+export function getPackageManager(pm: string): PackageManager {
   const packageManagers: Record<PackageManagerNames, PackageManager> = {
     npm: {
       install: 'i',

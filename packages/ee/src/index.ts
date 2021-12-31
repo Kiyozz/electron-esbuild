@@ -10,7 +10,7 @@ import fs from 'fs'
 import minimist from 'minimist'
 import path from 'path'
 
-import build from './build'
+import { build } from './build'
 
 const argv = minimist(process.argv.slice(2))
 

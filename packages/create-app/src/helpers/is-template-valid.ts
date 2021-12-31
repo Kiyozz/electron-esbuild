@@ -20,9 +20,7 @@ export const TEMPLATES = [
   red(Template.SvelteTypeScript),
 ]
 
-export default function isTemplateValid(
-  template?: string,
-): template is Template {
+export function isTemplateValid(template?: string): template is Template {
   if (template === undefined) {
     return false
   }

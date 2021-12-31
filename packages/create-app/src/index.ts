@@ -11,11 +11,11 @@ import { cyan, stripColors, bgLightYellow, black, bgLightGreen } from 'kolorist'
 import minimist from 'minimist'
 import path from 'path'
 
-import createApp from './create-app'
+import { createApp } from './create-app'
 import { Template } from './enums/template'
-import ensureFolderEmpty from './helpers/ensure-folder-empty'
+import { ensureFolderEmpty } from './helpers/ensure-folder-empty'
 import { emptyDir, isDirEmpty } from './helpers/fs'
-import isTemplateValid, { TEMPLATES } from './helpers/is-template-valid'
+import { isTemplateValid, TEMPLATES } from './helpers/is-template-valid'
 import { warn } from './helpers/log'
 
 const _argv = minimist(process.argv.slice(2))
