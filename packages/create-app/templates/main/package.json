@@ -7,10 +7,10 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^15.0.0",
-    "electron-builder": "^22.11.7",
+    "electron": "16.x",
+    "electron-builder": "22.x",
     "electron-esbuild": "3.x",
-    "electron-util": "^0.17.2",
+    "electron-util": "0.17.x",
     "esbuild": "0.x"
   },
   "build": {

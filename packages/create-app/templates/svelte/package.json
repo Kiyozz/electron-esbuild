@@ -8,14 +8,14 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "next",
-    "electron": "^15.0.0",
-    "electron-builder": "^22.11.7",
+    "electron": "16.x",
+    "electron-builder": "22.x",
     "electron-esbuild": "3.x",
-    "electron-util": "^0.17.2",
+    "electron-util": "0.17.x",
     "esbuild": "0.x",
-    "svelte": "^3.43.0",
-    "svelte-preprocess": "^4.9.5",
-    "vite": "^2.5.10"
+    "svelte": "3.x",
+    "svelte-preprocess": "4.x",
+    "vite": "~2.7"
   },
   "build": {
     "appId": "io.comp.myapp",

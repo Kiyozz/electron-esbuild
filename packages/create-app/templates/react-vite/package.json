@@ -7,15 +7,15 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@vitejs/plugin-react-refresh": "^1.3.6",
-    "electron": "^15.0.0",
-    "electron-builder": "^22.11.7",
+    "@vitejs/plugin-react-refresh": "~1.3",
+    "electron": "16.x",
+    "electron-builder": "22.x",
     "electron-esbuild": "3.x",
-    "electron-util": "^0.17.2",
+    "electron-util": "0.17.x",
     "esbuild": "0.x",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "vite": "^2.5.10"
+    "react": "17.x",
+    "react-dom": "17.x",
+    "vite": "~2.7"
   },
   "build": {
     "appId": "io.comp.myapp",

@@ -6,7 +6,7 @@
 
 import { promises as fs } from 'fs'
 
-export default function isPathExists(fileOrFolder: string): Promise<boolean> {
+export function isPathExists(fileOrFolder: string): Promise<boolean> {
   return fs
     .access(fileOrFolder)
     .then(() => true)
