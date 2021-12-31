@@ -1,5 +1,5 @@
 import spawn from 'cross-spawn'
-import { build as esbuildBuild } from 'esbuild'
+import esbuild from 'esbuild'
 import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
 import { bgCyan, bgGreen, black, cyan, green } from 'kolorist'
@@ -79,7 +79,7 @@ export async function build({
 
   await Promise.all(
     formats.map((format) =>
-      esbuildBuild({
+      esbuild.build({
         entryPoints,
         outdir: 'dist',
         platform: 'node',
