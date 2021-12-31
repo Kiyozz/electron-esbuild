@@ -5,6 +5,6 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [reactRefresh()],
   build: {
-    target: 'chrome94', // electron version target
+    target: 'chrome96', // electron version target
   },
 })
