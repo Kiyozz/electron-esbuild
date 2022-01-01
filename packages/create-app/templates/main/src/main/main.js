@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { is } from 'electron-util'
-import path from 'path'
+import * as path from 'path'
 
 /** @var {BrowserWindow | null} */
 let win = null

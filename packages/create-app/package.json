@@ -1,40 +1,50 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "1.8.1",
-  "main": "dist/index.js",
+  "version": "2.0.0",
   "keywords": [
     "electron",
     "react",
     "esbuild",
     "webpack",
     "svelte",
-    "cli"
+    "cli",
+    "create-app"
   ],
   "description": "Create Electron esbuild powered apps with one command",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
-  "scripts": {
-    "build": "ee 'src/index.ts' --format cjs --target node12 --bundle --sourcemap",
-    "prepublishOnly": "ee 'src/index.ts' --format cjs --target node12 --bundle --minify --check-types --no-sourcemap",
-    "lint": "eslint src --ext ts"
+  "author": {
+    "name": "Kévin TURMEL",
+    "email": "kevinturmel@gmail.com",
+    "url": "https://github.com/Kiyozz"
   },
-  "author": "Kiyozz <https://github.com/Kiyozz>",
   "license": "MIT",
   "bin": {
-    "create-app": "./dist/index.js"
+    "create-app": "./dist/index.mjs"
+  },
+  "exports": "./dist/index.mjs",
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
+  },
+  "scripts": {
+    "build": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16",
+    "prepublishOnly": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16 --check-types --ts-project tsconfig.types.json",
+    "lint": "eslint src --ext mts,mjs,ts,js"
   },
   "files": [
     "dist",
     "templates"
   ],
-  "devDependencies": {
-    "@electron-esbuild/ee": "workspace:^0.3.0",
-    "@types/cross-spawn": "^6.0.2",
-    "@types/minimist": "^1.2.2",
-    "@types/node": "^17.0.5",
+  "dependencies": {
     "cross-spawn": "^7.0.3",
     "enquirer": "^2.3.6",
     "kolorist": "^1.5.1",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.5"
+  },
+  "devDependencies": {
+    "@electron-esbuild/ee": "workspace:^0.4.0",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^17.0.5",
     "typescript": "~4.5.4"
   }
 }

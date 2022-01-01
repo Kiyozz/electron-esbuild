@@ -1,5 +1,5 @@
 import { BuildOptions } from 'esbuild'
-import path from 'path'
+import * as path from 'path'
 
 /**
  * @var {Partial<import('esbuild').BuildOptions>}
