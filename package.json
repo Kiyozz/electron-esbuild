@@ -41,10 +41,7 @@
     "*.{md,json,yml}": [
       "prettier --write"
     ],
-    "!(dist)/**/*.js": [
-      "prettier --write"
-    ],
-    "!(templates)/*.ts": [
+    "!(templates|dist)/*.{mts,mjs,ts,js}": [
       "eslint --fix --max-warnings=0"
     ]
   }
