@@ -6,6 +6,10 @@
 - This package is now pure ESM (because @electron-esbuild/create-app is mainly a cli, this should work out of the box).
   Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
+### Changes
+
+- Update templates
+
 ## v1.8.1
 
 ### Bug fixes

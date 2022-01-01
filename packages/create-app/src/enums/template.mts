@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-export const enum Template {
+export enum Template {
   ReactTypeScript = 'react-ts',
   ReactJavaScript = 'react',
   ReactTypeScriptWebpack = 'react-ts-webpack',

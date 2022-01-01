@@ -4,14 +4,14 @@
  * All rights reserved.
  */
 
-export const enum TypeConfig {
+export enum TypeConfig {
   esbuild = 'esbuild',
   webpack = 'webpack',
   vite = 'vite',
   typescript = 'tsc',
 }
 
-export const enum Target {
+export enum Target {
   main,
   renderer,
 }

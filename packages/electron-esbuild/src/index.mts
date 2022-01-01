@@ -7,9 +7,22 @@
  */
 
 import meow from 'meow'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
+import * as url from 'node:url'
 
 import { Cli, CliFlags } from './cli.mjs'
 import { commands } from './commands/index.mjs'
+
+const getVersion = async (): Promise<string> => {
+  const dirname = path.resolve(url.fileURLToPath(import.meta.url), '..')
+  const pkgPath = path.resolve(dirname, '../package.json')
+  const pkg: { version: string } = JSON.parse(
+    (await fs.readFile(pkgPath)).toString('utf-8'),
+  )
+
+  return pkg.version
+}
 
 const _cli = meow<CliFlags>(
   `Usage
@@ -25,7 +38,7 @@ Examples
   $ electron-esbuild dev
   $ electron-esbuild build`,
   {
-    version: '3.0.1',
+    version: await getVersion(),
     flags: {
       clean: {
         type: 'boolean',
