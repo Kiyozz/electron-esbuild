@@ -9,7 +9,9 @@
 import enquirer from 'enquirer'
 import { cyan, stripColors, bgLightYellow, black, bgLightGreen } from 'kolorist'
 import minimist from 'minimist'
+import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
+import * as url from 'node:url'
 
 import { createApp } from './create-app.mjs'
 import { Template } from './enums/template.mjs'
@@ -18,8 +20,18 @@ import { emptyDir, isDirEmpty } from './helpers/fs.mjs'
 import { isTemplateValid, TEMPLATES } from './helpers/is-template-valid.mjs'
 import { warn } from './helpers/log.mjs'
 
+const getVersion = async (): Promise<string> => {
+  const dirname = path.resolve(url.fileURLToPath(import.meta.url), '..')
+  const pkgPath = path.resolve(dirname, '../package.json')
+  const pkg: { version: string } = JSON.parse(
+    (await fs.readFile(pkgPath)).toString('utf-8'),
+  )
+
+  return pkg.version
+}
+
 const _argv = minimist(process.argv.slice(2))
-const _version = '1.8.1'
+const _version = await getVersion()
 
 if (_argv.help) {
   console.log(
