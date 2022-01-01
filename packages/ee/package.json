@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.4.0-rc.1",
+  "version": "0.4.0",
   "keywords": [
     "esbuild",
     "builder",
