@@ -11,18 +11,17 @@ import { cyan, stripColors, bgLightYellow, black, bgLightGreen } from 'kolorist'
 import minimist from 'minimist'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
-import * as url from 'node:url'
 
 import { createApp } from './create-app.mjs'
 import { Template } from './enums/template.mjs'
 import { ensureFolderEmpty } from './helpers/ensure-folder-empty.mjs'
+import { dirname } from './helpers/filename.mjs'
 import { emptyDir, isDirEmpty } from './helpers/fs.mjs'
 import { isTemplateValid, TEMPLATES } from './helpers/is-template-valid.mjs'
 import { warn } from './helpers/log.mjs'
 
 const getVersion = async (): Promise<string> => {
-  const dirname = path.resolve(url.fileURLToPath(import.meta.url), '..')
-  const pkgPath = path.resolve(dirname, '../package.json')
+  const pkgPath = path.resolve(dirname(import.meta), '../package.json')
   const pkg: { version: string } = JSON.parse(
     (await fs.readFile(pkgPath)).toString('utf-8'),
   )

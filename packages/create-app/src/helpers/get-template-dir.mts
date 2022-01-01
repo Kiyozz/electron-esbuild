@@ -6,8 +6,8 @@
 
 import * as path from 'node:path'
 
-import { filename } from './filename.mjs'
+import { dirname } from './filename.mjs'
 
 export const getTemplateDir = (template: string): string => {
-  return path.resolve(filename(import.meta), '../../templates', template)
+  return path.resolve(dirname(import.meta), '../../templates', template)
 }
