@@ -1,18 +1,30 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.3.0",
+  "version": "0.4.0",
+  "keywords": [
+    "esbuild",
+    "builder",
+    "cli"
+  ],
   "description": "electron-esbuild internal source code builder. ee for electron-esbuild",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --sourcemap",
-    "prepublishOnly": "esbuild src/index.ts --outdir=dist --bundle --platform=node --external:esbuild --sourcemap",
-    "lint": "eslint src --ext ts"
+  "author": {
+    "name": "Kévin TURMEL",
+    "email": "kevinturmel@gmail.com",
+    "url": "https://github.com/Kiyozz"
   },
-  "author": "Kiyozz <https://github.com/Kiyozz>",
   "license": "MIT",
   "bin": {
-    "ee": "./dist/index.js"
+    "ee": "./dist/index.mjs"
+  },
+  "exports": "./dist/index.mjs",
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "prepublishOnly": "node esbuild.config.mjs",
+    "lint": "eslint . --ext mts,mjs,ts,js"
   },
   "files": [
     "dist"
@@ -21,14 +33,16 @@
     "cross-spawn": "^7.0.3",
     "fast-glob": "^3.2.7",
     "kolorist": "^1.5.0",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "esbuild": "^0.14.9",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
     "@types/node": "^16.11.10",
-    "typescript": "^4.5.2"
+    "@types/rimraf": "^3.0.2",
+    "esbuild": "^0.14.9",
+    "typescript": "~4.5.2"
   },
   "peerDependencies": {
     "esbuild": "^0.14.x"

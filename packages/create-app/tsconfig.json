@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2015",
-    "outDir": "dist"
+    "outDir": "dist",
+    "lib": ["esnext"],
+    "target": "es2021",
+    "module": "esnext"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.mts"]
 }

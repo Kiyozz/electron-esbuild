@@ -11,7 +11,6 @@
     "cli"
   ],
   "description": "Use esbuild with Electron for blazing fast compilation",
-  "main": "dist/index.js",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "author": {
     "name": "Kévin TURMEL",
@@ -20,19 +19,16 @@
   },
   "license": "MIT",
   "bin": {
-    "electron-esbuild": "./dist/index.js"
+    "electron-esbuild": "./dist/index.mjs"
   },
-  "exports": {
-    "require": "./dist/index.js"
-  },
+  "exports": "./dist/index.mjs",
   "engines": {
-    "node": ">=14"
+    "node": "^14.13.1 || >=16.0.0"
   },
   "scripts": {
-    "build": "ee 'src/**' --format cjs --sourcemap",
-    "electron-esbuild": "node dist/index.js",
-    "prepublishOnly": "ee 'src/**' --check-types --format cjs --sourcemap --ts-project tsconfig.types.json",
-    "lint": "eslint src --ext .ts"
+    "build": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16",
+    "prepublishOnly": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16 --check-types --ts-project tsconfig.types.json",
+    "lint": "eslint src --ext mts,mjs,ts,js"
   },
   "files": [
     "dist"
@@ -41,7 +37,7 @@
     "chokidar": "^3.5.2",
     "compression": "^1.7.4",
     "connect": "^3.7.0",
-    "debounce-fn": "^4.0.0",
+    "debounce-fn": "^5.1.0",
     "deepmerge": "^4.2.2",
     "dependency-tree-81": "^8.1.2",
     "has": "^1.0.3",
@@ -49,11 +45,11 @@
     "joi": "^17.5.0",
     "js-yaml": "^4.1.0",
     "livereload": "^0.9.1",
-    "meow": "^9.0.0",
+    "meow": "^10.1.2",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@electron-esbuild/ee": "workspace:^0.3.0",
+    "@electron-esbuild/ee": "workspace:^0.4.0",
     "@types/compression": "^1.7.2",
     "@types/connect": "^3.4.35",
     "@types/cross-spawn": "^6.0.2",
@@ -61,22 +57,20 @@
     "@types/http-proxy": "^1.17.8",
     "@types/js-yaml": "^4.0.5",
     "@types/livereload": "^0.9.1",
-    "@types/node": "^17.0.5",
+    "@types/node": "^17.0.6",
     "@types/rimraf": "^3.0.2",
-    "@types/webpack-dev-server": "^4.5.0",
-    "cross-spawn": "^7.0.3",
-    "esbuild": "^0.14.9",
-    "fast-glob": "^3.2.7",
-    "typescript": "^4.5.4",
+    "@types/webpack-dev-server": "^4.5.1",
+    "esbuild": "^0.14.10",
+    "typescript": "~4.5.4",
     "vite": "~2.7.10",
     "webpack": "^5.65.0",
     "webpack-dev-server": "^4.7.2"
   },
   "peerDependencies": {
-    "esbuild": "0.x",
-    "vite": "~2.5 || ~2.6 || ~2.7",
-    "webpack": "^5.0.0",
-    "webpack-dev-server": "^4.0.0"
+    "esbuild": "0.14.x",
+    "vite": "2.5.x || 2.6.x || 2.7.x",
+    "webpack": "^5.x",
+    "webpack-dev-server": "4.x"
   },
   "peerDependenciesMeta": {
     "webpack": {

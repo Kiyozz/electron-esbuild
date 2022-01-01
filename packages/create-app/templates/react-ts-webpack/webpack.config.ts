@@ -1,6 +1,6 @@
 import webpack, { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server'
-import path from 'path'
+import * as path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'

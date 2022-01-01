@@ -1,4 +1,4 @@
-import path from 'path'
+import * as path from 'path'
 import { format } from 'url'
 import { app, BrowserWindow } from 'electron'
 import { is } from 'electron-util'
