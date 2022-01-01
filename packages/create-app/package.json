@@ -34,6 +34,9 @@
     "dist",
     "templates"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "cross-spawn": "^7.0.3",
     "enquirer": "^2.3.6",

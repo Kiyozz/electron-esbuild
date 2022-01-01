@@ -10,7 +10,7 @@
 
 ### Bug fixes
 
-- Fix react-ts-webpack template webpack.target
+- Fix react-ts-webpack template.
 
 ## v1.8.0
 

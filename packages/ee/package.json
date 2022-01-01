@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.4.0",
+  "version": "0.4.0-rc.1",
   "keywords": [
     "esbuild",
     "builder",
@@ -29,6 +29,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "cross-spawn": "^7.0.3",
     "fast-glob": "^3.2.7",
