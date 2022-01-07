@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="create-app var" type="NodeJSConfigurationType" application-parameters="var" path-to-js-file="dist/index.js" working-dir="$PROJECT_DIR$/packages/create-app">
+  <configuration default="false" name="create-app var" type="NodeJSConfigurationType" application-parameters="var" path-to-js-file="dist/index.mjs" working-dir="$PROJECT_DIR$/packages/create-app">
     <envs>
       <env name="DEBUG" value="1" />
     </envs>

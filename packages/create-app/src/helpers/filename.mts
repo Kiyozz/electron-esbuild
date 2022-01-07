@@ -6,5 +6,5 @@ export const filename = (meta: ImportMeta): string => {
 }
 
 export const dirname = (meta: ImportMeta): string => {
-  return path.resolve(path.dirname(filename(meta)), '..')
+  return path.resolve(path.dirname(filename(meta)))
 }

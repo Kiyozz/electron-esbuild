@@ -22,6 +22,8 @@ import { Yaml, YamlSkeleton } from './config/yaml.mjs'
 import { Logger } from './console.mjs'
 import { Env } from './env.mjs'
 
+const _outMain = 'out_main.mjs'
+const _outRenderer = 'out_renderer.mjs'
 const _logger = new Logger('Config')
 const _cwd = process.cwd()
 const _resolve = (...paths: string[]): string => path.resolve(_cwd, ...paths)
@@ -38,8 +40,10 @@ const _silentRemove = async (file: string) => {
 }
 const _buildUserConfig = async <C extends PossibleConfiguration>(
   configPath: string,
+  target: Target,
 ): Promise<C> => {
-  const out = _resolve('out.mjs')
+  const outName = target === Target.main ? _outMain : _outRenderer
+  const out = _resolve(outName)
 
   buildSync({
     target: 'node16',
@@ -185,10 +189,13 @@ export class Worker<
     let rendererConfigPath =
       rendererConfig !== null ? _resolve(rendererConfig.path) : null
 
-    const userMainConfig = await _buildUserConfig<M>(mainConfigPath)
+    const userMainConfig = await _buildUserConfig<M>(
+      mainConfigPath,
+      Target.main,
+    )
 
     const userRendererConfig = rendererConfigPath
-      ? await _buildUserConfig<R>(rendererConfigPath)
+      ? await _buildUserConfig<R>(rendererConfigPath, Target.renderer)
       : null
 
     if (

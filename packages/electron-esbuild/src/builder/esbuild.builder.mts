@@ -53,6 +53,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     }
 
     if (this._config.isMain) {
+      //region isMain
       const sources = path.join(
         path.resolve(path.dirname(this._config.fileConfig.src)),
         '**',
@@ -83,7 +84,9 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       process.on('exit', async () => {
         await watcher.close()
       })
+      //endregion
     } else if (this._config.isRenderer) {
+      //region isRenderer
       if (typeof this._config.fileConfig.html === 'undefined') {
         _logger.end(
           'Cannot use esbuild in renderer without specifying a html file in `rendererConfig.html`',
@@ -94,12 +97,15 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
         process.cwd(),
         path.dirname(this._config.fileConfig.src),
       )
+      const host = '127.0.0.1'
+      const port = 9081
+      const livereloadPort = 35729
 
       esbuild
         .serve(
           {
-            host: 'localhost',
-            port: 9081,
+            host,
+            port,
           },
           this._config.config,
         )
@@ -111,7 +117,6 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             return
           }
 
-          const livereloadPort = 35729
           const htmlPath = path.resolve(
             process.cwd(),
             this._config.fileConfig.html,
@@ -124,10 +129,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             )
 
           const proxy = httpProxy.createProxy({
-            target: 'http://localhost:9081',
+            target: `http://${host}:${port}`,
           })
           const proxyLr = httpProxy.createProxy({
-            target: `http://localhost:${livereloadPort}`,
+            target: `http://${host}:${livereloadPort}`,
           })
           const lrServer = livereload.createServer({ port: livereloadPort })
 
@@ -171,6 +176,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
           server.listen(9080)
         })
+      //endregion
     }
   }
 

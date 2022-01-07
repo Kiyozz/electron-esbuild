@@ -28,7 +28,7 @@ Easily integrate `esbuild`/`vite`/`webpack` for your Electron environment.
 
 ## Development
 
-This repository use node@16 for source code and pnpm workspace
+This repository use node@17 for source code and pnpm workspace
 
 ```shell
 pnpm i

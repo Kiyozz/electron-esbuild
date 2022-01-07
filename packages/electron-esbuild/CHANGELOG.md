@@ -1,3 +1,9 @@
+## v4.0.1
+
+### Bug fixes
+
+- Regression using esbuild for renderer process ([#34](https://github.com/Kiyozz/electron-esbuild/issues/34))
+
 ## v4.0.0
 
 ### Breaking Changes
