@@ -3,7 +3,10 @@ import * as path from 'path'
 
 const config: BuildOptions = {
   platform: 'browser',
-  entryPoints: [path.resolve('src/renderer/index.tsx')],
+  entryPoints: [
+    path.resolve('src/renderer/index.tsx'),
+    path.resolve('src/renderer/index.css'),
+  ],
   bundle: true,
   target: 'chrome96', // electron version target
 }

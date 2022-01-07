@@ -5,7 +5,10 @@ import * as path from 'path'
  */
 export default {
   platform: 'browser',
-  entryPoints: [path.resolve('src/renderer/index.jsx')],
+  entryPoints: [
+    path.resolve('src/renderer/index.jsx'),
+    path.resolve('src/renderer/index.css'),
+  ],
   bundle: true,
   target: 'chrome96', // electron version target
 }

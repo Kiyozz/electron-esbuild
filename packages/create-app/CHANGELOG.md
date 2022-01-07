@@ -1,3 +1,9 @@
+## v2.0.2
+
+### Bug fixes
+
+- Fix react, react-ts template with css files (#35)
+
 ## v2.0.1
 
 ### Bug fixes
