@@ -20,6 +20,14 @@ Start a development build
 npm run dev
 ```
 
+You can pass through extra arguments to the electron process.
+
+i.e. use a custom debug port
+
+```shell
+npx electron-esbuild dev -- --inspect=xxxx
+```
+
 Create a build
 
 ```shell

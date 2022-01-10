@@ -15,16 +15,81 @@ import { Worker } from '../worker.mjs'
 
 const _isWindows = process.platform === 'win32'
 const _electronBin = _isWindows ? 'electron.cmd' : 'electron'
-const _mainDebugPort = 9223
-const _rendererDebugPort = 9222
+const _defaultMainDebugPort = 9223
+const _defaultRendererDebugPort = 9222
+const _mainDebugPortFlag = '--inspect'
+const _rendererDebugPortFlag = '--remote-debugging-port'
+const _regMainDebugPort = new RegExp(`^${_mainDebugPortFlag}=(\\d+)$`)
+const _regRendererDebugPort = new RegExp(`^${_rendererDebugPortFlag}=(\\d+)$`)
 
 const _logger = new Logger('Commands/Dev')
 
 class _ApplicationStarter {
   private _electronProcess: ChildProcess | undefined
+  private readonly _args: readonly string[]
+  private readonly _mainDebugPort: number
+  private readonly _rendererDebugPort: number
 
-  constructor() {
+  constructor(unknownInputs: string[]) {
     this._cleanupProcess()
+
+    const getPort = (
+      arg: string,
+      reg: RegExp,
+      flag: string,
+    ): number | undefined => {
+      const matches = reg.exec(arg)
+
+      if (matches) {
+        const [, port] = matches
+        const portInt = parseInt(port)
+
+        if (Number.isNaN(portInt)) {
+          throw new Error(`${flag} is not a number`)
+        }
+
+        return portInt
+      }
+    }
+
+    const inspectFlag = unknownInputs.find((input) =>
+      input.includes(_mainDebugPortFlag),
+    )
+    const remoteFlag = unknownInputs.find((input) =>
+      input.includes(_rendererDebugPortFlag),
+    )
+    let mainPort = _defaultMainDebugPort
+    let rendererPort = _defaultRendererDebugPort
+
+    const args = ['dist/main/main.js']
+
+    if (!inspectFlag) {
+      args.push(`${_mainDebugPortFlag}=${_defaultMainDebugPort}`)
+    } else {
+      const port = getPort(inspectFlag, _regMainDebugPort, _mainDebugPortFlag)
+
+      if (port) {
+        mainPort = port
+      }
+    }
+
+    if (!remoteFlag) {
+      args.push(`${_rendererDebugPortFlag}=${_defaultRendererDebugPort}`)
+    } else {
+      const port = getPort(
+        remoteFlag,
+        _regRendererDebugPort,
+        _rendererDebugPortFlag,
+      )
+
+      if (port) {
+        rendererPort = port
+      }
+    }
+
+    this._args = [...args, ...unknownInputs]
+    this._mainDebugPort = mainPort
+    this._rendererDebugPort = rendererPort
   }
 
   start(): void {
@@ -39,15 +104,12 @@ class _ApplicationStarter {
     }
 
     _logger.log('Start application')
-    _logger.log(`Debugger listening on ${_mainDebugPort}`)
-    _logger.log(`Remote debugger listening on ${_rendererDebugPort}`)
+    _logger.log(`Debugger listening on ${this._mainDebugPort}`)
+    _logger.log(`Remote debugger listening on ${this._rendererDebugPort}`)
+
     this._electronProcess = spawn(
       path.resolve(`node_modules/.bin/${_electronBin}`),
-      [
-        'dist/main/main.js',
-        `--inspect=${_mainDebugPort}`,
-        `--remote-debugging-port=${_rendererDebugPort}`,
-      ],
+      this._args,
       {
         stdio: 'inherit',
       },
@@ -111,10 +173,9 @@ class _ApplicationStarter {
 export class Dev extends Cli {
   private readonly _mainBuilder: Builder
   private readonly _rendererBuilder: Builder | null
-  private readonly _applicationStarter: _ApplicationStarter =
-    new _ApplicationStarter()
+  private readonly _applicationStarter: _ApplicationStarter
 
-  static async create(cli: CliResult): Promise<Dev> {
+  static async create(cli: CliResult, unknownInputs: string[]): Promise<Dev> {
     process.env.NODE_ENV = 'development'
 
     _logger.debug('Creating worker')
@@ -137,6 +198,7 @@ export class Dev extends Cli {
     return new Dev(cli, {
       mainBuilder,
       rendererBuilder,
+      unknownInputs,
     })
   }
 
@@ -145,13 +207,16 @@ export class Dev extends Cli {
     {
       mainBuilder,
       rendererBuilder,
+      unknownInputs,
     }: {
       mainBuilder: Builder
       rendererBuilder: Builder | null
+      unknownInputs: string[]
     },
   ) {
     super(cli)
 
+    this._applicationStarter = new _ApplicationStarter(unknownInputs)
     this._mainBuilder = mainBuilder
     this._rendererBuilder = rendererBuilder
   }

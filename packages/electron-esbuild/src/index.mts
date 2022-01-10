@@ -45,17 +45,18 @@ Examples
         default: true,
       },
     },
+    allowUnknownFlags: true,
     importMeta: import.meta,
   },
 )
 
 type Commands = keyof typeof commands
 
-const _command = _cli.input[0] ?? null
+const [_command, ...unknownInputs] = _cli.input
 const _availableCommands = ['dev', 'build']
 
-function isValidAction(command: string): command is Commands {
-  if (command === null || !_availableCommands.includes(command)) {
+function isValidAction(command?: string): command is Commands {
+  if (typeof command === 'undefined' || !_availableCommands.includes(command)) {
     _cli.showHelp(0)
   }
 
@@ -63,7 +64,7 @@ function isValidAction(command: string): command is Commands {
 }
 
 if (isValidAction(_command)) {
-  const action: Cli = await commands[_command].create(_cli)
+  const action: Cli = await commands[_command].create(_cli, unknownInputs)
 
   action.init().then(() => {
     // process.exit(0)
