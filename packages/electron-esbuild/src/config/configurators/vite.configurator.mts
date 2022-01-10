@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import nodeModule from 'module'
+import nodeModule from 'node:module'
 import { InlineConfig } from 'vite'
 
 import type { EnvConfig } from '../config.mjs'

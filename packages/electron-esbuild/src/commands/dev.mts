@@ -5,7 +5,7 @@
  */
 
 import { ChildProcess, spawn } from 'child_process'
-import path from 'path'
+import path from 'node:path'
 
 import { Builder } from '../builder.mjs'
 import { Cli, CliResult } from '../cli.mjs'

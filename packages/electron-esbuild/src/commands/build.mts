@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import path from 'path'
+import path from 'node:path'
 import rimraf from 'rimraf'
 
 import { Cli, CliResult } from '../cli.mjs'
