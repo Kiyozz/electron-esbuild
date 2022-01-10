@@ -46,14 +46,14 @@ export function configByEnv({
   switch (type) {
     case TypeConfig.esbuild:
       return {
-        sourcemap: false,
+        sourcemap: 'external',
         minify: true,
         define: {
           'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
         },
       } as BuildOptions
     case TypeConfig.webpack:
-      return { mode: 'production', devtool: false } as Configuration
+      return { mode: 'production', devtool: 'source-map' } as Configuration
     case TypeConfig.vite:
       return {}
     case TypeConfig.typescript:
