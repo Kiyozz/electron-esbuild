@@ -6,11 +6,11 @@
 
 import deepMerge from 'deepmerge'
 import { buildSync } from 'esbuild'
-import fs from 'fs'
-import fsAsync from 'fs/promises'
 import has from 'has'
 import yaml from 'js-yaml'
-import path from 'path'
+import fs from 'node:fs'
+import fsAsync from 'node:fs/promises'
+import path from 'node:path'
 
 import { Config, Item } from './config/config.mjs'
 import { Configurator } from './config/configurators/base.configurator.mjs'

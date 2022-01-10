@@ -4,7 +4,7 @@
  * All rights reserved.
  */
 
-import path from 'path'
+import path from 'node:path'
 import type { build, createServer, InlineConfig } from 'vite'
 
 import type { Item } from '../config/config.mjs'

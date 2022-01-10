@@ -5,7 +5,7 @@
  */
 
 import depsTree from 'dependency-tree-81'
-import path from 'path'
+import path from 'node:path'
 
 export function getDeps(file: string): string[] {
   return depsTree.toList({

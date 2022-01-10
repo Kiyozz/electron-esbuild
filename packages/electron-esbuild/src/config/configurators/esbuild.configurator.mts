@@ -6,8 +6,8 @@
 
 import deepMerge from 'deepmerge'
 import { BuildOptions } from 'esbuild'
-import nodeModule from 'module'
-import path from 'path'
+import nodeModule from 'node:module'
+import path from 'node:path'
 
 import type { EnvConfig } from '../config.mjs'
 import { Target, TypeConfig } from '../enums.mjs'

@@ -5,7 +5,7 @@
  */
 
 import deepMerge from 'deepmerge'
-import path from 'path'
+import path from 'node:path'
 import { Configuration } from 'webpack'
 
 import type { EnvConfig } from '../config.mjs'
