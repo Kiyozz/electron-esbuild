@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
@@ -8,7 +8,6 @@ export enum TypeConfig {
   esbuild = 'esbuild',
   webpack = 'webpack',
   vite = 'vite',
-  typescript = 'tsc',
 }
 
 export enum Target {

@@ -4,6 +4,10 @@
 
 ## Getting Started
 
+With pnpm:
+
+    pnpm init @electron-esbuild/app
+
 With npm:
 
     npm init @electron-esbuild/app
@@ -20,13 +24,16 @@ Start a development build
 npm run dev
 ```
 
-You can pass through extra arguments to the electron process.
-
-i.e. use a custom debug port
+All arguments after `--` will be pass through the electron process.
 
 ```shell
-npx electron-esbuild dev -- --inspect=xxxx
+electron-esbuild dev -- --remote-debugging-port
 ```
+
+- `--remote-debugging-port=9229` will start the devtools to the port 9229
+- `--remote-debugging-port` will start the devtools to a free port
+- `--inspect=9230` will start the inspector to the port 9230
+- `--inspect` will start the inspector to a free port
 
 Create a build
 

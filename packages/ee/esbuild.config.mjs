@@ -1,5 +1,11 @@
+/*
+ * Copyright (c) 2022 Kiyozz.
+ *
+ * All rights reserved.
+ */
+
 import { build } from 'esbuild'
-import * as path from 'path'
+import * as path from 'node:path'
 import rimraf from 'rimraf'
 
 /**
@@ -7,7 +13,7 @@ import rimraf from 'rimraf'
  * @returns {Promise<void>}
  */
 const clean = async (path) => {
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     rimraf(path, (err) => {
       if (err) reject(err)
       else resolve()

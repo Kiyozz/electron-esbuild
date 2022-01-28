@@ -1,3 +1,22 @@
+## Unreleased
+
+### Breaking changes
+
+- `--inspect` and `--remote-debugging-port` are no longer injected by electron-esbuild (see #36 and #40).
+
+  If you need to debug the main process, use your IDE to start `electron-esbuild dev` in debug (vscode: launch config, Jetbrains: run configuration)
+
+  To debug the renderer process, add `-- --remote-debugging-port` to `electron-esbuild dev`.
+  Everything after `--` is transferred to the electron process. i.e: `electron-esbuild dev -- --remote-debugging-port`.
+
+  - `--remote-debugging-port=9229` will start the devtools to the port 9229
+  - `--remote-debugging-port` will start the devtools to a free port
+
+  vscode users: create a launch configuration to attach to a Node.js/Chrome inspector.
+
+  Jetbrains users: create a run configuration "Attach to Node.js/Chrome" to the port the console output gave you
+  or click the `ws` url from the console output to attach immediately.
+
 ## v4.0.1
 
 ### Bug fixes

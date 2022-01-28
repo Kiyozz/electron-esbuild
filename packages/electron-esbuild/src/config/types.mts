@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
@@ -16,5 +16,4 @@ export interface ConfigMapping {
   [TypeConfig.esbuild]: BuildOptions
   [TypeConfig.webpack]: Configuration
   [TypeConfig.vite]: InlineConfig
-  [TypeConfig.typescript]: unknown
 }

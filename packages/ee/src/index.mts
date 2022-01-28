@@ -1,14 +1,15 @@
 #!/usr/bin/env node
+
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
 
 import { Format } from 'esbuild'
-import * as fs from 'fs/promises'
 import minimist from 'minimist'
-import * as path from 'path'
+import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
 
 import { build } from './build.mjs'
 

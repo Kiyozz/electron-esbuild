@@ -4,4 +4,4 @@
  * All rights reserved.
  */
 
-export type Env = 'production' | 'development'
+export class ConfigurationError extends Error {}
