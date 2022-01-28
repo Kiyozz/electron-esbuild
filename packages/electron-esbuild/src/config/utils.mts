@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
@@ -38,8 +38,6 @@ export function configByEnv({
         } as Configuration
       case TypeConfig.vite:
         return {}
-      case TypeConfig.typescript:
-        return {}
     }
   }
 
@@ -55,8 +53,6 @@ export function configByEnv({
     case TypeConfig.webpack:
       return { mode: 'production', devtool: 'source-map' } as Configuration
     case TypeConfig.vite:
-      return {}
-    case TypeConfig.typescript:
       return {}
   }
 }

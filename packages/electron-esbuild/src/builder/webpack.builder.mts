@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
@@ -9,6 +9,7 @@ import type WebpackDevServer from 'webpack-dev-server'
 
 import type { Item } from '../config/config.mjs'
 import { Logger } from '../console.mjs'
+import { ConfigurationError } from '../errors/configuration-error.mjs'
 import { BaseBuilder } from './base.builder.mjs'
 
 const _logger = new Logger('Builder/Webpack')
@@ -99,16 +100,18 @@ export class WebpackBuilder extends BaseBuilder<Configuration> {
 
   async dev(): Promise<void> {
     if (this._config.isMain) {
-      // TODO: webpack main watch
-    } else {
-      try {
-        await this._rendererServer.start()
-      } catch (e) {
-        if (e instanceof Error) {
-          _logger.end(this.env, 'WDS error', e)
-        } else {
-          _logger.log(this.env, 'WDS starting')
-        }
+      throw new ConfigurationError(
+        'mainConfig.type: webpack is not supported yet.',
+      )
+    }
+
+    try {
+      await this._rendererServer.start()
+    } catch (e) {
+      if (e instanceof Error) {
+        _logger.end(this.env, 'WDS error', e)
+      } else {
+        _logger.log(this.env, 'WDS starting')
       }
     }
   }

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2022 Kiyozz.
+ *
+ * All rights reserved.
+ */
+
 import * as path from 'node:path'
 import * as url from 'node:url'
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
- * Copyright (c) 2021 Kiyozz.
+ * Copyright (c) 2022 Kiyozz.
  *
  * All rights reserved.
  */
@@ -49,7 +49,6 @@ Examples
     importMeta: import.meta,
   },
 )
-
 type Commands = keyof typeof commands
 
 const [_command, ...unknownInputs] = _cli.input
