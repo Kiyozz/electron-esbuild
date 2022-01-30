@@ -30,9 +30,9 @@ var __objRest = (source, exclude) => {
     }
   return target2;
 };
-import * as fs from "fs/promises";
 import minimist from "minimist";
-import * as path from "path";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 import { build } from "./build.mjs";
 const argv = minimist(process.argv.slice(2));
 if (argv.version) {

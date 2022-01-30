@@ -18,8 +18,8 @@ import { sync as spawnSync } from "cross-spawn";
 import { build as esbuildBuild } from "esbuild";
 import glob from "fast-glob";
 import { bgCyan, bgGreen, black, cyan, green } from "kolorist";
-import { platform } from "os";
-import path from "path";
+import { platform } from "node:os";
+import path from "node:path";
 import rimraf from "rimraf";
 const clean = async (path2) => {
   return new Promise((resolve, reject) => {

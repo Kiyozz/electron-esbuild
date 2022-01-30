@@ -1,4 +1,4 @@
-## Unreleased
+## 5.0.0
 
 ### Breaking changes
 
@@ -16,6 +16,9 @@
 
   Jetbrains users: create a run configuration "Attach to Node.js/Chrome" to the port the console output gave you
   or click the `ws` url from the console output to attach immediately.
+
+- Allow users to pass through extra arguments to the electron process when running `electron-esbuild dev`.
+  i.e: `electron-esbuild dev -- --extra-argument-for-electron`
 
 ## v4.0.1
 
