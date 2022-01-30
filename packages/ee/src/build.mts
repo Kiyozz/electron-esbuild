@@ -4,11 +4,12 @@
  * All rights reserved.
  */
 
-import { sync as spawnSync } from 'cross-spawn'
 import { build as esbuildBuild } from 'esbuild'
 import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
-import { bgCyan, bgGreen, black, cyan, green } from 'kolorist'
+import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from 'kolorist'
+import { spawnSync } from 'child_process'
+
 import { platform } from 'node:os'
 import path from 'node:path'
 import rimraf from 'rimraf'
@@ -63,7 +64,7 @@ const humanizeDuration = (duration: number): string => {
   return `${duration}ms`
 }
 
-const task = (label: string): { end: () => void } => {
+const task = (label: string) => {
   console.log(`${bgCyan(black(' TASK '))} ${cyan(label)}`)
   const now = Date.now()
 
@@ -76,6 +77,11 @@ const task = (label: string): { end: () => void } => {
         )}`,
       )
     },
+    error() {
+      const duration = Date.now() - now
+
+      console.error(`${bgRed(black(' ERROR '))} ${red(`${label} - ${humanizeDuration(duration)}`)}`)
+    }
   }
 }
 
@@ -97,7 +103,18 @@ export const build = async ({
 
   if (checkTypes) {
     const cTask = task('CHECKING TYPES')
-    spawnSync(`tsc -p ${tsProject}`, { cwd: process.cwd(), stdio: 'inherit' })
+    const tscResult = spawnSync('tsc', ['-p', tsProject], { cwd: process.cwd(), stdio: 'inherit' })
+
+    if (tscResult.error || tscResult.status !== 0) {
+      cTask.error()
+
+      if (tscResult.error) {
+        throw tscResult.error
+      }
+
+      throw new Error('error occurred during check-types')
+    }
+
     cTask.end()
   }
 

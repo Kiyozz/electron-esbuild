@@ -14,10 +14,10 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-import { sync as spawnSync } from "cross-spawn";
 import { build as esbuildBuild } from "esbuild";
 import glob from "fast-glob";
-import { bgCyan, bgGreen, black, cyan, green } from "kolorist";
+import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from "kolorist";
+import { spawnSync } from "child_process";
 import { platform } from "node:os";
 import path from "node:path";
 import rimraf from "rimraf";
@@ -58,6 +58,10 @@ const task = (label) => {
     end() {
       const duration = Date.now() - now;
       console.log(`${bgGreen(black(" DONE "))} ${green(`${label} - ${humanizeDuration(duration)}`)}`);
+    },
+    error() {
+      const duration = Date.now() - now;
+      console.error(`${bgRed(black(" ERROR "))} ${red(`${label} - ${humanizeDuration(duration)}`)}`);
     }
   };
 };
@@ -77,7 +81,14 @@ const build = async ({
   const entryPoints = await getEntries(entries);
   if (checkTypes) {
     const cTask = task("CHECKING TYPES");
-    spawnSync(`tsc -p ${tsProject}`, { cwd: process.cwd(), stdio: "inherit" });
+    const tscResult = spawnSync("tsc", ["-p", tsProject], { cwd: process.cwd(), stdio: "inherit" });
+    if (tscResult.error || tscResult.status !== 0) {
+      cTask.error();
+      if (tscResult.error) {
+        throw tscResult.error;
+      }
+      throw new Error("error occurred during check-types");
+    }
     cTask.end();
   }
   const bTask = task("BUILDING");
