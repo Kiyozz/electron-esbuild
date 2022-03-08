@@ -1,3 +1,9 @@
+## 5.0.1
+
+### Changes
+
+- Update electron-esbuild peerDependencies to include vite@2.8
+
 ## 5.0.0
 
 ### Breaking changes
