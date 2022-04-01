@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'packages/**/src/**.ts'
+      - 'packages/**/src/**.mts'
+      - 'packages/**/src/**.mjs'
+      - 'packages/**/src/**.js'
       - 'packages/**/src/**.json'
       - '.github/workflows/**.yml'
 
