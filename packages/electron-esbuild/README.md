@@ -1,5 +1,6 @@
 # electron-esbuild
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Kiyozz/electron-esbuild/blob/HEAD/LICENSE)
 [![electron-esbuild version](https://img.shields.io/npm/v/electron-esbuild.svg?label=%20)](./CHANGELOG.md)
 
 ## Getting Started
