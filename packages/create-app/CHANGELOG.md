@@ -1,3 +1,11 @@
+## v2.0.3
+
+**react-ts-webpack** template deprecated. Will be removed in v3.
+
+### Changes
+
+- Update templates
+
 ## v2.0.2
 
 ### Bug fixes

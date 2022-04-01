@@ -1,3 +1,10 @@
+## 5.0.2
+
+### Changes
+
+- Update dependencies
+- Update vite peerDependency
+
 ## 5.0.1
 
 ### Changes
