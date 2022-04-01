@@ -30,7 +30,6 @@ const getVersion = async (): Promise<string> => {
 }
 
 const _argv = minimist(process.argv.slice(2))
-const _version = await getVersion()
 
 if (_argv.help) {
   console.log(
@@ -53,6 +52,8 @@ ${cyan('--help')}                 show this help
 }
 
 if (_argv.version) {
+  const _version = await getVersion()
+
   console.log(_version)
 
   process.exit(0)
