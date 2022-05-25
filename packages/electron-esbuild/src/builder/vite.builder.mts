@@ -100,12 +100,7 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
     if (this._config.isRenderer) {
       _logger.log('Start vite dev server')
 
-      const server = await this._viteCreateServer({
-        ...this._inlineConfig,
-        server: {
-          port: 9080,
-        },
-      })
+      const server = await this._viteCreateServer(this._inlineConfig)
 
       await server.listen()
 
