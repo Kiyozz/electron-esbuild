@@ -19,23 +19,23 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=10",
-    "pnpm": "^6.10.0"
+    "node": ">=14.18",
+    "pnpm": "7"
   },
   "scripts": {
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.17.0",
-    "@typescript-eslint/parser": "^5.17.0",
-    "eslint": "^8.12.0",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "7.0.4",
-    "lint-staged": "^12.3.7",
-    "prettier": "^2.6.1",
-    "typescript": "~4.5.5"
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typescript": "~4.7.4"
   },
   "lint-staged": {
     "*.{md,json,yml}": [

@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import { is } from 'electron-util'
 import * as path from 'path'
 
-/** @var {BrowserWindow | null} */
+/** @type {BrowserWindow | null} */
 let win = null
 
 async function createWindow() {

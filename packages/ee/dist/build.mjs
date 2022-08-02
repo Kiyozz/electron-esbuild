@@ -1,23 +1,7 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
+import { spawnSync } from "child_process";
 import { build as esbuildBuild } from "esbuild";
 import glob from "fast-glob";
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from "kolorist";
-import { spawnSync } from "child_process";
 import { platform } from "node:os";
 import path from "node:path";
 import rimraf from "rimraf";
@@ -33,16 +17,18 @@ const clean = async (path2) => {
 };
 const getEntries = async (paths) => {
   const base = process.cwd();
-  const result = await Promise.all(paths.map((p) => {
-    let absP = path.resolve(base, p);
-    if (absP.includes("'")) {
-      absP = absP.replace(/'/g, "");
-    }
-    if (platform() === "win32") {
-      absP = absP.replace(/\\/g, "/");
-    }
-    return glob(absP);
-  }));
+  const result = await Promise.all(
+    paths.map((p) => {
+      let absP = path.resolve(base, p);
+      if (absP.includes("'")) {
+        absP = absP.replace(/'/g, "");
+      }
+      if (platform() === "win32") {
+        absP = absP.replace(/\\/g, "/");
+      }
+      return glob(absP);
+    })
+  );
   return result.flat();
 };
 const humanizeDuration = (duration) => {
@@ -57,11 +43,19 @@ const task = (label) => {
   return {
     end() {
       const duration = Date.now() - now;
-      console.log(`${bgGreen(black(" DONE "))} ${green(`${label} - ${humanizeDuration(duration)}`)}`);
+      console.log(
+        `${bgGreen(black(" DONE "))} ${green(
+          `${label} - ${humanizeDuration(duration)}`
+        )}`
+      );
     },
     error() {
       const duration = Date.now() - now;
-      console.error(`${bgRed(black(" ERROR "))} ${red(`${label} - ${humanizeDuration(duration)}`)}`);
+      console.error(
+        `${bgRed(black(" ERROR "))} ${red(
+          `${label} - ${humanizeDuration(duration)}`
+        )}`
+      );
     }
   };
 };
@@ -81,7 +75,10 @@ const build = async ({
   const entryPoints = await getEntries(entries);
   if (checkTypes) {
     const cTask = task("CHECKING TYPES");
-    const tscResult = spawnSync("tsc", ["-p", tsProject], { cwd: process.cwd(), stdio: "inherit" });
+    const tscResult = spawnSync("tsc", ["-p", tsProject], {
+      cwd: process.cwd(),
+      stdio: "inherit"
+    });
     if (tscResult.error || tscResult.status !== 0) {
       cTask.error();
       if (tscResult.error) {
@@ -92,19 +89,22 @@ const build = async ({
     cTask.end();
   }
   const bTask = task("BUILDING");
-  await Promise.all(formats.map((format) => {
-    return esbuildBuild(__spreadValues({
-      entryPoints,
-      outdir,
-      platform: "node",
-      format,
-      target,
-      logLevel: "info",
-      outExtension: {
-        ".js": format === "cjs" || format === "iife" ? ".js" : ".mjs"
-      }
-    }, options));
-  }));
+  await Promise.all(
+    formats.map((format) => {
+      return esbuildBuild({
+        entryPoints,
+        outdir,
+        platform: "node",
+        format,
+        target,
+        logLevel: "info",
+        outExtension: {
+          ".js": format === "cjs" || format === "iife" ? ".js" : ".mjs"
+        },
+        ...options
+      });
+    })
+  );
   bTask.end();
 };
 export {

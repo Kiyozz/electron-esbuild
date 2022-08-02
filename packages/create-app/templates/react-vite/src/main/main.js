@@ -3,6 +3,7 @@ import { is } from 'electron-util'
 import * as path from 'path'
 import { format } from 'url'
 
+/** @type {BrowserWindow | null} */
 let win = null
 
 async function createWindow() {
@@ -21,6 +22,7 @@ async function createWindow() {
   const isDev = is.development
 
   if (isDev) {
+    // this is the default port electron-esbuild is using
     win.loadURL('http://localhost:9080')
   } else {
     win.loadURL(

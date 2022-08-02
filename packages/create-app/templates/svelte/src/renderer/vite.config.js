@@ -8,4 +8,7 @@ export default defineConfig({
   build: {
     target: 'chrome100', // electron version target
   },
+  server: {
+    port: 9080
+  },
 })
