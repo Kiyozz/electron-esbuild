@@ -5,7 +5,6 @@
  */
 
 import { BuildOptions } from 'esbuild'
-import { Configuration } from 'webpack'
 
 import { TypeConfig } from './enums.mjs'
 import { PossibleConfiguration } from './types.mjs'
@@ -31,11 +30,6 @@ export function configByEnv({
             'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
           },
         } as BuildOptions
-      case TypeConfig.webpack:
-        return {
-          mode: 'development',
-          devtool: 'eval-source-map',
-        } as Configuration
       case TypeConfig.vite:
         return {}
     }
@@ -50,8 +44,6 @@ export function configByEnv({
           'process.env.NODE_ENV': `'${process.env.NODE_ENV}'`,
         },
       } as BuildOptions
-    case TypeConfig.webpack:
-      return { mode: 'production', devtool: 'source-map' } as Configuration
     case TypeConfig.vite:
       return {}
   }

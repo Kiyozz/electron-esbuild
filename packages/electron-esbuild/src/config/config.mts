@@ -6,26 +6,28 @@
 
 import { BuildOptions } from 'esbuild'
 import { InlineConfig } from 'vite'
-import { Configuration } from 'webpack'
 
 import { Builder } from '../builder.mjs'
 import { EsbuildBuilder } from '../builder/esbuild.builder.mjs'
 import { ViteBuilder } from '../builder/vite.builder.mjs'
-import { WebpackBuilder } from '../builder/webpack.builder.mjs'
 import { unsupportedType } from '../console.mjs'
 import { Configurator } from './configurators/base.configurator.mjs'
 import { EsbuildConfigurator } from './configurators/esbuild.configurator.mjs'
 import { ViteConfigurator } from './configurators/vite.configurator.mjs'
-import { WebpackConfigurator } from './configurators/webpack.configurator.mjs'
 import { Target, TypeConfig } from './enums.mjs'
 import { PossibleConfiguration } from './types.mjs'
 import { YamlItem } from './yaml.mjs'
+
+export type EnvOutput = {
+  dir: string
+  filename: string
+}
 
 export class EnvConfig {
   readonly type: TypeConfig
   readonly path: string
   readonly src: string
-  readonly output: string
+  readonly output: EnvOutput
   readonly html?: string
 
   constructor({
@@ -38,7 +40,7 @@ export class EnvConfig {
     type: TypeConfig
     path: string
     src: string
-    output: string
+    output: EnvOutput
     html?: string
   }) {
     this.type = type
@@ -62,8 +64,6 @@ export class EnvConfig {
     switch (this.type) {
       case TypeConfig.esbuild:
         return new EsbuildConfigurator(this)
-      case TypeConfig.webpack:
-        return new WebpackConfigurator(this)
       case TypeConfig.vite:
         return new ViteConfigurator(this)
       default:
@@ -80,7 +80,6 @@ export class Item<
   readonly fileConfig: F
   readonly target: Target
   readonly isVite: boolean
-  readonly isWebpack: boolean
   readonly isEsbuild: boolean
   readonly isMain: boolean
   readonly isRenderer: boolean
@@ -98,7 +97,6 @@ export class Item<
     this.fileConfig = fileConfig
     this.target = target
     this.isVite = this.fileConfig?.type === TypeConfig.vite
-    this.isWebpack = this.fileConfig?.type === TypeConfig.webpack
     this.isEsbuild = this.fileConfig?.type === TypeConfig.esbuild
     this.isMain = this.target === Target.main
     this.isRenderer = this.target === Target.renderer
@@ -107,8 +105,6 @@ export class Item<
   async toBuilderAsync(): Promise<Builder | null> {
     if (this.isEsbuild) {
       return new EsbuildBuilder(this as Item<BuildOptions>)
-    } else if (this.isWebpack) {
-      return await WebpackBuilder.create(this as Item<Configuration>)
     } else if (this.isVite) {
       return await ViteBuilder.create(this as Item<InlineConfig>)
     }

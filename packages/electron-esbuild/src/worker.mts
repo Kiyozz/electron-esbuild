@@ -185,8 +185,8 @@ export class Worker<
     }
 
     process.env.NODE_ENV = this.env
-    let mainConfigPath = _resolve(mainConfig.path)
-    let rendererConfigPath =
+    const mainConfigPath = _resolve(mainConfig.path)
+    const rendererConfigPath =
       rendererConfig !== null ? _resolve(rendererConfig.path) : null
 
     const userMainConfig = await _buildUserConfig<M>(
@@ -197,30 +197,6 @@ export class Worker<
     const userRendererConfig = rendererConfigPath
       ? await _buildUserConfig<R>(rendererConfigPath, Target.renderer)
       : null
-
-    if (
-      typeof userMainConfig === 'function' ||
-      typeof userRendererConfig === 'function'
-    ) {
-      const configFileThatIsWrong: string[] = []
-
-      if (typeof userMainConfig === 'function') {
-        configFileThatIsWrong.push('main')
-      }
-
-      if (typeof userRendererConfig === 'function') {
-        configFileThatIsWrong.push('renderer')
-      }
-
-      const plural = configFileThatIsWrong.length > 1 ? 's' : ''
-
-      _logger.end(
-        'Starting electron-esbuild v1.2.0, you need to export an object from your esbuild/webpack configuration file',
-        `Check your ${configFileThatIsWrong.join(
-          ', ',
-        )} configuration file${plural}`,
-      )
-    }
 
     let mainConfigFinal: M = deepMerge(this._main, userMainConfig, {
       clone: false,

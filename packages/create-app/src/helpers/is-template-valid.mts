@@ -13,7 +13,6 @@ export const TEMPLATES = [
   yellow(Template.MainOnlyTypeScript),
   cyan(Template.ReactJavaScript),
   cyan(Template.ReactTypeScript),
-  cyan(Template.ReactTypeScriptWebpack),
   cyan(Template.ReactViteJavaScript),
   cyan(Template.ReactViteTypeScript),
   red(Template.SvelteJavaScript),

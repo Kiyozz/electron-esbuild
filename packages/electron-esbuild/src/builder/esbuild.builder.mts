@@ -182,7 +182,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
 
   private async _copyHtml() {
     if (this._config.fileConfig?.html) {
-      const out = path.resolve(process.cwd(), this._config.fileConfig.output)
+      const out = path.resolve(
+        process.cwd(),
+        this._config.fileConfig.output.dir,
+      )
       const html = path.resolve(process.cwd(), this._config.fileConfig.html)
 
       await fs.copyFile(html, path.join(out, path.basename(html)))

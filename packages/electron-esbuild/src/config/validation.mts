@@ -5,32 +5,46 @@
  */
 
 import Joi from 'joi'
+import yaml from 'js-yaml'
+import path from 'node:path'
 
 import { Logger } from '../console.mjs'
 import { EnvConfig } from './config.mjs'
-import { TypeConfig } from './enums.mjs'
-import { Yaml, YamlSkeleton } from './yaml.mjs'
+import { Target, TypeConfig } from './enums.mjs'
+import { Yaml, YamlItem, YamlSkeleton } from './yaml.mjs'
 
 const _logger = new Logger('Config/Validation')
-const _schema = Joi.object<YamlSkeleton>({
-  mainConfig: Joi.object({
-    type: Joi.string().valid(TypeConfig.esbuild).required(),
-    path: Joi.string().required(),
-    src: Joi.string().required(),
-    output: Joi.string().required(),
-  }).required(),
-  rendererConfig: Joi.object({
-    type: Joi.string()
-      .valid(TypeConfig.esbuild, TypeConfig.webpack, TypeConfig.vite)
-      .required(),
-    path: Joi.string().required(),
-    src: Joi.string().required(),
-    output: Joi.string().required(),
-    html: Joi.string().optional(),
+const buildSchema = (yaml: YamlSkeleton) => {
+  return Joi.object<YamlSkeleton>({
+    mainConfig: Joi.object({
+      type: Joi.string().valid(TypeConfig.esbuild).required(),
+      path: Joi.string().required(),
+      src: Joi.string().required(),
+      output: Joi.object({
+        dir: Joi.string().required(),
+        filename: Joi.string().required(),
+      }).required(),
+    }).required(),
+    rendererConfig: Joi.object({
+      type: Joi.string().valid(TypeConfig.esbuild, TypeConfig.vite).required(),
+      path: Joi.string().required(),
+      src: Joi.string().required(),
+      output:
+        yaml.rendererConfig?.type === 'vite'
+          ? Joi.object({
+              dir: Joi.string().required(),
+              filename: Joi.forbidden(),
+            }).required()
+          : Joi.object({
+              dir: Joi.string().required(),
+              filename: Joi.string().required(),
+            }).required(),
+      html: Joi.string().optional(),
+    })
+      .optional()
+      .allow(null),
   })
-    .optional()
-    .allow(null),
-})
+}
 
 export class ConfigFile {
   constructor(public readonly config: YamlSkeleton) {
@@ -39,8 +53,58 @@ export class ConfigFile {
     }
   }
 
+  private _dumpYaml(config: YamlItem, isMain: boolean) {
+    return yaml.dump({
+      [isMain ? 'mainConfig' : 'rendererConfig']: {
+        ...config,
+        output: {
+          dir: config.output as unknown as string,
+          filename: path.basename(config.src).replace(/\.[tj]sx?$/, '.js'),
+        },
+      },
+    })
+  }
+
   ensureValid(): true | never {
-    const result = _schema.validate(this.config)
+    // checks configuration file before 6.0.0: output is no longer a string, but now an object
+    if (
+      (typeof this.config.mainConfig.output as unknown) === 'string' ||
+      typeof (this.config.rendererConfig?.output as unknown) === 'string'
+    ) {
+      const processType =
+        (typeof this.config.mainConfig.output as unknown) === 'string'
+          ? Target.main
+          : typeof (this.config.rendererConfig?.output as unknown) === 'string'
+          ? Target.renderer
+          : undefined
+      const processName: keyof YamlSkeleton | undefined =
+        processType === Target.main
+          ? 'mainConfig'
+          : processType === Target.renderer
+          ? 'rendererConfig'
+          : undefined
+      const dump =
+        processType === Target.main
+          ? this._dumpYaml(this.config.mainConfig, true)
+          : this.config.rendererConfig !== null &&
+            processType === Target.renderer
+          ? this._dumpYaml(this.config.rendererConfig, false)
+          : undefined
+
+      if (dump) {
+        _logger.end(`starting from electron-esbuild@6.0.0, \`output\` is an object. Please update ** ${
+          processName ?? ''
+        } ** ⬇
+
+# electron-esbuild.config.yaml
+
+${dump}`)
+      }
+    }
+
+    const schema = buildSchema(this.config)
+
+    const result = schema.validate(this.config)
 
     if (result.error) {
       return _logger.end(

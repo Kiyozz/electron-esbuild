@@ -7,11 +7,16 @@
 import type { EnvConfig } from './config.mjs'
 import { TypeConfig } from './enums.mjs'
 
+export type YamlOutput = {
+  dir: string
+  filename: string
+}
+
 export type YamlItem = {
   type: TypeConfig
   path: string
   src: string
-  output: string
+  output: YamlOutput
   html?: string
 }
 

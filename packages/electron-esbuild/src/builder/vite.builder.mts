@@ -63,7 +63,7 @@ export class ViteBuilder extends BaseBuilder<InlineConfig> {
       root: path.resolve(process.cwd(), path.dirname(_config.fileConfig.src)),
       base: '',
       build: {
-        outDir: path.resolve(process.cwd(), _config.fileConfig?.output),
+        outDir: path.resolve(process.cwd(), _config.fileConfig?.output.dir),
       },
     }
   }

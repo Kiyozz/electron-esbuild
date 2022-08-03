@@ -5,12 +5,12 @@
 ![github-actions](https://github.com/Kiyozz/electron-esbuild/workflows/CI/badge.svg)
 ![electron-esbuild downloads](https://img.shields.io/npm/dm/electron-esbuild.svg)
 
-Easily integrate `esbuild`/`vite`/`webpack` for your Electron environment.
+Easily integrate `esbuild`/`vite` for your Electron environment.
 
 ## Features
 
 - Use of `esbuild` for main source code building
-- Use of `esbuild`, `webpack` or `vite` for renderer source code building
+- Use of `esbuild` or `vite` for renderer source code building
 - HMR for `renderer` and `main` processes
 - Full control of your esbuild configuration
 - Full control of your webpack configuration

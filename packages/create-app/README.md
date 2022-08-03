@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Kiyozz/electron-esbuild/blob/HEAD/LICENSE)
 [![@electron-esbuild/create-app version](https://img.shields.io/npm/v/@electron-esbuild/create-app.svg)](./CHANGELOG.md)
 
-The easiest way to get started with Esbuild/Webpack/Vite in Electron by using `@electron-esbuild/create-app`. This simple CLI tool enables you to quickly start building a new Electron application.
+The easiest way to get started with Esbuild/Vite in Electron by using `@electron-esbuild/create-app`. This simple CLI tool enables you to quickly start building a new Electron application.
 
 With npm:
 

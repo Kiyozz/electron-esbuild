@@ -4,9 +4,10 @@
 
 ### Breaking Changes
 
+- **webpack supports** removed, use vite instead.
 - electron-esbuild uses vite@3
 - Fixed bug where users could not set their own port in vite.config.[ts/js].
-  - 🚨 **Existing projects** will no longer use port `9080` by default. [Please modify the `server.port` property in your Vite config](https://vitejs.dev/config/server-options.html#server-port) to your port of choice, or update your project to accomodate the Vite default port `3000`.
+  - 🚨 **Existing projects** will no longer use port `9080` by default. [Please modify the `server.port` property in your Vite config](https://vitejs.dev/config/server-options.html#server-port) to your port of choice, or update your project to accommodate the Vite default port `5173`.
   - New projects will set port `9080` as part of the initialization template.
 
 ## 5.0.2

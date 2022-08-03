@@ -6,7 +6,6 @@
 
 export enum TypeConfig {
   esbuild = 'esbuild',
-  webpack = 'webpack',
   vite = 'vite',
 }
 

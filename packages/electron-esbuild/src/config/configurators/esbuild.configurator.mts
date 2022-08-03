@@ -10,7 +10,7 @@ import nodeModule from 'node:module'
 import path from 'node:path'
 
 import type { EnvConfig } from '../config.mjs'
-import { Target, TypeConfig } from '../enums.mjs'
+import { TypeConfig } from '../enums.mjs'
 import type { Configurator } from './base.configurator.mjs'
 
 export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
@@ -21,13 +21,12 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
   toBuilderConfig(
     partial: Partial<BuildOptions>,
     userConfig: BuildOptions,
-    target: Target,
   ): BuildOptions {
     const additional: Partial<BuildOptions> = {}
     const out = path.resolve(
       process.cwd(),
-      this.config.output,
-      target === Target.main ? 'main.js' : 'index.js',
+      this.config.output.dir,
+      this.config.output.filename,
     )
 
     if (userConfig.entryPoints?.length ?? 1 > 1) {

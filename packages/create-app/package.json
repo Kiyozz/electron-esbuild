@@ -5,7 +5,6 @@
     "electron",
     "react",
     "esbuild",
-    "webpack",
     "svelte",
     "cli",
     "create-app"

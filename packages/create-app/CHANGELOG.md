@@ -1,3 +1,7 @@
+## Unreleased
+
+**react-ts-webpack** template removed.
+
 ## v2.0.3
 
 **react-ts-webpack** template deprecated. Will be removed in v3.

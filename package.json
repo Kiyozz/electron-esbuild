@@ -1,23 +1,14 @@
 {
   "name": "electron-esbuild-monorepo",
   "version": "5.0.2",
-  "keywords": [
-    "esbuild",
-    "electron",
-    "webpack",
-    "renderer",
-    "hmr",
-    "hot reload",
-    "cli"
-  ],
-  "description": "Use esbuild with Electron for blazing fast compilation",
+  "description": "Use esbuild/vite with Electron for blazing fast compilation",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "author": {
     "name": "Kévin TURMEL",
     "email": "kevinturmel@gmail.com",
     "url": "https://github.com/Kiyozz"
   },
-  "license": "MIT",
+  "private": true,
   "engines": {
     "node": ">=14.18",
     "pnpm": "7"

@@ -9,7 +9,9 @@ import path from 'node:path'
 
 import { Builder } from '../builder.mjs'
 import { Cli, CliResult } from '../cli.mjs'
+import { Config } from '../config/config.mjs'
 import { CONFIG_FILE_NAME } from '../config/constants.mjs'
+import { PossibleConfiguration } from '../config/types.mjs'
 import { Logger } from '../console.mjs'
 import { Worker } from '../worker.mjs'
 
@@ -23,10 +25,10 @@ class _ApplicationStarter {
 
   constructor(unknownInputs: string[]) {
     this._cleanupProcess()
-    this._args = ['dist/main/main.js', ...unknownInputs]
+    this._args = [...unknownInputs]
   }
 
-  async start(): Promise<void> {
+  async start(outputEntryFile: string): Promise<void> {
     if (this._electronProcess) {
       try {
         this._kill()
@@ -41,7 +43,7 @@ class _ApplicationStarter {
 
     this._electronProcess = spawn(
       path.resolve(`node_modules/.bin/${_electronBin}`),
-      this._args,
+      [outputEntryFile, ...this._args],
       {
         stdio: 'inherit',
       },
@@ -106,6 +108,7 @@ export class Dev extends Cli {
   private readonly _mainBuilder: Builder
   private readonly _rendererBuilder: Builder | null
   private readonly _applicationStarter: _ApplicationStarter
+  private readonly _config: Config<PossibleConfiguration, PossibleConfiguration>
 
   static async create(cli: CliResult, unknownInputs: string[]): Promise<Dev> {
     process.env.NODE_ENV = 'development'
@@ -131,6 +134,7 @@ export class Dev extends Cli {
       mainBuilder,
       rendererBuilder,
       unknownInputs,
+      config,
     })
   }
 
@@ -140,10 +144,12 @@ export class Dev extends Cli {
       mainBuilder,
       rendererBuilder,
       unknownInputs,
+      config,
     }: {
       mainBuilder: Builder
       rendererBuilder: Builder | null
       unknownInputs: string[]
+      config: Config<PossibleConfiguration, PossibleConfiguration>
     },
   ) {
     super(cli)
@@ -151,12 +157,19 @@ export class Dev extends Cli {
     this._applicationStarter = new _ApplicationStarter(unknownInputs)
     this._mainBuilder = mainBuilder
     this._rendererBuilder = rendererBuilder
+    this._config = config
   }
 
   async init(): Promise<void> {
     _logger.debug('Start')
 
-    const start = () => this._applicationStarter.start()
+    const start = () =>
+      this._applicationStarter.start(
+        path.join(
+          this._config.main.fileConfig.output.dir,
+          this._config.main.fileConfig.output.filename,
+        ),
+      )
 
     _logger.debug('Starting dev builders')
     await this._mainBuilder.dev(start)
@@ -175,6 +188,6 @@ export class Dev extends Cli {
 
     _logger.debug('Initial builds finished')
 
-    await this._applicationStarter.start()
+    await start()
   }
 }
