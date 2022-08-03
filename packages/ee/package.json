@@ -7,12 +7,12 @@
     "cli"
   ],
   "description": "electron-esbuild internal source code builder. ee for electron-esbuild",
-  "repository": "https://github.com/Kiyozz/electron-esbuild",
-  "author": {
-    "name": "Kévin TURMEL",
-    "email": "kevinturmel@gmail.com",
-    "url": "https://github.com/Kiyozz"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiyozz/electron-esbuild.git",
+    "directory": "packages/ee"
   },
+  "author": "Kiyozz",
   "license": "MIT",
   "bin": {
     "ee": "./dist/index.mjs"

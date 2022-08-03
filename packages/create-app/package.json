@@ -10,12 +10,12 @@
     "create-app"
   ],
   "description": "Create Electron esbuild powered apps with one command",
-  "repository": "https://github.com/Kiyozz/electron-esbuild",
-  "author": {
-    "name": "Kévin TURMEL",
-    "email": "kevinturmel@gmail.com",
-    "url": "https://github.com/Kiyozz"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiyozz/electron-esbuild.git",
+    "directory": "packages/create-app"
   },
+  "author": "Kiyozz",
   "license": "MIT",
   "bin": {
     "create-app": "./dist/index.mjs"

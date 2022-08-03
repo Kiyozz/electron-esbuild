@@ -10,12 +10,12 @@
     "cli"
   ],
   "description": "Use esbuild with Electron for blazing fast compilation",
-  "repository": "https://github.com/Kiyozz/electron-esbuild",
-  "author": {
-    "name": "Kévin TURMEL",
-    "email": "kevinturmel@gmail.com",
-    "url": "https://github.com/Kiyozz"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiyozz/electron-esbuild.git",
+    "directory": "packages/electron-esbuild"
   },
+  "author": "Kiyozz",
   "license": "MIT",
   "bin": {
     "electron-esbuild": "./dist/index.mjs"
