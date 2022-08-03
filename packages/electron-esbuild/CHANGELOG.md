@@ -1,6 +1,4 @@
-## Unreleased
-
-### Changes
+## 6.0.0
 
 ### Breaking Changes
 
