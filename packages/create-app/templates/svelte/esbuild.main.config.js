@@ -8,5 +8,5 @@ export default {
     path.resolve('src/main/preload.js'),
   ],
   bundle: true,
-  target: 'node16.13.1', // electron version target
+  target: 'node16.15.0', // electron version target
 }

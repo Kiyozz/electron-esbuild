@@ -10,5 +10,5 @@ export default {
     path.resolve('src/renderer/index.css'),
   ],
   bundle: true,
-  target: 'chrome100', // electron version target
+  target: 'chrome104', // electron version target
 }

@@ -6,7 +6,7 @@ import sveltePreprocess from 'svelte-preprocess'
 export default defineConfig({
   plugins: [svelte({ preprocess: sveltePreprocess() })],
   build: {
-    target: 'chrome100', // electron version target
+    target: 'chrome104', // electron version target
   },
   server: {
     port: 9080

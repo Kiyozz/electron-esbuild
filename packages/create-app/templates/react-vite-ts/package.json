@@ -8,18 +8,18 @@
   },
   "devDependencies": {
     "@types/node": "16.x",
-    "@types/react": "17.x",
-    "@types/react-dom": "17.x",
-    "@vitejs/plugin-react": "~1.3",
-    "electron": "18.x",
-    "electron-builder": "22.x",
+    "@types/react": "18.x",
+    "@types/react-dom": "18.x",
+    "@vitejs/plugin-react": "2.x",
+    "electron": "20.x",
+    "electron-builder": "23.x",
     "electron-esbuild": "5.x",
     "electron-util": "0.17.x",
     "esbuild": "0.x",
-    "react": "17.x",
-    "react-dom": "17.x",
-    "typescript": "~4.6.3",
-    "vite": "~2.9"
+    "react": "18.x",
+    "react-dom": "18.x",
+    "typescript": "4.7.x",
+    "vite": "3.0.x"
   },
   "build": {
     "appId": "io.comp.myapp",
