@@ -12,7 +12,7 @@
     "electron-builder": "23.x",
     "electron-esbuild": "6.0.0-rc1",
     "electron-util": "0.17.x",
-    "esbuild": "0.x",
+    "esbuild": "0.14.x",
     "typescript": "4.7.x"
   },
   "build": {
