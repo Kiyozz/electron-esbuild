@@ -13,7 +13,6 @@ Easily integrate `esbuild`/`vite` for your Electron environment.
 - Use of `esbuild` or `vite` for renderer source code building
 - HMR for `renderer` and `main` processes
 - Full control of your esbuild configuration
-- Full control of your webpack configuration
 - Full control of your vite configuration
 - Use electron-builder for final package
 
