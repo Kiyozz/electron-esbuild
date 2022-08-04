@@ -7,7 +7,7 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "next",
+    "@sveltejs/vite-plugin-svelte": "1.x",
     "electron": "20.x",
     "electron-builder": "23.x",
     "electron-esbuild": "6.0.0-rc1",
