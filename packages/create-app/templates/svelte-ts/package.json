@@ -11,7 +11,7 @@
     "@types/node": "16.x",
     "electron": "20.x",
     "electron-builder": "23.x",
-    "electron-esbuild": "6.0.0-rc1",
+    "electron-esbuild": "^6.0.0",
     "electron-util": "0.17.x",
     "esbuild": "0.14.x",
     "svelte": "3.x",
