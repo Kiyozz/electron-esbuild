@@ -5,6 +5,10 @@
 
 The easiest way to get started with Esbuild/Vite in Electron by using `@electron-esbuild/create-app`. This simple CLI tool enables you to quickly start building a new Electron application.
 
+With pnpm:
+
+    pnpm create @electron-esbuild/app
+
 With npm:
 
     npm init @electron-esbuild/app

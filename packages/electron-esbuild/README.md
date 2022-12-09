@@ -7,7 +7,7 @@
 
 With pnpm:
 
-    pnpm init @electron-esbuild/app
+    pnpm create @electron-esbuild/app
 
 With npm:
 
