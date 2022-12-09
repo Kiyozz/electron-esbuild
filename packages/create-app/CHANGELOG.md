@@ -1,3 +1,9 @@
+## Unreleased
+
+### Breaking Changes
+
+- templates updated for vite@4
+
 ## v3.0.0
 
 **react-ts-webpack** template removed.

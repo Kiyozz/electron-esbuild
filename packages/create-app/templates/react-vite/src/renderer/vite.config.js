@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    target: 'chrome104', // electron version target
+    target: 'chrome108', // electron version target
   },
   server: {
     port: 9080,

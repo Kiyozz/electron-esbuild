@@ -1,3 +1,9 @@
+## Unreleased
+
+### Breaking Changes
+
+- support for vite@4
+
 ## 6.0.0
 
 ### Breaking Changes

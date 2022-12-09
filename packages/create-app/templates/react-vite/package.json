@@ -7,15 +7,15 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "2.x",
-    "electron": "20.x",
+    "@vitejs/plugin-react": "3.x",
+    "electron": "22.x",
     "electron-builder": "23.x",
     "electron-esbuild": "^6.0.0",
     "electron-util": "0.17.x",
-    "esbuild": "0.14.x",
+    "esbuild": "0.16.x",
     "react": "18.x",
     "react-dom": "18.x",
-    "vite": "3.0.x"
+    "vite": "4.x"
   },
   "build": {
     "appId": "io.comp.myapp",

@@ -7,7 +7,7 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "electron": "20.x",
+    "electron": "22.x",
     "electron-builder": "23.x",
     "electron-esbuild": "^6.0.0",
     "electron-util": "0.17.x",

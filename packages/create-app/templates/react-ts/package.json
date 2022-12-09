@@ -10,14 +10,14 @@
     "@types/node": "16.x",
     "@types/react": "18.x",
     "@types/react-dom": "18.x",
-    "electron": "20.x",
+    "electron": "22.x",
     "electron-builder": "23.x",
     "electron-esbuild": "^6.0.0",
     "electron-util": "0.17.x",
-    "esbuild": "0.14.x",
+    "esbuild": "0.16.x",
     "react": "18.x",
     "react-dom": "18.x",
-    "typescript": "4.7.x"
+    "typescript": "4.9.x"
   },
   "build": {
     "appId": "io.comp.myapp",
