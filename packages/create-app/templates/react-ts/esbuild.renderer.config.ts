@@ -8,7 +8,7 @@ const config: BuildOptions = {
     path.resolve('src/renderer/index.css'),
   ],
   bundle: true,
-  target: 'chrome104', // electron version target
+  target: 'chrome108', // electron version target
 }
 
 export default config
