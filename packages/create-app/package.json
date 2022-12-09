@@ -43,7 +43,7 @@
     "minimist": "^1.2.7"
   },
   "devDependencies": {
-    "@electron-esbuild/ee": "workspace:^0.4.0",
+    "@electron-esbuild/ee": "workspace:*",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
     "@types/node": "^16.11.45",
