@@ -10,7 +10,7 @@
     "@types/node": "16.x",
     "electron": "22.x",
     "electron-builder": "23.x",
-    "electron-esbuild": "^6.0.0",
+    "electron-esbuild": "^7.0.0",
     "electron-util": "0.17.x",
     "esbuild": "0.16.x",
     "typescript": "4.9.x"

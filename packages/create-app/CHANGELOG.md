@@ -1,8 +1,12 @@
-## Unreleased
+## v4.0.1
 
 ### Breaking Changes
 
 - templates updated for vite@4
+
+### Bug fixes
+
+- Fixed templates with the latest version of electron-esbuild
 
 ## v3.0.0
 
