@@ -65,7 +65,7 @@
   },
   "peerDependencies": {
     "esbuild": "0.16.x",
-    "vite": "4.0.x"
+    "vite": "4.x"
   },
   "peerDependenciesMeta": {
     "vite": {
