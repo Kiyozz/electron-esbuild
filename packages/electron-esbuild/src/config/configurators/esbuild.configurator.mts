@@ -6,6 +6,7 @@
 
 import deepMerge from 'deepmerge'
 import { BuildOptions } from 'esbuild'
+import nodeModule from 'node:module'
 import path from 'node:path'
 
 import type { Configurator } from './base.configurator.mjs'
@@ -34,6 +35,20 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
       additional.outfile = out
     }
 
-    return deepMerge(partial, additional, { clone: false })
+    return deepMerge(
+      deepMerge(
+        partial,
+        {
+          external: [
+            ...(partial.external ?? []),
+            'electron',
+            ...nodeModule.builtinModules,
+          ],
+        },
+        { clone: false },
+      ),
+      additional,
+      { clone: false },
+    )
   }
 }
