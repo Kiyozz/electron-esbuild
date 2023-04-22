@@ -5,7 +5,7 @@
  */
 
 import path from 'node:path'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 
 import { Cli, CliResult } from '../cli.mjs'
 import { CONFIG_FILE_NAME } from '../config/constants.mjs'
@@ -14,18 +14,9 @@ import { Worker } from '../worker.mjs'
 
 const _logger = new Logger('Commands/Build')
 
-function clean(): Promise<void> {
+async function clean(): Promise<void> {
   _logger.log('Cleaning')
-
-  return new Promise((resolve, reject) => {
-    rimraf(path.resolve('dist'), (err) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
+  await rimraf(path.resolve('dist'))
 }
 
 export class Build extends Cli {

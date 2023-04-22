@@ -39,14 +39,14 @@
   "dependencies": {
     "cross-spawn": "^7.0.3",
     "enquirer": "^2.3.6",
-    "kolorist": "^1.6.0",
-    "minimist": "^1.2.7"
+    "kolorist": "^1.7.0",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@electron-esbuild/ee": "workspace:*",
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
-    "@types/node": "^16.11.45",
-    "typescript": "~4.9.4"
+    "@types/node": "^18.15.11",
+    "typescript": "~5.0.4"
   }
 }

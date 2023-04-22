@@ -6,19 +6,14 @@
 
 import { build } from 'esbuild'
 import * as path from 'node:path'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 
 /**
  * @param {string} path
  * @returns {Promise<void>}
  */
 const clean = async (path) => {
-  return new Promise((resolve, reject) => {
-    rimraf(path, (err) => {
-      if (err) reject(err)
-      else resolve()
-    })
-  })
+  return rimraf(path)
 }
 
 const outDir = path.resolve('dist')
@@ -31,7 +26,7 @@ await build({
   platform: 'node',
   sourcemap: true,
   format: 'esm',
-  target: 'node16',
+  target: 'node19',
   outExtension: {
     '.js': '.mjs',
   },

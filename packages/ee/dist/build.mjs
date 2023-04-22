@@ -4,16 +4,9 @@ import glob from "fast-glob";
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from "kolorist";
 import { platform } from "node:os";
 import path from "node:path";
-import rimraf from "rimraf";
+import { rimraf } from "rimraf";
 const clean = async (path2) => {
-  return new Promise((resolve, reject) => {
-    rimraf(path2, (err) => {
-      if (err)
-        reject(err);
-      else
-        resolve();
-    });
-  });
+  await rimraf(path2);
 };
 const getEntries = async (paths) => {
   const base = process.cwd();

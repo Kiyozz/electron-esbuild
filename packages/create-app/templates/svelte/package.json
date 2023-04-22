@@ -8,11 +8,11 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "2.x",
-    "electron": "22.x",
+    "electron": "24.x",
     "electron-builder": "23.x",
     "electron-esbuild": "^7.0.0",
     "electron-util": "0.17.x",
-    "esbuild": "0.16.x",
+    "esbuild": "0.17.x",
     "svelte": "3.x",
     "svelte-preprocess": "5.x",
     "vite": "4.x"

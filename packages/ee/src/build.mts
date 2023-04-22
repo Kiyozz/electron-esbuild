@@ -11,7 +11,7 @@ import glob from 'fast-glob'
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from 'kolorist'
 import { platform } from 'node:os'
 import path from 'node:path'
-import rimraf from 'rimraf'
+import { rimraf } from 'rimraf'
 
 type BuildOptions = {
   entries: string[]
@@ -25,12 +25,7 @@ type BuildOptions = {
 }
 
 const clean = async (path: string): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    rimraf(path, (err) => {
-      if (err) reject(err)
-      else resolve()
-    })
-  })
+  await rimraf(path)
 }
 
 const getEntries = async (paths: string[]): Promise<string[]> => {

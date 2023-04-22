@@ -7,9 +7,9 @@
 import nodeModule from 'node:module'
 import { InlineConfig } from 'vite'
 
+import type { Configurator } from './base.configurator.mjs'
 import type { EnvConfig } from '../config.mjs'
 import { TypeConfig } from '../enums.mjs'
-import type { Configurator } from './base.configurator.mjs'
 
 export class ViteConfigurator implements Configurator<TypeConfig.vite> {
   public readonly type = TypeConfig.vite

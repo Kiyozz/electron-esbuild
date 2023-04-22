@@ -7,9 +7,9 @@
 import path from 'node:path'
 import type { build, createServer, InlineConfig } from 'vite'
 
+import { BaseBuilder } from './base.builder.mjs'
 import type { Item } from '../config/config.mjs'
 import { Logger, unsupportedType } from '../console.mjs'
-import { BaseBuilder } from './base.builder.mjs'
 
 const _logger = new Logger('Builder/Vite')
 
