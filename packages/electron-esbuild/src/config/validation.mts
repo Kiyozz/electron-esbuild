@@ -8,10 +8,10 @@ import Joi from 'joi'
 import yaml from 'js-yaml'
 import path from 'node:path'
 
-import { Logger } from '../console.mjs'
 import { EnvConfig } from './config.mjs'
 import { Target, TypeConfig } from './enums.mjs'
 import { Yaml, YamlItem, YamlSkeleton } from './yaml.mjs'
+import { Logger } from '../console.mjs'
 
 const _logger = new Logger('Config/Validation')
 const buildSchema = (yaml: YamlSkeleton) => {

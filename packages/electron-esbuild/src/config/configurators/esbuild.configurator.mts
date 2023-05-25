@@ -9,9 +9,9 @@ import { BuildOptions } from 'esbuild'
 import nodeModule from 'node:module'
 import path from 'node:path'
 
+import type { Configurator } from './base.configurator.mjs'
 import type { EnvConfig } from '../config.mjs'
 import { TypeConfig } from '../enums.mjs'
-import type { Configurator } from './base.configurator.mjs'
 
 export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
   public readonly type = TypeConfig.esbuild

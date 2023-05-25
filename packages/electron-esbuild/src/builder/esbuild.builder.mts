@@ -8,25 +8,24 @@ import chokidar from 'chokidar'
 import compression from 'compression'
 import connect from 'connect'
 import debounce from 'debounce-fn'
-import esbuild from 'esbuild'
-import { BuildIncremental, BuildOptions } from 'esbuild'
+import esbuild, { BuildContext, BuildOptions } from 'esbuild'
 import httpProxy from 'http-proxy'
 import livereload from 'livereload'
 import fs from 'node:fs/promises'
 import { createServer } from 'node:http'
 import path from 'node:path'
 
+import { BaseBuilder } from './base.builder.mjs'
 import type { Item } from '../config/config.mjs'
 import { Logger } from '../console.mjs'
 import { getDeps } from '../deps.mjs'
-import { BaseBuilder } from './base.builder.mjs'
 
 const _logger = new Logger('Builder/Esbuild')
 
 export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
   readonly hasInitialBuild = true
 
-  private _builder: BuildIncremental | undefined
+  private _builder: BuildContext | undefined
 
   constructor(protected readonly _config: Item<BuildOptions>) {
     super(_config)
@@ -38,9 +37,10 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
     if (this._builder) {
       await this._builder.rebuild()
     } else {
-      this._builder = (await esbuild.build(
+      this._builder = (await esbuild.context(
         this._config.config,
-      )) as BuildIncremental
+      )) as BuildContext
+      await this._builder.rebuild()
       await this._copyHtml()
     }
 
@@ -69,6 +69,7 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
           'all',
           debounce(
             async () => {
+              if (this._builder) await this._builder.cancel()
               await this.build()
 
               start()
@@ -100,15 +101,13 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
       const host = '127.0.0.1'
       const port = 9081
       const livereloadPort = 35729
+      const ctx = await esbuild.context(this._config.config)
 
-      esbuild
-        .serve(
-          {
-            host,
-            port,
-          },
-          this._config.config,
-        )
+      ctx
+        .serve({
+          host,
+          port,
+        })
         .then(async (builder) => {
           if (typeof this._config.fileConfig?.html === 'undefined') {
             _logger.end(
@@ -171,7 +170,8 @@ export class EsbuildBuilder extends BaseBuilder<BuildOptions> {
             server.close()
             lrServer.close()
             await watcher.close()
-            builder.stop()
+            await this._builder?.cancel()
+            await ctx.dispose()
           })
 
           server.listen(9080)

@@ -7,18 +7,18 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@types/node": "16.x",
+    "@types/node": "18.x",
     "@types/react": "18.x",
     "@types/react-dom": "18.x",
     "@vitejs/plugin-react": "3.x",
-    "electron": "22.x",
+    "electron": "24.x",
     "electron-builder": "23.x",
     "electron-esbuild": "^7.0.0",
     "electron-util": "0.17.x",
-    "esbuild": "0.16.x",
+    "esbuild": "0.17.x",
     "react": "18.x",
     "react-dom": "18.x",
-    "typescript": "4.9.x",
+    "typescript": "5.0.x",
     "vite": "4.x"
   },
   "build": {

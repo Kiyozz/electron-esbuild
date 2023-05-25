@@ -65,7 +65,8 @@ function isValidAction(command?: string): command is Commands {
 if (isValidAction(_command)) {
   const action: Cli = await commands[_command].create(_cli, unknownInputs)
 
-  action.init().then(() => {
-    // process.exit(0)
-  })
+  await action.init()
+  if (_command === 'build') {
+    process.exit(0)
+  }
 }
