@@ -7,17 +7,17 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@types/node": "18.x",
-    "@types/react": "18.x",
-    "@types/react-dom": "18.x",
-    "electron": "24.x",
-    "electron-builder": "23.x",
-    "electron-esbuild": "^7.0.0",
-    "electron-util": "0.17.x",
-    "esbuild": "0.17.x",
-    "react": "18.x",
-    "react-dom": "18.x",
-    "typescript": "5.0.x"
+    "@types/node": "^18.16.19",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "electron": "^25.2.0",
+    "electron-builder": "^24.4.0",
+    "electron-esbuild": "^8.0.0",
+    "electron-util": "^0.17.2",
+    "esbuild": "^0.18.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.1.6"
   },
   "build": {
     "appId": "io.comp.myapp",

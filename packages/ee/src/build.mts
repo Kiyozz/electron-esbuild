@@ -10,7 +10,8 @@ import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from 'kolorist'
 import { platform } from 'node:os'
-import path from 'node:path'
+import * as path from 'node:path'
+import * as process from 'node:process'
 import { rimraf } from 'rimraf'
 
 type BuildOptions = {

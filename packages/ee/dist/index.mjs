@@ -2,6 +2,7 @@
 import minimist from "minimist";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import * as process from "node:process";
 import { build } from "./build.mjs";
 const argv = minimist(process.argv.slice(2));
 if (argv.version) {

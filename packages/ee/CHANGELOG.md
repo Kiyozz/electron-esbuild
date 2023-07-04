@@ -1,3 +1,9 @@
+## 0.5.0
+
+### Breaking changes
+
+- require esbuild@0.18
+
 ## v0.4.0
 
 ### Breaking changes

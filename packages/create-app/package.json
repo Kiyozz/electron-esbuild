@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "4.0.1",
+  "version": "8.0.0",
   "keywords": [
     "electron",
     "react",
@@ -22,7 +22,7 @@
   },
   "exports": "./dist/index.mjs",
   "engines": {
-    "node": "^14.18 || >=16.0.0"
+    "node": ">=18.15.0"
   },
   "scripts": {
     "build": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16",

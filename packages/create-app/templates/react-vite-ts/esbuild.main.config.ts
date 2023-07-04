@@ -8,7 +8,7 @@ const config: BuildOptions = {
     path.resolve('src/main/preload.ts'),
   ],
   bundle: true,
-  target: 'node16.15.0', // electron version target
+  target: 'node18.15.0', // electron version target
 }
 
 export default config

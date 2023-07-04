@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "7.0.1",
+  "version": "8.0.0",
   "keywords": [
     "esbuild",
     "electron",
@@ -22,7 +22,7 @@
   },
   "exports": "./dist/index.mjs",
   "engines": {
-    "node": "^14.18 || >=16.0.0",
+    "node": ">=18.15.0",
     "pnpm": "8"
   },
   "scripts": {
@@ -64,7 +64,7 @@
     "vite": "^4.3.1"
   },
   "peerDependencies": {
-    "esbuild": "0.16.x",
+    "esbuild": "0.18.x",
     "vite": "4.x"
   },
   "peerDependenciesMeta": {

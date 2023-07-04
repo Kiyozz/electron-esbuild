@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild-monorepo",
-  "version": "6.0.0-rc1",
+  "version": "8.0.0",
   "description": "Use esbuild/vite with Electron for blazing fast compilation",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "author": {

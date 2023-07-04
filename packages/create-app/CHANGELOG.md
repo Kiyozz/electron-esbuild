@@ -1,3 +1,10 @@
+## 8.0.0
+
+### Breaking Changes
+
+- require node@18.15.0 to be synchronized with electron@25.0.0
+- support for esbuild@0.18 ([#53](https://github.com/Kiyozz/electron-esbuild/pull/53), thanks to [@jonluca](https://github.com/jonluca))
+
 ## v4.0.1
 
 ### Breaking Changes

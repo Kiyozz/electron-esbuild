@@ -7,15 +7,15 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "2.x",
-    "electron": "24.x",
-    "electron-builder": "23.x",
-    "electron-esbuild": "^7.0.0",
-    "electron-util": "0.17.x",
-    "esbuild": "0.17.x",
-    "svelte": "3.x",
-    "svelte-preprocess": "5.x",
-    "vite": "4.x"
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "electron": "^25.2.0",
+    "electron-builder": "^24.4.0",
+    "electron-esbuild": "^8.0.0",
+    "electron-util": "^0.17.2",
+    "esbuild": "^0.18.11",
+    "svelte": "^4.0.3",
+    "svelte-preprocess": "^5.0.4",
+    "vite": "^4.3.9"
   },
   "build": {
     "appId": "io.comp.myapp",

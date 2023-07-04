@@ -10,6 +10,7 @@ import { Format } from 'esbuild'
 import minimist from 'minimist'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
+import * as process from 'node:process'
 
 import { build } from './build.mjs'
 
