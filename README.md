@@ -28,7 +28,7 @@ Easily integrate `esbuild`/`vite` for your Electron environment.
 
 ## Development
 
-This repository use node@16 for source code and pnpm workspace
+This repository use node@18 for source code and pnpm workspace
 
 ```shell
 pnpm i

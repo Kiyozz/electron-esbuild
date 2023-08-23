@@ -7,11 +7,11 @@
     "package": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^25.2.0",
+    "electron": "^25.3.0",
     "electron-builder": "^24.4.0",
     "electron-esbuild": "^8.0.0",
     "electron-util": "^0.17.2",
-    "esbuild": "^0.18.11",
+    "esbuild": "^0.18.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

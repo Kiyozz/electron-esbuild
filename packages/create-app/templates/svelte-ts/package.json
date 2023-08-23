@@ -9,15 +9,15 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@types/node": "^18.16.19",
-    "electron": "^25.2.0",
+    "electron": "^25.3.0",
     "electron-builder": "^24.4.0",
     "electron-esbuild": "^8.0.0",
     "electron-util": "^0.17.2",
-    "esbuild": "^0.18.11",
-    "svelte": "^4.0.3",
+    "esbuild": "^0.18.14",
+    "svelte": "^4.0.5",
     "svelte-preprocess": "^5.0.4",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9"
+    "vite": "^4.4.4"
   },
   "build": {
     "appId": "io.comp.myapp",
