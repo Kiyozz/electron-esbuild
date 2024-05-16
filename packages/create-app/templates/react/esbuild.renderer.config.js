@@ -1,4 +1,4 @@
-import * as path from 'path'
+import * as path from 'node:path'
 
 /**
  * @var {Partial<import('esbuild').BuildOptions>}
@@ -10,5 +10,5 @@ export default {
     path.resolve('src/renderer/index.css'),
   ],
   bundle: true,
-  target: 'chrome114', // electron version target
+  target: 'chrome124', // electron version target
 }

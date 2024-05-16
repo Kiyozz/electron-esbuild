@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "target": "es2021",
-    "module": "esnext"
+    "target": "es2022",
+    "module": "node16"
   },
-  "include": ["src/**/*.mts"]
+  "include": ["src/**/*.ts"]
 }

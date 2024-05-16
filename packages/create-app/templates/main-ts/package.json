@@ -6,14 +6,15 @@
     "build": "electron-esbuild build",
     "package": "electron-builder"
   },
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^18.16.19",
-    "electron": "^25.3.0",
-    "electron-builder": "^24.4.0",
+    "@types/node": "^20.11.1",
+    "electron": "^30.0.6",
+    "electron-builder": "^24.13.3",
     "electron-esbuild": "^8.0.0",
-    "electron-util": "^0.17.2",
-    "esbuild": "^0.18.14",
-    "typescript": "^5.1.6"
+    "electron-util": "^0.18.1",
+    "esbuild": "^0.21.2",
+    "typescript": "~5.4.5"
   },
   "build": {
     "appId": "io.comp.myapp",

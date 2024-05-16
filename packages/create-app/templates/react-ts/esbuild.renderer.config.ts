@@ -1,5 +1,5 @@
 import { BuildOptions } from 'esbuild'
-import * as path from 'path'
+import * as path from 'node:path'
 
 const config: BuildOptions = {
   platform: 'browser',
@@ -8,7 +8,7 @@ const config: BuildOptions = {
     path.resolve('src/renderer/index.css'),
   ],
   bundle: true,
-  target: 'chrome114', // electron version target
+  target: 'chrome124', // electron version target
 }
 
 export default config

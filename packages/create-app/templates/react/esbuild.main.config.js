@@ -1,4 +1,4 @@
-import * as path from 'path'
+import * as path from 'node:path'
 
 /**
  * @var {Partial<import('esbuild').BuildOptions>}
@@ -10,5 +10,6 @@ export default {
     path.resolve('src/main/preload.js'),
   ],
   bundle: true,
-  target: 'node16.5.0', // electron version target
+  format: 'esm',
+  target: 'node20.11.1', // electron version target
 }

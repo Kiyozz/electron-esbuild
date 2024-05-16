@@ -1,3 +1,15 @@
+## 9.0.0
+
+### Features
+
+- electron@30
+
+### Breaking Changes
+
+- now flagged as type module in package.json
+- This package is now pure ESM (because electron-esbuild is mainly a cli, this should work out of the box).
+  Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+
 ## 8.0.0
 
 ### Breaking Changes

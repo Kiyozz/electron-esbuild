@@ -1,9 +1,12 @@
-import * as path from 'path'
-import { format } from 'url'
+import * as path from 'node:path'
+import * as url from 'node:url'
 import { app, BrowserWindow } from 'electron'
+import { isDev } from 'electron-util/main'
 import { is } from 'electron-util'
 
 let win: BrowserWindow | null = null
+
+const dirname = path.dirname(new URL(import.meta.url).pathname)
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -13,20 +16,18 @@ async function createWindow() {
     minWidth: 650,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(dirname, 'preload.js'),
     },
     show: false,
   })
-
-  const isDev = is.development
 
   if (isDev) {
     // this is the default port electron-esbuild is using
     win.loadURL('http://localhost:9080')
   } else {
     win.loadURL(
-      format({
-        pathname: path.join(__dirname, 'index.html'),
+      url.format({
+        pathname: path.join(dirname, 'index.html'),
         protocol: 'file',
         slashes: true,
       }),
@@ -51,7 +52,7 @@ async function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
   if (!is.macos) {
