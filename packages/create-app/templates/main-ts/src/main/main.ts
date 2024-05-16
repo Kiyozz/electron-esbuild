@@ -1,8 +1,11 @@
 import { app, BrowserWindow } from 'electron'
+import { isDev } from 'electron-util/main'
 import { is } from 'electron-util'
-import * as path from 'path'
+import * as path from 'node:path'
 
 let win: BrowserWindow | null = null
+
+const dirname = path.dirname(new URL(import.meta.url).pathname)
 
 async function createWindow() {
   win = new BrowserWindow({
@@ -11,12 +14,10 @@ async function createWindow() {
     minHeight: 600,
     minWidth: 650,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(dirname, 'preload.mjs'),
     },
     show: false,
   })
-
-  const isDev = is.development
 
   win.loadURL('https://duckduckgo.com') // load any url you want to use with electron
 
@@ -38,7 +39,7 @@ async function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
   if (!is.macos) {

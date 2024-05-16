@@ -1,3 +1,14 @@
+## 9.0.0
+
+### Breaking Changes
+
+- change to pure ESM
+- remove esbuild as renderer bundler
+
+### Changes
+
+- Updated all templates for latest electron versions.
+
 ## 8.0.0
 
 ### Breaking Changes

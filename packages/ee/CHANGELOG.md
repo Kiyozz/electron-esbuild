@@ -1,3 +1,9 @@
+## 0.6.0
+
+### Breaking changes
+
+- now flagged as type module in package.json
+
 ## 0.5.0
 
 ### Breaking changes

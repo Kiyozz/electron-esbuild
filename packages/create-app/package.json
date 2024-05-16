@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "keywords": [
     "electron",
     "react",
@@ -9,6 +9,7 @@
     "cli",
     "create-app"
   ],
+  "type": "module",
   "description": "Create Electron esbuild powered apps with one command",
   "repository": {
     "type": "git",
@@ -18,15 +19,15 @@
   "author": "Kiyozz",
   "license": "MIT",
   "bin": {
-    "create-app": "./dist/index.mjs"
+    "create-app": "./dist/index.js"
   },
-  "exports": "./dist/index.mjs",
+  "exports": "./dist/index.js",
   "engines": {
     "node": ">=18.15.0"
   },
   "scripts": {
-    "build": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16",
-    "prepublishOnly": "ee 'src/**' --format esm --sourcemap --clean-outdir --outdir dist --target node16 --check-types --ts-project tsconfig.types.json",
+    "build": "ee 'src/**' --module --format esm --sourcemap --clean-outdir --outdir dist --target node16",
+    "prepublishOnly": "ee 'src/**' --module --format esm --sourcemap --clean-outdir --outdir dist --target node16 --check-types --ts-project tsconfig.types.json",
     "lint": "eslint src --ext mts,mjs,ts,js"
   },
   "files": [
@@ -47,6 +48,6 @@
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.16.19",
-    "typescript": "~5.1.6"
+    "typescript": "~5.4.5"
   }
 }
