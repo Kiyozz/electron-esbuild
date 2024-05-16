@@ -3,6 +3,7 @@
 ### Breaking Changes
 
 - change to pure ESM
+- remove esbuild as renderer bundler
 
 ### Changes
 

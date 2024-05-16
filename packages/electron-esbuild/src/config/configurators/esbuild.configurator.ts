@@ -21,8 +21,8 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
   constructor(public readonly config: EnvConfig) {}
 
   toBuilderConfig(
-    partials: Partial<BuildOptions[]>,
-    userConfig: BuildOptions[],
+    partial: Partial<BuildOptions>,
+    userConfig: BuildOptions[] | BuildOptions,
   ): BuildOptions[] {
     const additional: Partial<BuildOptions> = {}
     const out = path.resolve(
@@ -31,9 +31,11 @@ export class EsbuildConfigurator implements Configurator<TypeConfig.esbuild> {
       this.config.output.filename,
     )
 
-    return userConfig.map((config, index) => {
-      const partial = partials[index] ?? {}
+    if (!Array.isArray(userConfig)) {
+      userConfig = [userConfig]
+    }
 
+    return userConfig.map((config) => {
       if (
         (isObject(config.entryPoints) &&
           Object.keys(config.entryPoints).length > 0) ||

@@ -9,11 +9,11 @@ import { InlineConfig } from 'vite'
 
 import { TypeConfig } from './enums.js'
 
+export type ExtractArray<T> = T extends Array<infer U> ? U : T
+
 export type MainPossibleConfiguration = BuildOptions[]
 
-export type RendererPossibleConfiguration =
-  | Omit<BuildOptions, 'logLevel'>
-  | InlineConfig
+export type RendererPossibleConfiguration = BuildOptions[] | InlineConfig
 
 export type PossibleConfiguration =
   | MainPossibleConfiguration

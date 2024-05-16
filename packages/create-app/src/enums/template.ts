@@ -5,8 +5,6 @@
  */
 
 export enum Template {
-  ReactTypeScript = 'react-ts',
-  ReactJavaScript = 'react',
   ReactViteJavaScript = 'react-vite',
   ReactViteTypeScript = 'react-vite-ts',
   MainOnlyTypeScript = 'main-ts',

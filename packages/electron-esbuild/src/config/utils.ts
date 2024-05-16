@@ -7,7 +7,7 @@
 import { BuildOptions } from 'esbuild'
 
 import { TypeConfig } from './enums.js'
-import { PossibleConfiguration } from './types.js'
+import { ExtractArray, PossibleConfiguration } from './types.js'
 
 export function configByEnv({
   dev,
@@ -15,7 +15,7 @@ export function configByEnv({
 }: {
   dev: boolean
   type: TypeConfig | null
-}): Partial<PossibleConfiguration> {
+}): Partial<ExtractArray<PossibleConfiguration>> {
   if (type === null) {
     return {}
   }

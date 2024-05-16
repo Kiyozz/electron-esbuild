@@ -64,12 +64,12 @@ export class EnvConfig {
     })
   }
 
-  toConfigurator(): Configurator<TypeConfig> {
+  toConfigurator() {
     switch (this.type) {
       case TypeConfig.esbuild:
-        return new EsbuildConfigurator(this)
+        return new EsbuildConfigurator(this) as Configurator<TypeConfig>
       case TypeConfig.vite:
-        return new ViteConfigurator(this)
+        return new ViteConfigurator(this) as Configurator<TypeConfig>
       default:
         unsupportedType(this.type)
     }

@@ -18,7 +18,9 @@
   "bin": {
     "ee": "./dist/index.js"
   },
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "engines": {
     "node": ">=16.0.0",
     "pnpm": "8"
@@ -26,7 +28,7 @@
   "scripts": {
     "build": "node esbuild.config.js",
     "prepublishOnly": "node esbuild.config.js",
-    "lint": "eslint . --ext mts,mjs,ts,js"
+    "lint": "eslint . --ext ts,js"
   },
   "files": [
     "dist"

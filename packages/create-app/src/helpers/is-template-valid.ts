@@ -11,8 +11,6 @@ import { Template } from '../enums/template.js'
 export const TEMPLATES = [
   yellow(Template.MainOnlyJavaScript),
   yellow(Template.MainOnlyTypeScript),
-  cyan(Template.ReactJavaScript),
-  cyan(Template.ReactTypeScript),
   cyan(Template.ReactViteJavaScript),
   cyan(Template.ReactViteTypeScript),
   red(Template.SvelteJavaScript),

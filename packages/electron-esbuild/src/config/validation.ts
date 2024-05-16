@@ -40,22 +40,9 @@ const buildSchema = (yaml: YamlSkeleton) => {
                 dir: z.string(),
                 filename: z.string(),
               }),
-        html: z.string().optional(),
       })
       .optional()
-      .nullable()
-      .superRefine((renderer, ctx) => {
-        if (
-          renderer?.type === TypeConfig.esbuild &&
-          renderer.html === undefined
-        ) {
-          ctx.addIssue({
-            code: 'custom',
-            path: ['rendererConfig', 'html'],
-            message: 'html is required for esbuild renderer',
-          })
-        }
-      }),
+      .nullable(),
   })
 }
 

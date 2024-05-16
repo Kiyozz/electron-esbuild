@@ -4,7 +4,6 @@
  * All rights reserved.
  */
 
-import deepMerge from 'deepmerge'
 import { buildSync } from 'esbuild'
 import has from 'has'
 import yaml from 'js-yaml'
@@ -16,6 +15,7 @@ import { Config, ConfigItem, EnvConfig } from './config/config.js'
 import { Configurator } from './config/configurators/base.configurator.js'
 import { Target, TypeConfig } from './config/enums.js'
 import {
+  ExtractArray,
   MainPossibleConfiguration,
   PossibleConfiguration,
   RendererPossibleConfiguration,
@@ -128,8 +128,8 @@ export class Worker<
   R extends RendererPossibleConfiguration,
 > {
   private readonly _file: string
-  private readonly _main: Partial<M>
-  private readonly _renderer: Partial<R>
+  private readonly _main: Partial<ExtractArray<M>>
+  private readonly _renderer: Partial<ExtractArray<R>>
 
   readonly env: Env
   readonly configurator: _WorkerConfigurator
@@ -144,8 +144,8 @@ export class Worker<
     file: string
     env: Env
     configurator: _WorkerConfigurator
-    main: Partial<M>
-    renderer: Partial<R>
+    main: Partial<ExtractArray<M>>
+    renderer: Partial<ExtractArray<R>>
   }) {
     this._file = file
     this.env = env
@@ -163,11 +163,11 @@ export class Worker<
     const main = configByEnv({
       dev: env === 'development',
       type: configurator.main.type,
-    }) as Partial<M>
+    }) as Partial<ExtractArray<M>>
     const renderer = configByEnv({
       dev: env === 'development',
       type: configurator.renderer?.type ?? null,
-    }) as Partial<R>
+    }) as Partial<ExtractArray<R>>
 
     return new this({
       file,
@@ -208,14 +208,6 @@ export class Worker<
       ? await _buildUserConfig<R>(rendererConfigPath, Target.renderer)
       : null
 
-    // let mainConfigFinal: M = deepMerge(this._main, userMainConfig, {
-    //   clone: false,
-    // })
-    // let rendererConfigFinal: R | null =
-    //   rendererConfig !== null && userRendererConfig !== null
-    //     ? deepMerge(this._renderer, userRendererConfig, { clone: false })
-    //     : null
-
     const mainConfigFinal = this.configurator.main.toBuilderConfig(
       this._main,
       userMainConfig,
@@ -225,15 +217,11 @@ export class Worker<
     const rendererConfigFinal =
       userRendererConfig !== null
         ? this.configurator.renderer
-          ? deepMerge(
-              this.configurator.renderer.toBuilderConfig(
-                this._renderer,
-                userRendererConfig,
-                Target.renderer,
-              ) as Partial<R>,
+          ? (this.configurator.renderer.toBuilderConfig(
+              this._renderer,
               userRendererConfig,
-              { clone: false },
-            )
+              Target.renderer,
+            ) as R | null)
           : null
         : null
 

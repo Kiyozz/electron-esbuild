@@ -7,11 +7,13 @@
     "package": "electron-builder"
   },
   "type": "module",
+  "author": "built by electron-esbuild",
+  "description": "A simple Electron app built with electron-esbuild",
   "devDependencies": {
     "@vitejs/plugin-react-swc": "^3.6.0",
     "electron": "^30.0.6",
     "electron-builder": "^24.13.3",
-    "electron-esbuild": "^8.0.0",
+    "electron-esbuild": "^9.0.0",
     "electron-util": "^0.18.1",
     "esbuild": "^0.21.2",
     "react": "^18.3.1",
