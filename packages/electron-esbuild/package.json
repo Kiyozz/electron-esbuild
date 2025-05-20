@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "10.0.0-rc",
+  "version": "10.0.0",
   "keywords": [
     "esbuild",
     "electron",
