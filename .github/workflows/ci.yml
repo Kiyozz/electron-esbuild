@@ -24,6 +24,8 @@ jobs:
           node-version: lts/*
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
       - name: Lint
         run: pnpm -r lint
       - name: Build
