@@ -1,3 +1,7 @@
+## 9.2.0
+
+Updated templates for latest electron versions.
+
 ## 9.0.0
 
 ### Breaking Changes

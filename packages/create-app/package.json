@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/create-app",
-  "version": "9.1.0",
+  "version": "9.2.0",
   "keywords": [
     "electron",
     "react",
