@@ -19,8 +19,8 @@ export abstract class BaseBuilder<T extends PossibleConfiguration | null>
     this.env = this._config.isMain
       ? 'Main'
       : this._config.isRenderer
-      ? 'Renderer'
-      : 'Unknown env'
+        ? 'Renderer'
+        : 'Unknown env'
   }
 
   abstract build(): Promise<void>

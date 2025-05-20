@@ -75,21 +75,21 @@ export class ConfigFile {
         (typeof this.config.mainConfig.output as unknown) === 'string'
           ? Target.main
           : typeof (this.config.rendererConfig?.output as unknown) === 'string'
-          ? Target.renderer
-          : undefined
+            ? Target.renderer
+            : undefined
       const processName: keyof YamlSkeleton | undefined =
         processType === Target.main
           ? 'mainConfig'
           : processType === Target.renderer
-          ? 'rendererConfig'
-          : undefined
+            ? 'rendererConfig'
+            : undefined
       const dump =
         processType === Target.main
           ? this._dumpYaml(this.config.mainConfig, true)
           : this.config.rendererConfig !== null &&
-            processType === Target.renderer
-          ? this._dumpYaml(this.config.rendererConfig, false)
-          : undefined
+              processType === Target.renderer
+            ? this._dumpYaml(this.config.rendererConfig, false)
+            : undefined
 
       if (dump) {
         _logger.end(`starting from electron-esbuild@6.0.0, \`output\` is an object. Please update ** ${
