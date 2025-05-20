@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild-monorepo",
-  "version": "8.0.0",
+  "version": "10.0.0",
   "description": "Use esbuild/vite with Electron for blazing fast compilation",
   "repository": "https://github.com/Kiyozz/electron-esbuild",
   "author": {
@@ -10,11 +10,11 @@
   },
   "private": true,
   "engines": {
-    "node": ">=14.18",
-    "pnpm": "8"
+    "node": ">=22",
+    "pnpm": "10"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.9.0",
@@ -23,10 +23,10 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.0.0",
-    "husky": "8.0.3",
-    "lint-staged": "^13.2.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
     "prettier": "^3.0.0",
-    "typescript": "~5.4.5"
+    "typescript": "~5.8.3"
   },
   "lint-staged": {
     "*.{md,json,yml}": [
@@ -35,5 +35,6 @@
     "!(templates|dist)/*.{mts,mjs,ts,js}": [
       "eslint --fix --max-warnings=0"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

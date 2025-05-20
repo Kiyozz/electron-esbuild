@@ -1,3 +1,9 @@
+## 10.0.0
+
+### Features
+
+- electron@36
+
 ## 9.0.0
 
 ### Features

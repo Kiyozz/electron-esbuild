@@ -49,6 +49,7 @@ class _ApplicationStarter {
       [outputEntryFile, ...this._args],
       {
         stdio: 'inherit',
+        shell: true,
       },
     )
 
@@ -62,7 +63,11 @@ class _ApplicationStarter {
       if (_isWindows) {
         _logger.debug('kill electron process on windows')
 
-        spawn('taskkill', ['/pid', `${this._electronProcess.pid}`, '/f', '/t'])
+        spawn(
+          'taskkill',
+          ['/pid', `${this._electronProcess.pid}`, '/f', '/t'],
+          { shell: true },
+        )
       } else {
         _logger.debug('kill electron process on macOS/linux')
         const pid = this._electronProcess.pid

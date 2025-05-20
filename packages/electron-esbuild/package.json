@@ -1,6 +1,6 @@
 {
   "name": "electron-esbuild",
-  "version": "9.0.0",
+  "version": "10.0.0-rc",
   "keywords": [
     "esbuild",
     "electron",
@@ -27,8 +27,8 @@
     }
   },
   "engines": {
-    "node": ">=18.15.0",
-    "pnpm": "8"
+    "node": ">=22",
+    "pnpm": "10"
   },
   "scripts": {
     "build": "ee 'src/**' --module --format esm --sourcemap --clean-outdir --outdir dist --target node16",
@@ -57,13 +57,13 @@
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^18.16.19",
     "@types/rimraf": "^3.0.2",
-    "esbuild": "^0.21.3",
-    "typescript": "~5.4.5",
-    "vite": "^5.2.11"
+    "esbuild": "^0.25.4",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
   },
   "peerDependencies": {
-    "esbuild": "0.21.x",
-    "vite": "5.x"
+    "esbuild": "0.25.x",
+    "vite": "6.x"
   },
   "peerDependenciesMeta": {
     "vite": {

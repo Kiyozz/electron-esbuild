@@ -13,7 +13,7 @@ import { rimraf } from 'rimraf'
  * @returns {Promise<void>}
  */
 const clean = async (path) => {
-  return rimraf(path)
+  await rimraf(path)
 }
 
 const outDir = path.resolve('dist')

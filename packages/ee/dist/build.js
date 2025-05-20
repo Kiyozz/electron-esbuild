@@ -1,8 +1,8 @@
-import { spawnSync } from "child_process";
 import { build as esbuildBuild } from "esbuild";
 import glob from "fast-glob";
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from "kolorist";
-import { platform } from "node:os";
+import * as childProcess from "node:child_process";
+import * as os from "node:os";
 import * as path from "node:path";
 import * as process from "node:process";
 import { rimraf } from "rimraf";
@@ -17,7 +17,7 @@ const getEntries = async (paths) => {
       if (absP.includes("'")) {
         absP = absP.replace(/'/g, "");
       }
-      if (platform() === "win32") {
+      if (os.platform() === "win32") {
         absP = absP.replace(/\\/g, "/");
       }
       return glob(absP);
@@ -70,9 +70,10 @@ const build = async ({
   const entryPoints = await getEntries(entries);
   if (checkTypes) {
     const cTask = task("CHECKING TYPES");
-    const tscResult = spawnSync("tsc", ["-p", tsProject], {
+    const tscResult = childProcess.spawnSync("tsc", ["-p", tsProject], {
       cwd: process.cwd(),
-      stdio: "inherit"
+      stdio: "inherit",
+      shell: true
     });
     if (tscResult.error || tscResult.status !== 0) {
       cTask.error();

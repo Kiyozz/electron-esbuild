@@ -4,12 +4,12 @@
  * All rights reserved.
  */
 
-import { spawnSync } from 'child_process'
 import { build as esbuildBuild } from 'esbuild'
 import { BuildOptions as EsbuildBuildOptions, Format } from 'esbuild'
 import glob from 'fast-glob'
 import { bgCyan, bgGreen, bgRed, black, cyan, green, red } from 'kolorist'
-import { platform } from 'node:os'
+import * as childProcess from 'node:child_process'
+import * as os from 'node:os'
 import * as path from 'node:path'
 import * as process from 'node:process'
 import { rimraf } from 'rimraf'
@@ -41,7 +41,7 @@ const getEntries = async (paths: string[]): Promise<string[]> => {
         absP = absP.replace(/'/g, '')
       }
 
-      if (platform() === 'win32') {
+      if (os.platform() === 'win32') {
         absP = absP.replace(/\\/g, '/')
       }
 
@@ -104,9 +104,10 @@ export const build = async ({
 
   if (checkTypes) {
     const cTask = task('CHECKING TYPES')
-    const tscResult = spawnSync('tsc', ['-p', tsProject], {
+    const tscResult = childProcess.spawnSync('tsc', ['-p', tsProject], {
       cwd: process.cwd(),
       stdio: 'inherit',
+      shell: true,
     })
 
     if (tscResult.error || tscResult.status !== 0) {

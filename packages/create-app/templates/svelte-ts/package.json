@@ -11,15 +11,15 @@
   "description": "A simple Electron app built with electron-esbuild",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
-    "@types/node": "^20.12.12",
-    "electron": "^30.0.6",
-    "electron-builder": "^24.13.3",
+    "@types/node": "^22.15.20",
+    "electron": "^36.2.1",
+    "electron-builder": "^26.0.12",
     "electron-esbuild": "^9.0.0",
     "electron-util": "^0.18.1",
-    "esbuild": "^0.21.2",
+    "esbuild": "^0.25.4",
     "svelte": "^4.2.17",
     "svelte-preprocess": "^5.1.4",
-    "typescript": "~5.4.5",
+    "typescript": "~5.8.3",
     "vite": "^5.2.11"
   },
   "build": {

@@ -1,6 +1,6 @@
 {
   "name": "@electron-esbuild/ee",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "keywords": [
     "esbuild",
     "builder",
@@ -22,8 +22,8 @@
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": "8"
+    "node": ">=22",
+    "pnpm": "10"
   },
   "scripts": {
     "build": "node esbuild.config.js",
@@ -40,15 +40,14 @@
     "fast-glob": "^3.3.0",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
-    "rimraf": "^5.0.1"
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.16.19",
-    "@types/rimraf": "^3.0.2",
-    "esbuild": "^0.21.3",
-    "typescript": "~5.4.5"
+    "esbuild": "^0.25.4",
+    "typescript": "~5.8.3"
   },
   "peerDependencies": {
     "esbuild": "^0.16.x"
